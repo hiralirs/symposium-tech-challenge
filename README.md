@@ -2,6 +2,7 @@
 
 A lightweight, offline-ready coding challenge built for our college symposium. This project requires no backend server or database—it runs entirely in the browser using HTML, CSS, and JavaScript, making it perfect for rapid deployment across multiple lab computers.
 
+
 ## 🩸 Challenge Flow
 
 The game follows a strict, timed progression:
@@ -26,6 +27,7 @@ The game follows a strict, timed progression:
 * Displays Final Score (MCQs solved, Puzzle status, Time spent)
 
 ## 🛡️ Anti-Cheating Features
+
 To maintain the integrity of the symposium event, this app includes:
 * **No Copy-Paste:** Right-click context menus, copying, and pasting are disabled via JavaScript.
 * **Text Selection Disabled:** CSS prevents highlighting text to search for answers.
