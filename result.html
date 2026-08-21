@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Final Result</title>
 
@@ -18,246 +15,49 @@
 
 <body>
 
-<div class="container">
+<div class="page">
 
+    <div class="container">
 
-    <!-- ================================
-         DISQUALIFIED RESULT
-    ================================= -->
-
-    <div
-        id="disqualifiedResult"
-        class="hidden"
-    >
-
-        <div class="vampire">
-            🚫
-        </div>
-
-
-        <h1>
-            TEAM DISQUALIFIED
+        <h1 class="blood-title">
+            🏆 CHALLENGE COMPLETE
         </h1>
 
+        <div class="card result-card">
 
-        <div class="answer-box">
-
-            <p>
-
-                <b>
-                    Team Name:
-                </b>
-
-                <span id="disqualifiedTeam"></span>
-
-            </p>
-
-
-            <p>
-
-                <b>
-                    Team ID:
-                </b>
-
-                <span id="disqualifiedId"></span>
-
-            </p>
-
-
-            <p>
-
-                <b>
-                    Reason:
-                </b>
-
-                <span
-                    id="disqualificationReason"
-                    class="wrong"
-                ></span>
-
-            </p>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- ================================
-         NORMAL RESULT
-    ================================= -->
-
-    <div id="normalResult">
-
-        <div class="vampire">
-            🏆
-        </div>
-
-
-        <h1>
-            FINAL RESULT
-        </h1>
-
-
-        <div class="team-result">
-
-            <p>
-
-                <b>
-                    Team Name:
-                </b>
-
-                <span id="finalTeamName"></span>
-
-            </p>
-
-
-            <p>
-
-                <b>
-                    Team ID:
-                </b>
-
-                <span id="finalTeamId"></span>
-
-            </p>
-
-        </div>
-
-
-
-        <!-- LEVEL 1 RESULT -->
-
-        <h2>
-            🩸 Level 1 - Vampire's Logic
-        </h2>
-
-
-        <div id="level1Results"></div>
-
-
-        <div class="score-box">
-
-            Level 1 Score:
-
-            <span id="level1Score">
-                0
-            </span>
-
-            / 50
-
-        </div>
-
-
-
-        <!-- LEVEL 2 RESULT -->
-
-        <h2>
-            🧩 Level 2 - Vampire's Puzzle
-        </h2>
-
-
-        <div class="answer-box">
-
-            <p>
-
-                <b>
-                    Your Answer:
-                </b>
-
-                <span id="puzzleUserAnswer"></span>
-
-            </p>
-
-
-            <p>
-
-                <b>
-                    Correct Answer:
-                </b>
-
-                <span class="correct">
-                    55
-                </span>
-
-            </p>
-
-        </div>
-
-
-        <div class="score-box">
-
-            Level 2 Score:
-
-            <span id="level2Score">
-                0
-            </span>
-
-            / 40
-
-        </div>
-
-
-
-        <!-- FINAL SCORE -->
-
-        <div class="final-score">
-
-            <h2>
-                🎯 FINAL SCORE
+            <h2 id="resultTeam">
+                TEAM
             </h2>
 
+            <div class="score-circle">
 
-            <p>
+                <span id="finalScore">
+                    0
+                </span>
 
-                Total:
+                <small>/ 100</small>
 
-                <b>
+            </div>
 
-                    <span id="totalScore">
-                        0
-                    </span>
+            <h2 class="red-heading">
+                🩸 FINAL SCORE
+            </h2>
 
-                    / 90
-
-                </b>
-
+            <p id="resultMessage"
+               class="result-message">
             </p>
 
-
-            <p>
-
-                Converted Score:
-
-                <b>
-
-                    <span id="convertedScore">
-                        0
-                    </span>
-
-                    / 20
-
-                </b>
-
-            </p>
+            <button id="restartBtn">
+                🔄 PLAY AGAIN
+            </button>
 
         </div>
-
-
-        <div id="qualification"></div>
 
     </div>
 
 </div>
 
-
 <script src="script.js"></script>
 
-
-<script>
-    loadResult();
-</script>
-
 </body>
-
 </html>
