@@ -1,197 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Level 1 - Vampire's Logic</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="timer-box">
+    ⏱️ <span id="timer">05:00</span>
+</div>
 
+<div class="page">
 
-    <!-- ================================
-         LEVEL 1 INSTRUCTIONS
-    ================================= -->
+    <div class="container">
 
-    <section id="level1Instructions">
-
-        <div class="vampire">
-            🩸
-        </div>
-
-        <h1>
-            LEVEL 1
+        <h1 class="blood-title">
+            🧠 LEVEL 1
         </h1>
 
-        <h2>
-            Vampire's Logic
+        <h2 class="red-heading">
+            VAMPIRE'S LOGIC
         </h2>
 
+        <div class="card">
 
-        <div class="instruction-box">
+            <div class="question-number">
+                Question <span id="questionNumber">1</span> / 5
+            </div>
 
-            <h3>
-                📜 Instructions
-            </h3>
+            <div class="progress-container">
+                <div id="progressBar"></div>
+            </div>
 
+            <div id="questionBox" class="question-box">
+                Question
+            </div>
 
-            <p>
-                • You have 5 Python MCQ questions.
-            </p>
+            <div id="optionsBox"></div>
 
-
-            <p>
-                • Time limit:
-                <b>5 minutes.</b>
-            </p>
-
-
-            <p>
-                • There is
-                <b>no attempt limit.</b>
-            </p>
-
-
-            <p>
-                • Select one option for every question.
-            </p>
-
-
-            <p>
-                • Correct answers will not be shown
-                immediately.
-            </p>
-
-
-            <p>
-                • Correct answers will be displayed
-                only on the final result page.
-            </p>
-
-
-            <p>
-                • Do not switch tabs or minimize
-                the screen.
-            </p>
-
-
-            <p>
-                • Do not press ESC or exit fullscreen.
-            </p>
-
-
-            <p>
-                • Any violation will result in
-                disqualification.
+            <p class="enter-info">
+                Select an answer or press <b>ENTER</b> to continue.
             </p>
 
         </div>
 
-
-        <button onclick="startLevel1()">
-            START LEVEL 1
-        </button>
-
-    </section>
-
-
-
-    <!-- ================================
-         LEVEL 1 QUESTIONS
-    ================================= -->
-
-    <section
-        id="level1Questions"
-        class="hidden"
-    >
-
-        <div class="top-bar">
-
-            <span>
-                Team:
-                <b id="teamNameDisplay"></b>
-            </span>
-
-
-            <span>
-                ID:
-                <b id="teamIdDisplay"></b>
-            </span>
-
-        </div>
-
-
-        <h1>
-            🩸 LEVEL 1
-        </h1>
-
-
-        <h2>
-            Vampire's Logic
-        </h2>
-
-
-        <div class="timer">
-
-            ⏱ Time Left:
-
-            <span id="timer">
-                05:00
-            </span>
-
-        </div>
-
-
-        <div class="progress">
-
-            Question
-
-            <span id="questionNumber">
-                1
-            </span>
-
-            of 5
-
-        </div>
-
-
-        <div id="questionContainer"></div>
-
-
-        <button onclick="nextQuestion()">
-            NEXT
-        </button>
-
-
-        <p
-            id="questionError"
-            class="error"
-        ></p>
-
-    </section>
+    </div>
 
 </div>
 
-
 <script src="script.js"></script>
 
-
-<script>
-    loadLevel1();
-</script>
-
 </body>
-
 </html>
