@@ -1,288 +1,97 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Level 2 - Vampire's Puzzle</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<div class="container">
+<div class="timer-box">
+    ⏱️ <span id="timer">05:00</span>
+</div>
 
+<div class="page">
 
-    <!-- ================================
-         LEVEL 2 INSTRUCTIONS
-    ================================= -->
+    <div class="container">
 
-    <section id="level2Instructions">
-
-        <div class="vampire">
-            🧩
-        </div>
-
-
-        <h1>
-            LEVEL 2
+        <h1 class="blood-title">
+            🩸 LEVEL 2
         </h1>
 
-
-        <h2>
-            Vampire's Puzzle
+        <h2 class="red-heading">
+            VAMPIRE'S PUZZLE
         </h2>
 
+        <div class="card">
 
-        <div class="instruction-box">
-
-            <h3>
-                📜 Instructions
-            </h3>
-
-
-            <p>
-                • You have to solve the given puzzle.
-            </p>
-
-
-            <p>
-                • Time limit:
-                <b>5 minutes.</b>
-            </p>
-
-
-            <p>
-                • There is
-                <b>no attempt limit.</b>
-            </p>
-
-
-            <p>
-                • A hint will be provided.
-            </p>
-
-
-            <p>
-                • Enter your answer in the answer box.
-            </p>
-
-
-            <p>
-                • The correct answer will be shown
-                only on the final result page.
-            </p>
-
-
-            <p>
-                • Do not switch tabs or minimize
-                the screen.
-            </p>
-
-
-            <p>
-                • Do not press ESC or exit fullscreen.
-            </p>
-
-
-            <p>
-                • Any violation will result in
-                disqualification.
-            </p>
-
-        </div>
-
-
-        <button onclick="startLevel2()">
-            START LEVEL 2
-        </button>
-
-    </section>
-
-
-
-    <!-- ================================
-         LEVEL 2 POPUP
-    ================================= -->
-
-    <div
-        id="level2Popup"
-        class="popup-overlay hidden"
-    >
-
-        <div class="popup-box">
-
-            <div class="popup-icon">
-                🩸
-            </div>
-
-
-            <h2>
-                IMPORTANT NOTICE
-            </h2>
-
-
-            <p>
-                The hint of the puzzle will
-                appear below the puzzle.
-            </p>
-
-
-            <p>
-                Read the hint carefully before
-                solving the puzzle.
-            </p>
-
-
-            <button onclick="closeLevel2Popup()">
-                UNDERSTOOD
-            </button>
+            <div id="puzzleArea"></div>
 
         </div>
 
     </div>
 
+</div>
 
 
-    <!-- ================================
-         LEVEL 2 PUZZLE
-    ================================= -->
+<!-- LEVEL 2 INSTRUCTIONS -->
 
-    <section
-        id="level2Puzzle"
-        class="hidden"
-    >
+<div id="instructionsPopup" class="popup show">
 
-        <div class="top-bar">
+    <div class="popup-box">
 
-            <span>
-                Team:
-                <b id="teamNameDisplay"></b>
-            </span>
+        <h2>📜 LEVEL 2 INSTRUCTIONS</h2>
 
+        <p>⏱️ You have <b>5 minutes</b> to complete Level 2.</p>
 
-            <span>
-                ID:
-                <b id="teamIdDisplay"></b>
-            </span>
+        <p>🧩 There are <b>2 logical puzzles.</b></p>
 
-        </div>
+        <p>💡 Each puzzle contains a hint.</p>
 
+        <p>🤫 Correct and wrong answers will not be displayed.</p>
 
-        <h1>
-            🧩 LEVEL 2
-        </h1>
+        <p>📊 Your score will be displayed after completing Level 2.</p>
 
-
-        <h2>
-            Vampire's Puzzle
-        </h2>
-
-
-        <div class="timer">
-
-            ⏱ Time Left:
-
-            <span id="timer">
-                05:00
-            </span>
-
-        </div>
-
-
-        <!-- HINT -->
-
-        <div class="hint">
-
-            <h3>
-                💡 Hint
-            </h3>
-
-
-            <p>
-                Look carefully at the mathematical
-                relationship between the numbers.
-            </p>
-
-        </div>
-
-
-        <!-- PUZZLE -->
-
-        <div class="puzzle">
-
-            <h3>
-                Solve the Puzzle
-            </h3>
-
-
-            <p>
-                2 + 3 = 10
-            </p>
-
-
-            <p>
-                3 + 4 = 21
-            </p>
-
-
-            <p>
-                4 + 5 = 36
-            </p>
-
-
-            <p>
-                Then:
-            </p>
-
-
-            <h3>
-                5 + 6 = ?
-            </h3>
-
-        </div>
-
-
-        <input
-            type="text"
-            id="puzzleAnswer"
-            class="puzzle-input"
-            placeholder="Enter your answer"
-            autocomplete="off"
-        >
-
-
-        <button onclick="submitPuzzle()">
-            SUBMIT ANSWER
+        <button id="instructionsContinue">
+            CONTINUE
         </button>
 
+    </div>
 
-        <p
-            id="puzzleError"
-            class="error"
-        ></p>
+</div>
 
-    </section>
+
+<!-- HINT POPUP -->
+
+<div id="hintPopup" class="popup">
+
+    <div class="popup-box">
+
+        <h2>💡 PUZZLE HINT</h2>
+
+        <p>
+            The hint for the puzzle will appear
+            <b>below the question.</b>
+        </p>
+
+        <p>
+            Read the puzzle carefully and use the hint if needed.
+        </p>
+
+        <button id="hintContinue">
+            GOT IT
+        </button>
+
+    </div>
 
 </div>
 
 
 <script src="script.js"></script>
 
-
-<script>
-    loadLevel2();
-</script>
-
 </body>
-
 </html>
