@@ -1,203 +1,197 @@
-/* =========================================
-   VAMPIRE TECH CHALLENGE
-   RED THEME
-========================================= */
-
 * {
     box-sizing: border-box;
-}
-
-html,
-body {
     margin: 0;
     padding: 0;
+}
 
-    min-height: 100%;
+body {
+    min-height: 100vh;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 
     color: white;
 
     background:
         radial-gradient(
             circle at top,
-            #4d0000,
-            #180000 40%,
-            #050000 100%
+            #650000,
+            #260000 40%,
+            #080000 80%,
+            #000000
         );
+
+    overflow-x: hidden;
 }
 
 
-/* =========================================
-   PAGE
-========================================= */
+/* Main page */
 
 .page {
     min-height: 100vh;
 
-    padding:
-        30px
-        15px;
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 25px;
 }
 
 
 .container {
-    width: 95%;
+    width: 100%;
 
     max-width: 900px;
-
-    margin: auto;
 
     text-align: center;
 }
 
 
-/* =========================================
-   TITLES
-========================================= */
+/* Title */
 
 .blood-title {
-    margin-top: 25px;
+    font-size: clamp(32px, 7vw, 60px);
 
     color: #ff1a1a;
 
-    font-size:
-        clamp(
-            32px,
-            7vw,
-            58px
-        );
-
     text-shadow:
         0 0 10px #ff0000,
-        0 0 25px #990000,
-        0 0 45px #ff0000;
+        0 0 25px #ff0000,
+        0 0 45px #990000;
+
+    margin-bottom: 10px;
+
+    letter-spacing: 2px;
 }
+
 
 .subtitle {
-    font-size: 20px;
-
     color: #ffb3b3;
+
+    font-size: 18px;
+
+    margin-bottom: 25px;
 }
 
-.red-heading {
+
+/* Card */
+
+.card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(75, 0, 0, 0.96),
+            rgba(10, 0, 0, 0.98)
+        );
+
+    border: 2px solid #a00000;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 0 25px rgba(255, 0, 0, 0.35);
+}
+
+
+.card h2 {
     color: #ff3333;
+
+    margin-bottom: 20px;
 
     text-shadow:
         0 0 10px #ff0000;
 }
 
 
-/* =========================================
-   CARD
-========================================= */
-
-.card {
-    margin-top: 30px;
-
-    padding: 30px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(60, 0, 0, 0.96),
-            rgba(15, 0, 0, 0.97)
-        );
-
-    border:
-        2px solid
-        #990000;
-
-    border-radius: 20px;
-
-    box-shadow:
-        0 0 25px
-        rgba(255, 0, 0, 0.3);
-}
-
-
-/* =========================================
-   INSTRUCTIONS
-========================================= */
+/* Instructions */
 
 .instructions {
     text-align: left;
 
-    max-width: 750px;
-
-    margin:
-        20px auto;
+    margin-bottom: 25px;
 }
+
 
 .instructions p {
-    margin: 9px 0;
+    padding: 11px 14px;
 
-    padding: 10px 12px;
+    margin: 8px 0;
 
     background:
-        rgba(100, 0, 0, 0.3);
+        rgba(100, 0, 0, 0.35);
 
     border-left:
-        4px solid
-        #ff0000;
+        4px solid #ff0000;
 
-    border-radius: 6px;
+    border-radius: 7px;
 
     line-height: 1.5;
+
+    color: #ffe5e5;
 }
 
 
-/* =========================================
-   INPUT
-========================================= */
+.instructions b {
+    color: #ff5555;
+}
 
-input {
-    width: 85%;
+
+/* Team */
+
+.team-title {
+    color: #ff6666;
+
+    margin-bottom: 10px;
+}
+
+
+#teamName {
+    width: 90%;
 
     max-width: 500px;
 
     padding: 15px;
 
-    margin:
-        15px 0;
-
-    border:
-        2px solid
-        #990000;
-
     border-radius: 10px;
 
-    background: #100000;
+    border:
+        2px solid #800000;
+
+    background: #120000;
 
     color: white;
 
     font-size: 17px;
 
     outline: none;
+
+    text-align: center;
 }
 
-input:focus {
+
+#teamName::placeholder {
+    color: #bb7777;
+}
+
+
+#teamName:focus {
     border-color: #ff0000;
 
     box-shadow:
-        0 0 12px
-        #ff0000;
+        0 0 15px rgba(255, 0, 0, 0.6);
 }
 
 
-/* =========================================
-   BUTTON
-========================================= */
+/* Button */
 
 button {
     padding:
-        14px
-        28px;
+        14px 30px;
 
-    margin: 8px;
+    margin-top: 18px;
 
     border: none;
 
@@ -219,283 +213,55 @@ button {
     cursor: pointer;
 
     box-shadow:
-        0 0 10px
-        rgba(255, 0, 0, 0.4);
+        0 0 15px rgba(255, 0, 0, 0.5);
 
-    transition:
-        0.2s;
+    transition: 0.2s;
 }
+
 
 button:hover {
-    transform: scale(1.04);
+    transform: scale(1.05);
 
     box-shadow:
-        0 0 20px
-        #ff0000;
-}
-
-button:disabled {
-    opacity: 0.5;
-
-    cursor: not-allowed;
+        0 0 25px #ff0000;
 }
 
 
-/* =========================================
-   TIMER
-========================================= */
+.enter-text {
+    margin-top: 18px;
 
-.timer-box {
-    position: fixed;
-
-    top: 15px;
-
-    right: 20px;
-
-    z-index: 500;
-
-    padding:
-        12px
-        20px;
-
-    border:
-        2px solid
-        #ff0000;
-
-    border-radius: 10px;
-
-    background:
-        #550000;
-
-    color: white;
-
-    font-size: 20px;
-
-    font-weight: bold;
-
-    box-shadow:
-        0 0 15px
-        #ff0000;
-}
-
-.timer-warning {
-    background: #ff0000;
-
-    animation:
-        blink 0.7s infinite;
-}
-
-@keyframes blink {
-
-    50% {
-        opacity: 0.5;
-    }
-
-}
-
-
-/* =========================================
-   QUESTION
-========================================= */
-
-.question-number {
     color: #ff9999;
 
-    font-size: 18px;
-
-    margin-bottom: 20px;
+    font-size: 14px;
 }
 
 
-.question-box {
-    margin:
-        25px 0;
-
-    padding: 20px;
-
-    font-size: 23px;
-
-    line-height: 1.5;
-
-    background:
-        rgba(80, 0, 0, 0.4);
-
-    border:
-        1px solid
-        #990000;
-
-    border-radius: 12px;
-}
-
-
-/* =========================================
-   PROGRESS
-========================================= */
-
-.progress-container {
-    width: 90%;
-
-    height: 9px;
-
-    margin:
-        20px auto;
-
-    background:
-        #260000;
-
-    border-radius: 10px;
-
-    overflow: hidden;
-}
-
-#progressBar {
-    width: 0%;
-
-    height: 100%;
-
-    background:
-        linear-gradient(
-            90deg,
-            #990000,
-            #ff0000
-        );
-
-    transition:
-        width 0.3s;
-}
-
-
-/* =========================================
-   OPTIONS
-========================================= */
-
-.option {
-    display: block;
-
-    width: 90%;
-
-    max-width: 650px;
-
-    margin:
-        12px auto;
-
-    padding: 15px;
-
-    background:
-        #250000;
-
-    border:
-        2px solid
-        #700000;
-
-    text-align: left;
-
-    font-weight: normal;
-}
-
-.option:hover {
-    background:
-        #4d0000;
-
-    border-color:
-        #ff0000;
-}
-
-
-/* =========================================
-   ENTER INFO
-========================================= */
-
-.enter-info {
-    color: #ff9999;
-
-    margin-top: 25px;
-}
-
-
-/* =========================================
-   PUZZLES
-========================================= */
-
-.puzzle {
-    padding: 25px;
-
-    margin:
-        15px 0;
-
-    background:
-        #180000;
-
-    border:
-        2px solid
-        #800000;
-
-    border-radius: 15px;
-
-    text-align: left;
-}
-
-.puzzle h3 {
-    color: #ff3333;
-
-    text-align: center;
-}
-
-.puzzle-question {
-    font-size: 20px;
-
-    line-height: 1.6;
-
-    text-align: center;
-}
-
-.hint {
-    margin-top: 20px;
-
-    padding: 15px;
-
-    background:
-        rgba(100, 0, 0, 0.4);
-
-    border-left:
-        5px solid
-        #ff0000;
-
-    line-height: 1.5;
-}
-
-
-/* =========================================
-   POPUP
-========================================= */
+/* Popup */
 
 .popup {
     position: fixed;
 
     inset: 0;
 
-    z-index: 1000;
-
     display: none;
 
-    align-items: center;
-
     justify-content: center;
+
+    align-items: center;
 
     padding: 20px;
 
     background:
         rgba(0, 0, 0, 0.9);
+
+    z-index: 1000;
 }
 
-.popup.show {
-    display: flex;
-}
 
 .popup-box {
     width: 95%;
 
-    max-width: 600px;
+    max-width: 500px;
 
     padding: 30px;
 
@@ -504,122 +270,63 @@ button:disabled {
     background:
         linear-gradient(
             145deg,
-            #450000,
+            #500000,
             #100000
         );
 
     border:
-        3px solid
-        #ff0000;
+        2px solid #ff0000;
 
-    border-radius: 20px;
+    border-radius: 18px;
 
     box-shadow:
-        0 0 40px
-        rgba(255, 0, 0, 0.6);
+        0 0 35px #ff0000;
 }
+
 
 .popup-box h2 {
     color: #ff3333;
 
-    text-shadow:
-        0 0 10px #ff0000;
+    margin-bottom: 15px;
 }
+
 
 .popup-box p {
-    line-height: 1.6;
-}
-
-
-/* =========================================
-   RESULT
-========================================= */
-
-.result-card {
-    text-align: center;
-}
-
-.score-circle {
-    width: 200px;
-
-    height: 200px;
-
-    margin:
-        30px auto;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex-direction: column;
-
-    border-radius: 50%;
-
-    border:
-        8px solid
-        #ff0000;
-
-    background:
-        #120000;
-
-    box-shadow:
-        0 0 35px
-        #ff0000;
-}
-
-#finalScore {
-    font-size: 50px;
-
-    font-weight: bold;
-
-    color: #ff3333;
-}
-
-.score-circle small {
-    color: white;
-
-    font-size: 18px;
-}
-
-.result-message {
-    font-size: 21px;
-
-    color: #ffaaaa;
+    color: #ffe5e5;
 
     line-height: 1.6;
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+/* Mobile */
 
-@media(max-width: 600px) {
+@media (max-width: 600px) {
+
+    .page {
+        padding: 15px;
+    }
 
     .card {
         padding: 20px;
     }
 
-    .timer-box {
-        top: 10px;
+    .blood-title {
+        font-size: 34px;
+    }
 
-        right: 10px;
-
-        padding:
-            8px
-            12px;
-
+    .subtitle {
         font-size: 15px;
     }
 
-    .question-box {
-        font-size: 19px;
+    .instructions p {
+        font-size: 14px;
+    }
+
+    #teamName {
+        width: 100%;
     }
 
     button {
-        font-size: 15px;
+        width: 100%;
     }
-
 }
