@@ -1,849 +1,137 @@
 /* =====================================================
-   VAMPIRE CHALLENGE
+   VAMPIRE TECH CHALLENGE
+   MAIN JAVASCRIPT
 ===================================================== */
 
 
 /* =====================================================
-   QUESTIONS
+   COMMON PROTECTION
 ===================================================== */
 
-const questions = [
+document.addEventListener("contextmenu", function(event) {
 
-    {
-        question:
-            "What is the output of print(2 ** 3)?",
+    event.preventDefault();
 
-        options: [
-            "6",
-            "8",
-            "9",
-            "5"
-        ],
-
-        answer: "8"
-    },
+});
 
 
-    {
-        question:
-            "What is the output of print(10 // 3)?",
+document.addEventListener("copy", function(event) {
 
-        options: [
-            "3",
-            "3.33",
-            "4",
-            "1"
-        ],
+    event.preventDefault();
 
-        answer: "3"
-    },
+});
 
 
-    {
-        question:
-            "What is the data type of 10.5?",
+document.addEventListener("cut", function(event) {
 
-        options: [
-            "int",
-            "str",
-            "float",
-            "double"
-        ],
+    event.preventDefault();
 
-        answer: "float"
-    },
+});
 
 
-    {
-        question:
-            "What is the output of len('Python')?",
+document.addEventListener("paste", function(event) {
 
-        options: [
-            "5",
-            "6",
-            "7",
-            "8"
-        ],
+    event.preventDefault();
 
-        answer: "6"
-    },
+});
 
 
-    {
-        question:
-            "What is the output of print(5 > 3 and 2 > 4)?",
+document.addEventListener("dragstart", function(event) {
 
-        options: [
-            "True",
-            "False",
-            "5",
-            "Error"
-        ],
+    event.preventDefault();
 
-        answer: "False"
+});
+
+
+/* =====================================================
+   BLOCK SOME SHORTCUTS
+===================================================== */
+
+document.addEventListener("keydown", function(event) {
+
+    if (
+        event.key === "F12" ||
+        (
+            event.ctrlKey &&
+            event.shiftKey &&
+            (
+                event.key === "I" ||
+                event.key === "J"
+            )
+        ) ||
+        (
+            event.ctrlKey &&
+            event.key === "U"
+        )
+    ) {
+
+        event.preventDefault();
+
     }
 
-];
+});
 
 
 /* =====================================================
-   VARIABLES
+   PAGE NAME
 ===================================================== */
 
-let currentQuestion = 0;
-
-let selectedAnswer = null;
-
-let level1Score = 0;
-
-let timerInterval = null;
-
-let timeLeft = 300;
-
-let violationTriggered = false;
-
-
-const currentPage =
-    window.location.pathname
+const page =
+    location.pathname
         .split("/")
         .pop();
 
 
 /* =====================================================
-   START ROUND
+   WELCOME PAGE
 ===================================================== */
 
-function startRound() {
-
-    const teamName =
-        document
-            .getElementById("teamName")
-            .value
-            .trim();
-
-
-    const teamId =
-        document
-            .getElementById("teamId")
-            .value
-            .trim();
-
-
-    if (
-        teamName === "" ||
-        teamId === ""
-    ) {
-
-        document
-            .getElementById("error")
-            .innerText =
-                "Please enter Team Name and Team ID.";
-
-        return;
-    }
-
-
-    localStorage.clear();
-
-
-    localStorage.setItem(
-        "teamName",
-        teamName
-    );
-
-
-    localStorage.setItem(
-        "teamId",
-        teamId
-    );
-
-
-    localStorage.setItem(
-        "disqualified",
-        "false"
-    );
-
-
-    localStorage.setItem(
-        "level1Answers",
-        JSON.stringify([])
-    );
-
-
-    localStorage.setItem(
-        "level1Score",
-        "0"
-    );
-
-
-    localStorage.setItem(
-        "level2Score",
-        "0"
-    );
-
-
-    localStorage.setItem(
-        "puzzleAnswer",
-        ""
-    );
-
-
-    requestFullscreen();
-
-
-    window.location.href =
-        "level1.html";
-}
-
-
-/* =====================================================
-   CHECK TEAM
-===================================================== */
-
-function checkTeam() {
-
-    const teamName =
-        localStorage.getItem("teamName");
-
-
-    const teamId =
-        localStorage.getItem("teamId");
-
-
-    if (
-        !teamName ||
-        !teamId
-    ) {
-
-        window.location.href =
-            "index.html";
-
-        return false;
-    }
-
-
-    return true;
-}
-
-
-/* =====================================================
-   LEVEL 1 LOAD
-===================================================== */
-
-function loadLevel1() {
-
-    if (!checkTeam()) {
-        return;
-    }
-
-
-    document
-        .getElementById("teamNameDisplay")
-        .innerText =
-            localStorage.getItem("teamName");
-
-
-    document
-        .getElementById("teamIdDisplay")
-        .innerText =
-            localStorage.getItem("teamId");
-
-}
-
-
-/* =====================================================
-   START LEVEL 1
-===================================================== */
-
-function startLevel1() {
-
-    document
-        .getElementById(
-            "level1Instructions"
-        )
-        .classList.add("hidden");
-
-
-    document
-        .getElementById(
-            "level1Questions"
-        )
-        .classList.remove("hidden");
-
-
-    currentQuestion = 0;
-
-    selectedAnswer = null;
-
-
-    showQuestion();
-
-
-    /*
-       5 MINUTES
-    */
-
-    startTimer();
-
-
-    requestFullscreen();
-
-}
-
-
-/* =====================================================
-   SHOW QUESTION
-===================================================== */
-
-function showQuestion() {
-
-    selectedAnswer = null;
-
-
-    document
-        .getElementById(
-            "questionNumber"
-        )
-        .innerText =
-            currentQuestion + 1;
-
-
-    const question =
-        questions[currentQuestion];
-
-
-    let html = `
-
-        <div class="question-box">
-
-            <h3>
-                ${question.question}
-            </h3>
-
-    `;
-
-
-    question.options.forEach(
-        function(option) {
-
-            const safeOption =
-                option.replace(
-                    /'/g,
-                    "\\'"
-                );
-
-
-            html += `
-
-                <div
-                    class="option"
-                    onclick="selectOption(
-                        this,
-                        '${safeOption}'
-                    )"
-                >
-
-                    ${option}
-
-                </div>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-        </div>
-
-    `;
-
-
-    document
-        .getElementById(
-            "questionContainer"
-        )
-        .innerHTML =
-            html;
-}
-
-
-/* =====================================================
-   SELECT ANSWER
-===================================================== */
-
-function selectOption(
-    element,
-    answer
+if (
+    page === "index.html" ||
+    page === ""
 ) {
 
-    document
-        .querySelectorAll(".option")
-        .forEach(
-            function(option) {
+    const startBtn =
+        document.getElementById("startBtn");
 
-                option.classList.remove(
-                    "selected"
-                );
-
-            }
-        );
+    const teamInput =
+        document.getElementById("teamName");
 
 
-    element.classList.add(
-        "selected"
+    startBtn.addEventListener(
+        "click",
+        startChallenge
     );
 
 
-    selectedAnswer =
-        answer;
-}
+    function startChallenge() {
+
+        const team =
+            teamInput.value.trim();
 
 
-/* =====================================================
-   NEXT QUESTION
-===================================================== */
+        if (team === "") {
 
-function nextQuestion() {
+            alert(
+                "Please enter your team name."
+            );
 
-    if (
-        selectedAnswer === null
-    ) {
+            teamInput.focus();
 
-        document
-            .getElementById(
-                "questionError"
-            )
-            .innerText =
-                "Please select an answer.";
-
-        return;
-    }
-
-
-    document
-        .getElementById(
-            "questionError"
-        )
-        .innerText = "";
-
-
-    let answers =
-        JSON.parse(
-            localStorage.getItem(
-                "level1Answers"
-            ) || "[]"
-        );
-
-
-    answers[currentQuestion] =
-        selectedAnswer;
-
-
-    localStorage.setItem(
-        "level1Answers",
-        JSON.stringify(answers)
-    );
-
-
-    currentQuestion++;
-
-
-    if (
-        currentQuestion <
-        questions.length
-    ) {
-
-        showQuestion();
-
-    }
-
-    else {
-
-        finishLevel1();
-
-    }
-}
-
-
-/* =====================================================
-   FINISH LEVEL 1
-===================================================== */
-
-function finishLevel1() {
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    calculateLevel1Score();
-
-
-    /*
-       Correct answers are NOT shown.
-
-       Go to Level 2 instructions.
-    */
-
-    window.location.href =
-        "level2.html";
-}
-
-
-/* =====================================================
-   LEVEL 1 SCORE
-===================================================== */
-
-function calculateLevel1Score() {
-
-    const answers =
-        JSON.parse(
-            localStorage.getItem(
-                "level1Answers"
-            ) || "[]"
-        );
-
-
-    level1Score = 0;
-
-
-    answers.forEach(
-        function(answer, index) {
-
-            if (
-                answer ===
-                questions[index].answer
-            ) {
-
-                level1Score += 10;
-
-            }
+            return;
 
         }
-    );
 
-
-    localStorage.setItem(
-        "level1Score",
-        level1Score
-    );
-}
-
-
-/* =====================================================
-   LEVEL 2 LOAD
-===================================================== */
-
-function loadLevel2() {
-
-    if (!checkTeam()) {
-        return;
-    }
-
-
-    document
-        .getElementById(
-            "teamNameDisplay"
-        )
-        .innerText =
-            localStorage.getItem(
-                "teamName"
-            );
-
-
-    document
-        .getElementById(
-            "teamIdDisplay"
-        )
-        .innerText =
-            localStorage.getItem(
-                "teamId"
-            );
-
-}
-
-
-/* =====================================================
-   START LEVEL 2
-===================================================== */
-
-function startLevel2() {
-
-    /*
-       Hide instructions.
-    */
-
-    document
-        .getElementById(
-            "level2Instructions"
-        )
-        .classList.add(
-            "hidden"
-        );
-
-
-    /*
-       Show popup.
-    */
-
-    document
-        .getElementById(
-            "level2Popup"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-/* =====================================================
-   CLOSE LEVEL 2 POPUP
-===================================================== */
-
-function closeLevel2Popup() {
-
-    /*
-       Close popup.
-    */
-
-    document
-        .getElementById(
-            "level2Popup"
-        )
-        .classList.add(
-            "hidden"
-        );
-
-
-    /*
-       Show puzzle.
-    */
-
-    document
-        .getElementById(
-            "level2Puzzle"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
-
-    /*
-       Start 5-minute timer.
-    */
-
-    startTimer();
-
-
-    requestFullscreen();
-
-}
-
-
-/* =====================================================
-   SUBMIT PUZZLE
-===================================================== */
-
-function submitPuzzle() {
-
-    const answer =
-        document
-            .getElementById(
-                "puzzleAnswer"
-            )
-            .value
-            .trim();
-
-
-    if (
-        answer === ""
-    ) {
-
-        document
-            .getElementById(
-                "puzzleError"
-            )
-            .innerText =
-                "Please enter your answer.";
-
-        return;
-    }
-
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    localStorage.setItem(
-        "puzzleAnswer",
-        answer
-    );
-
-
-    let score = 0;
-
-
-    /*
-       5 + 6 = 5 × 11 = 55
-    */
-
-    if (
-        answer === "55"
-    ) {
-
-        score = 40;
-
-    }
-
-
-    localStorage.setItem(
-        "level2Score",
-        score
-    );
-
-
-    window.location.href =
-        "result.html";
-}
-
-
-/* =====================================================
-   TIMER
-===================================================== */
-
-function startTimer() {
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    /*
-       5 MINUTES = 300 SECONDS
-    */
-
-    timeLeft = 300;
-
-
-    updateTimer();
-
-
-    timerInterval =
-        setInterval(
-            function() {
-
-                timeLeft--;
-
-
-                updateTimer();
-
-
-                if (
-                    timeLeft <= 0
-                ) {
-
-                    clearInterval(
-                        timerInterval
-                    );
-
-
-                    timeExpired();
-
-                }
-
-            },
-            1000
-        );
-}
-
-
-/* =====================================================
-   UPDATE TIMER
-===================================================== */
-
-function updateTimer() {
-
-    const timer =
-        document.getElementById(
-            "timer"
-        );
-
-
-    if (!timer) {
-        return;
-    }
-
-
-    const minutes =
-        Math.floor(
-            timeLeft / 60
-        );
-
-
-    const seconds =
-        timeLeft % 60;
-
-
-    timer.innerText =
-
-        String(minutes)
-            .padStart(2, "0")
-
-        + ":" +
-
-        String(seconds)
-            .padStart(2, "0");
-}
-
-
-/* =====================================================
-   TIME EXPIRED
-===================================================== */
-
-function timeExpired() {
-
-    /*
-       LEVEL 1
-    */
-
-    if (
-        currentPage ===
-        "level1.html"
-    ) {
-
-        calculateLevel1Score();
-
-
-        alert(
-            "⏰ Level 1 time is over!\n\n" +
-            "Your current score has been saved."
-        );
-
-
-        window.location.href =
-            "level2.html";
-
-
-        return;
-    }
-
-
-    /*
-       LEVEL 2
-    */
-
-    if (
-        currentPage ===
-        "level2.html"
-    ) {
 
         localStorage.setItem(
-            "puzzleAnswer",
-            "Not Answered"
+            "teamName",
+            team
+        );
+
+
+        localStorage.setItem(
+            "level1Score",
+            "0"
         );
 
 
@@ -853,14 +141,40 @@ function timeExpired() {
         );
 
 
-        alert(
-            "⏰ Level 2 time is over!"
+        localStorage.setItem(
+            "finalScore",
+            "0"
         );
 
 
+        requestFullscreen();
+
+
         window.location.href =
-            "result.html";
+            "level1.html";
+
     }
+
+
+    /* ENTER ON WELCOME PAGE */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                startChallenge();
+
+            }
+
+        }
+    );
+
 }
 
 
@@ -871,28 +185,1016 @@ function timeExpired() {
 function requestFullscreen() {
 
     if (
-        !document.fullscreenElement &&
         document.documentElement.requestFullscreen
     ) {
 
         document.documentElement
             .requestFullscreen()
-            .catch(
-                function() {
+            .catch(function() {
 
-                    console.log(
-                        "Fullscreen permission denied."
-                    );
+                console.log(
+                    "Fullscreen permission was not granted."
+                );
 
-                }
-            );
+            });
 
     }
+
 }
 
 
 /* =====================================================
-   DETECT TAB SWITCHING
+   LEVEL 1
+===================================================== */
+
+if (
+    page === "level1.html"
+) {
+
+    const questions = [
+
+        {
+            question:
+                "What is the output of print(2 ** 3)?",
+
+            options: [
+                "6",
+                "8",
+                "9",
+                "5"
+            ],
+
+            answer: 1,
+
+            marks: 10
+        },
+
+        {
+            question:
+                "What is the output of print(10 // 3)?",
+
+            options: [
+                "3",
+                "3.33",
+                "1",
+                "4"
+            ],
+
+            answer: 0,
+
+            marks: 10
+        },
+
+        {
+            question:
+                "Which keyword is used to define a function in Python?",
+
+            options: [
+                "function",
+                "define",
+                "def",
+                "fun"
+            ],
+
+            answer: 2,
+
+            marks: 10
+        },
+
+        {
+            question:
+                "What is the output of print(bool(0))?",
+
+            options: [
+                "True",
+                "False",
+                "0",
+                "None"
+            ],
+
+            answer: 1,
+
+            marks: 10
+        },
+
+        {
+            question:
+                "What is the output of print(len('Vampire'))?",
+
+            options: [
+                "6",
+                "7",
+                "8",
+                "5"
+            ],
+
+            answer: 1,
+
+            marks: 10
+        }
+
+    ];
+
+
+    let currentQuestion = 0;
+
+    let level1Score = 0;
+
+    let selected = false;
+
+    let timeLeft = 300;
+
+    let timerInterval;
+
+
+    const questionBox =
+        document.getElementById(
+            "questionBox"
+        );
+
+    const optionsBox =
+        document.getElementById(
+            "optionsBox"
+        );
+
+    const questionNumber =
+        document.getElementById(
+            "questionNumber"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    /* LOAD QUESTION */
+
+    function loadQuestion() {
+
+        selected = false;
+
+
+        const q =
+            questions[currentQuestion];
+
+
+        questionNumber.textContent =
+            currentQuestion + 1;
+
+
+        questionBox.textContent =
+            q.question;
+
+
+        progressBar.style.width =
+            (
+                ((currentQuestion + 1) / 5)
+                * 100
+            ) + "%";
+
+
+        optionsBox.innerHTML = "";
+
+
+        q.options.forEach(
+            function(option, index) {
+
+                const button =
+                    document.createElement(
+                        "button"
+                    );
+
+
+                button.className =
+                    "option";
+
+
+                button.textContent =
+                    option;
+
+
+                button.addEventListener(
+                    "click",
+                    function() {
+
+                        selectAnswer(
+                            index
+                        );
+
+                    }
+                );
+
+
+                optionsBox.appendChild(
+                    button
+                );
+
+            }
+        );
+
+    }
+
+
+    /* SELECT ANSWER */
+
+    function selectAnswer(index) {
+
+        if (selected) {
+            return;
+        }
+
+
+        selected = true;
+
+
+        const q =
+            questions[currentQuestion];
+
+
+        if (
+            index === q.answer
+        ) {
+
+            level1Score +=
+                q.marks;
+
+        }
+
+
+        /*
+
+        IMPORTANT:
+
+        No correct/wrong message
+        is displayed.
+
+        The participant immediately
+        goes to the next question.
+
+        */
+
+
+        setTimeout(
+            nextQuestion,
+            150
+        );
+
+    }
+
+
+    /* NEXT QUESTION */
+
+    function nextQuestion() {
+
+        currentQuestion++;
+
+
+        if (
+            currentQuestion >=
+            questions.length
+        ) {
+
+            finishLevel1();
+
+            return;
+
+        }
+
+
+        loadQuestion();
+
+    }
+
+
+    /* FINISH LEVEL 1 */
+
+    function finishLevel1() {
+
+        clearInterval(
+            timerInterval
+        );
+
+
+        localStorage.setItem(
+            "level1Score",
+            level1Score
+        );
+
+
+        localStorage.setItem(
+            "currentLevelScore",
+            level1Score
+        );
+
+
+        window.location.href =
+            "level2.html";
+
+    }
+
+
+    /* TIMER */
+
+    function updateTimer() {
+
+        const minutes =
+            Math.floor(
+                timeLeft / 60
+            );
+
+
+        const seconds =
+            timeLeft % 60;
+
+
+        timer.textContent =
+            String(minutes)
+                .padStart(2, "0")
+            + ":" +
+            String(seconds)
+                .padStart(2, "0");
+
+
+        if (
+            timeLeft <= 30
+        ) {
+
+            timer.parentElement
+                .classList.add(
+                    "timer-warning"
+                );
+
+        }
+
+
+        if (
+            timeLeft <= 0
+        ) {
+
+            clearInterval(
+                timerInterval
+            );
+
+
+            finishLevel1();
+
+        }
+
+    }
+
+
+    timerInterval =
+        setInterval(
+            function() {
+
+                timeLeft--;
+
+                updateTimer();
+
+            },
+            1000
+        );
+
+
+    /* ENTER KEY */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+
+                if (!selected) {
+
+                    /*
+                    Enter selects the
+                    first option if no
+                    option was selected.
+                    */
+
+                    const firstButton =
+                        document.querySelector(
+                            ".option"
+                        );
+
+
+                    if (firstButton) {
+
+                        firstButton.click();
+
+                    }
+
+                }
+                else {
+
+                    nextQuestion();
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* START */
+
+    loadQuestion();
+
+    updateTimer();
+
+}
+
+
+/* =====================================================
+   LEVEL 2
+===================================================== */
+
+if (
+    page === "level2.html"
+) {
+
+    const puzzles = [
+
+        {
+            question:
+                "I am a number. If you multiply me by 2 and add 6, the answer is 20. What am I?",
+
+            hint:
+                "Think backwards. Subtract 6 first, then divide by 2.",
+
+            answer:
+                "7",
+
+            marks:
+                25
+        },
+
+        {
+            question:
+                "I have keys but no locks. I have space but no room. You can enter, but you cannot go inside. What am I?",
+
+            hint:
+                "You use me when working with a computer.",
+
+            answer:
+                "keyboard",
+
+            marks:
+                25
+        }
+
+    ];
+
+
+    let currentPuzzle = 0;
+
+    let level2Score = 0;
+
+    let timeLeft = 300;
+
+    let timerInterval;
+
+    let answerSelected = false;
+
+
+    const puzzleArea =
+        document.getElementById(
+            "puzzleArea"
+        );
+
+
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    const instructionsPopup =
+        document.getElementById(
+            "instructionsPopup"
+        );
+
+
+    const hintPopup =
+        document.getElementById(
+            "hintPopup"
+        );
+
+
+    const instructionsContinue =
+        document.getElementById(
+            "instructionsContinue"
+        );
+
+
+    const hintContinue =
+        document.getElementById(
+            "hintContinue"
+        );
+
+
+    /* =========================================
+       LEVEL 2 INSTRUCTIONS
+    ========================================= */
+
+    instructionsContinue.addEventListener(
+        "click",
+        function() {
+
+            instructionsPopup
+                .classList.remove(
+                    "show"
+                );
+
+
+            hintPopup
+                .classList.add(
+                    "show"
+                );
+
+        }
+    );
+
+
+    /* =========================================
+       HINT POPUP
+    ========================================= */
+
+    hintContinue.addEventListener(
+        "click",
+        function() {
+
+            hintPopup
+                .classList.remove(
+                    "show"
+                );
+
+
+            loadPuzzle();
+
+            startTimer();
+
+        }
+    );
+
+
+    /* =========================================
+       LOAD PUZZLE
+    ========================================= */
+
+    function loadPuzzle() {
+
+        answerSelected = false;
+
+
+        const puzzle =
+            puzzles[currentPuzzle];
+
+
+        puzzleArea.innerHTML = `
+
+            <div class="question-number">
+                Puzzle ${currentPuzzle + 1} / 2
+            </div>
+
+            <div class="puzzle">
+
+                <h3>
+                    🧩 PUZZLE ${currentPuzzle + 1}
+                </h3>
+
+                <div class="puzzle-question">
+                    ${puzzle.question}
+                </div>
+
+                <div class="hint">
+
+                    💡 <b>Hint:</b>
+
+                    ${puzzle.hint}
+
+                </div>
+
+                <div style="text-align:center;">
+
+                    <input
+                        id="puzzleAnswer"
+                        type="text"
+                        placeholder="Enter your answer"
+                        autocomplete="off"
+                    >
+
+                    <br>
+
+                    <button id="submitPuzzle">
+                        SUBMIT
+                    </button>
+
+                </div>
+
+            </div>
+
+            <p class="enter-info">
+                Enter your answer and press
+                <b>ENTER</b> to continue.
+            </p>
+
+        `;
+
+
+        document
+            .getElementById(
+                "submitPuzzle"
+            )
+            .addEventListener(
+                "click",
+                submitPuzzle
+            );
+
+
+        document
+            .getElementById(
+                "puzzleAnswer"
+            )
+            .focus();
+
+    }
+
+
+    /* =========================================
+       SUBMIT PUZZLE
+    ========================================= */
+
+    function submitPuzzle() {
+
+        if (answerSelected) {
+            return;
+        }
+
+
+        answerSelected = true;
+
+
+        const input =
+            document.getElementById(
+                "puzzleAnswer"
+            );
+
+
+        const answer =
+            input.value
+                .trim()
+                .toLowerCase();
+
+
+        const correctAnswer =
+            puzzles[currentPuzzle]
+                .answer
+                .toLowerCase();
+
+
+        if (
+            answer === correctAnswer
+        ) {
+
+            level2Score +=
+                puzzles[currentPuzzle]
+                    .marks;
+
+        }
+
+
+        /*
+        No correct/wrong message.
+        */
+
+
+        setTimeout(
+            nextPuzzle,
+            150
+        );
+
+    }
+
+
+    /* =========================================
+       NEXT PUZZLE
+    ========================================= */
+
+    function nextPuzzle() {
+
+        currentPuzzle++;
+
+
+        if (
+            currentPuzzle >=
+            puzzles.length
+        ) {
+
+            finishLevel2();
+
+            return;
+
+        }
+
+
+        loadPuzzle();
+
+    }
+
+
+    /* =========================================
+       FINISH LEVEL 2
+    ========================================= */
+
+    function finishLevel2() {
+
+        clearInterval(
+            timerInterval
+        );
+
+
+        localStorage.setItem(
+            "level2Score",
+            level2Score
+        );
+
+
+        window.location.href =
+            "result.html";
+
+    }
+
+
+    /* =========================================
+       TIMER
+    ========================================= */
+
+    function startTimer() {
+
+        clearInterval(
+            timerInterval
+        );
+
+
+        updateTimer();
+
+
+        timerInterval =
+            setInterval(
+                function() {
+
+                    timeLeft--;
+
+                    updateTimer();
+
+
+                    if (
+                        timeLeft <= 0
+                    ) {
+
+                        clearInterval(
+                            timerInterval
+                        );
+
+
+                        finishLevel2();
+
+                    }
+
+                },
+                1000
+            );
+
+    }
+
+
+    function updateTimer() {
+
+        const minutes =
+            Math.floor(
+                timeLeft / 60
+            );
+
+
+        const seconds =
+            timeLeft % 60;
+
+
+        timer.textContent =
+            String(minutes)
+                .padStart(2, "0")
+            + ":" +
+            String(seconds)
+                .padStart(2, "0");
+
+
+        if (
+            timeLeft <= 30
+        ) {
+
+            timer.parentElement
+                .classList.add(
+                    "timer-warning"
+                );
+
+        }
+
+    }
+
+
+    /* =========================================
+       ENTER KEY
+    ========================================= */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+
+                const popupOpen =
+                    instructionsPopup
+                        .classList.contains(
+                            "show"
+                        );
+
+
+                const hintOpen =
+                    hintPopup
+                        .classList.contains(
+                            "show"
+                        );
+
+
+                if (popupOpen) {
+
+                    instructionsContinue
+                        .click();
+
+                    return;
+
+                }
+
+
+                if (hintOpen) {
+
+                    hintContinue.click();
+
+                    return;
+
+                }
+
+
+                submitPuzzle();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RESULT PAGE
+===================================================== */
+
+if (
+    page === "result.html"
+) {
+
+    const team =
+        localStorage.getItem(
+            "teamName"
+        ) || "Team";
+
+
+    const level1 =
+        Number(
+            localStorage.getItem(
+                "level1Score"
+            ) || 0
+        );
+
+
+    const level2 =
+        Number(
+            localStorage.getItem(
+                "level2Score"
+            ) || 0
+        );
+
+
+    const total =
+        level1 + level2;
+
+
+    document.getElementById(
+        "resultTeam"
+    ).textContent =
+        "🩸 " + team;
+
+
+    document.getElementById(
+        "finalScore"
+    ).textContent =
+        total;
+
+
+    let message;
+
+
+    if (total >= 80) {
+
+        message =
+            "🧛 Outstanding! You escaped the Vampire's Castle!";
+
+    }
+
+    else if (total >= 50) {
+
+        message =
+            "🩸 Great job! You survived the challenge!";
+
+    }
+
+    else {
+
+        message =
+            "☠️ The Vampire has won this time!";
+
+    }
+
+
+    document.getElementById(
+        "resultMessage"
+    ).textContent =
+        message;
+
+
+    /* RESTART */
+
+    document.getElementById(
+        "restartBtn"
+    ).addEventListener(
+        "click",
+        function() {
+
+            localStorage.clear();
+
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
+
+    /* ENTER = RESTART */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                document
+                    .getElementById(
+                        "restartBtn"
+                    )
+                    .click();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   TAB SWITCH WARNING
 ===================================================== */
 
 document.addEventListener(
@@ -901,86 +1203,14 @@ document.addEventListener(
 
         if (
             document.hidden &&
-            isExamPage() &&
-            !violationTriggered
+            (
+                page === "level1.html" ||
+                page === "level2.html"
+            )
         ) {
-
-            triggerViolation(
-                "Tab switching or minimizing is not allowed."
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   DETECT FULLSCREEN EXIT
-===================================================== */
-
-document.addEventListener(
-    "fullscreenchange",
-    function() {
-
-        if (
-            !document.fullscreenElement &&
-            isExamPage() &&
-            !violationTriggered
-        ) {
-
-            triggerViolation(
-                "Fullscreen mode was exited."
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   ESC DETECTION
-===================================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Escape" &&
-            isExamPage() &&
-            !violationTriggered
-        ) {
-
-            event.preventDefault();
-
-
-            triggerViolation(
-                "ESC key is not allowed."
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   COPY BLOCK
-===================================================== */
-
-document.addEventListener(
-    "copy",
-    function(event) {
-
-        if (isExamPage()) {
-
-            event.preventDefault();
-
 
             alert(
-                "⚠️ Copying is not allowed."
+                "⚠️ Please remain on the challenge screen."
             );
 
         }
@@ -989,326 +1219,4 @@ document.addEventListener(
 );
 
 
-/* =====================================================
-   CUT BLOCK
-===================================================== */
-
-document.addEventListener(
-    "cut",
-    function(event) {
-
-        if (isExamPage()) {
-
-            event.preventDefault();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   PASTE BLOCK
-===================================================== */
-
-document.addEventListener(
-    "paste",
-    function(event) {
-
-        if (isExamPage()) {
-
-            event.preventDefault();
-
-
-            alert(
-                "⚠️ Pasting is not allowed."
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   RIGHT CLICK BLOCK
-===================================================== */
-
-document.addEventListener(
-    "contextmenu",
-    function(event) {
-
-        if (isExamPage()) {
-
-            event.preventDefault();
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   DEVTOOLS SHORTCUTS
-===================================================== */
-
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (!isExamPage()) {
-            return;
-        }
-
-
-        /*
-           F12
-        */
-
-        if (
-            event.key === "F12"
-        ) {
-
-            event.preventDefault();
-
-
-            triggerViolation(
-                "Developer tools are not allowed."
-            );
-
-        }
-
-
-        /*
-           CTRL + SHIFT + I
-        */
-
-        if (
-            event.ctrlKey &&
-            event.shiftKey &&
-            event.key.toLowerCase() === "i"
-        ) {
-
-            event.preventDefault();
-
-
-            triggerViolation(
-                "Developer tools are not allowed."
-            );
-
-        }
-
-
-        /*
-           CTRL + SHIFT + J
-        */
-
-        if (
-            event.ctrlKey &&
-            event.shiftKey &&
-            event.key.toLowerCase() === "j"
-        ) {
-
-            event.preventDefault();
-
-
-            triggerViolation(
-                "Developer tools are not allowed."
-            );
-
-        }
-
-
-        /*
-           CTRL + U
-        */
-
-        if (
-            event.ctrlKey &&
-            event.key.toLowerCase() === "u"
-        ) {
-
-            event.preventDefault();
-
-
-            triggerViolation(
-                "Viewing page source is not allowed."
-            );
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   EXAM PAGE CHECK
-===================================================== */
-
-function isExamPage() {
-
-    return (
-
-        currentPage ===
-        "level1.html"
-
-        ||
-
-        currentPage ===
-        "level2.html"
-
-    );
-
-}
-
-
-/* =====================================================
-   VIOLATION
-===================================================== */
-
-function triggerViolation(
-    reason
-) {
-
-    if (
-        violationTriggered
-    ) {
-
-        return;
-    }
-
-
-    violationTriggered =
-        true;
-
-
-    clearInterval(
-        timerInterval
-    );
-
-
-    localStorage.setItem(
-        "disqualified",
-        "true"
-    );
-
-
-    localStorage.setItem(
-        "disqualificationReason",
-        reason
-    );
-
-
-    if (
-        currentPage ===
-        "level1.html"
-    ) {
-
-        calculateLevel1Score();
-
-    }
-
-
-    if (
-        currentPage ===
-        "level2.html"
-    ) {
-
-        localStorage.setItem(
-            "level2Score",
-            "0"
-        );
-
-    }
-
-
-    alert(
-        "⚠️ VIOLATION DETECTED\n\n" +
-        reason +
-        "\n\n" +
-        "The team has been disqualified."
-    );
-
-
-    window.location.href =
-        "result.html";
-}
-
-
-/* =====================================================
-   RESULT PAGE
-===================================================== */
-
-function loadResult() {
-
-    const teamName =
-        localStorage.getItem(
-            "teamName"
-        );
-
-
-    const teamId =
-        localStorage.getItem(
-            "teamId"
-        );
-
-
-    if (
-        !teamName ||
-        !teamId
-    ) {
-
-        window.location.href =
-            "index.html";
-
-        return;
-    }
-
-
-    const disqualified =
-        localStorage.getItem(
-            "disqualified"
-        );
-
-
-    /*
-       DISQUALIFIED
-    */
-
-    if (
-        disqualified ===
-        "true"
-    ) {
-
-        document
-            .getElementById(
-                "normalResult"
-            )
-            .classList.add(
-                "hidden"
-            );
-
-
-        document
-            .getElementById(
-                "disqualifiedResult"
-            )
-            .classList.remove(
-                "hidden"
-            );
-
-
-        document
-            .getElementById(
-                "disqualifiedTeam"
-            )
-            .innerText =
-                teamName;
-
-
-        document
-            .getElementById(
-                "disqualifiedId"
-            )
-            .innerText =
-                teamId;
+/* ========================
