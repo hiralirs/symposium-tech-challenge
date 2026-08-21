@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -19,67 +20,178 @@
 
 <div class="container">
 
-    <div class="top-bar">
 
-        <span>
-            Team:
-            <b id="teamNameDisplay"></b>
-        </span>
+    <!-- ================================
+         LEVEL 1 INSTRUCTIONS
+    ================================= -->
 
-        <span>
-            ID:
-            <b id="teamIdDisplay"></b>
-        </span>
+    <section id="level1Instructions">
 
-    </div>
+        <div class="vampire">
+            🩸
+        </div>
 
+        <h1>
+            LEVEL 1
+        </h1>
 
-    <h1>🩸 LEVEL 1</h1>
-
-    <h2>Vampire's Logic</h2>
-
-
-    <div class="timer">
-
-        ⏱ Time Left:
-        <span id="timer">06:00</span>
-
-    </div>
+        <h2>
+            Vampire's Logic
+        </h2>
 
 
-    <div class="progress">
+        <div class="instruction-box">
 
-        Question
-        <span id="questionNumber">1</span>
-        of 5
-
-    </div>
+            <h3>
+                📜 Instructions
+            </h3>
 
 
-    <div id="questionContainer"></div>
+            <p>
+                • You have 5 Python MCQ questions.
+            </p>
 
 
-    <button
-        id="nextButton"
-        onclick="nextQuestion()"
+            <p>
+                • Time limit:
+                <b>5 minutes.</b>
+            </p>
+
+
+            <p>
+                • There is
+                <b>no attempt limit.</b>
+            </p>
+
+
+            <p>
+                • Select one option for every question.
+            </p>
+
+
+            <p>
+                • Correct answers will not be shown
+                immediately.
+            </p>
+
+
+            <p>
+                • Correct answers will be displayed
+                only on the final result page.
+            </p>
+
+
+            <p>
+                • Do not switch tabs or minimize
+                the screen.
+            </p>
+
+
+            <p>
+                • Do not press ESC or exit fullscreen.
+            </p>
+
+
+            <p>
+                • Any violation will result in
+                disqualification.
+            </p>
+
+        </div>
+
+
+        <button onclick="startLevel1()">
+            START LEVEL 1
+        </button>
+
+    </section>
+
+
+
+    <!-- ================================
+         LEVEL 1 QUESTIONS
+    ================================= -->
+
+    <section
+        id="level1Questions"
+        class="hidden"
     >
-        NEXT
-    </button>
+
+        <div class="top-bar">
+
+            <span>
+                Team:
+                <b id="teamNameDisplay"></b>
+            </span>
 
 
-    <p
-        id="questionError"
-        class="error"
-    ></p>
+            <span>
+                ID:
+                <b id="teamIdDisplay"></b>
+            </span>
+
+        </div>
+
+
+        <h1>
+            🩸 LEVEL 1
+        </h1>
+
+
+        <h2>
+            Vampire's Logic
+        </h2>
+
+
+        <div class="timer">
+
+            ⏱ Time Left:
+
+            <span id="timer">
+                05:00
+            </span>
+
+        </div>
+
+
+        <div class="progress">
+
+            Question
+
+            <span id="questionNumber">
+                1
+            </span>
+
+            of 5
+
+        </div>
+
+
+        <div id="questionContainer"></div>
+
+
+        <button onclick="nextQuestion()">
+            NEXT
+        </button>
+
+
+        <p
+            id="questionError"
+            class="error"
+        ></p>
+
+    </section>
 
 </div>
 
 
 <script src="script.js"></script>
 
+
 <script>
     loadLevel1();
 </script>
 
 </body>
+
 </html>
