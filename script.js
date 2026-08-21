@@ -1,18 +1,23 @@
 /* =====================================================
-   VAMPIRE CODE HUNT
+   VAMPIRE CHALLENGE
 ===================================================== */
 
+
+/* =====================================================
+   QUESTIONS
+===================================================== */
 
 const questions = [
 
     {
-        q: "What is the output of print(2 ** 3)?",
+        question:
+            "What is the output of print(2 ** 3)?",
 
         options: [
-            "5",
             "6",
             "8",
-            "9"
+            "9",
+            "5"
         ],
 
         answer: "8"
@@ -20,27 +25,14 @@ const questions = [
 
 
     {
-        q: "What is the output of print(len('Vampire'))?",
-
-        options: [
-            "6",
-            "7",
-            "8",
-            "9"
-        ],
-
-        answer: "7"
-    },
-
-
-    {
-        q: "What does 10 // 3 produce?",
+        question:
+            "What is the output of print(10 // 3)?",
 
         options: [
             "3",
             "3.33",
-            "1",
-            "0"
+            "4",
+            "1"
         ],
 
         answer: "3"
@@ -48,7 +40,38 @@ const questions = [
 
 
     {
-        q: "What is the output of print(5 > 3 and 2 < 1)?",
+        question:
+            "What is the data type of 10.5?",
+
+        options: [
+            "int",
+            "str",
+            "float",
+            "double"
+        ],
+
+        answer: "float"
+    },
+
+
+    {
+        question:
+            "What is the output of len('Python')?",
+
+        options: [
+            "5",
+            "6",
+            "7",
+            "8"
+        ],
+
+        answer: "6"
+    },
+
+
+    {
+        question:
+            "What is the output of print(5 > 3 and 2 > 4)?",
 
         options: [
             "True",
@@ -58,184 +81,389 @@ const questions = [
         ],
 
         answer: "False"
-    },
-
-
-    {
-        q: "Which data type is used for [1, 2, 3]?",
-
-        options: [
-            "Tuple",
-            "Set",
-            "List",
-            "Dictionary"
-        ],
-
-        answer: "List"
     }
 
 ];
 
 
+/* =====================================================
+   VARIABLES
+===================================================== */
+
 let currentQuestion = 0;
 
-let time = 300;
+let selectedAnswer = null;
 
-let timerInterval;
+let level1Score = 0;
+
+let timerInterval = null;
+
+let timeLeft = 300;
+
+let violationTriggered = false;
+
+
+const currentPage =
+    window.location.pathname
+        .split("/")
+        .pop();
 
 
 /* =====================================================
-   LEVEL 1
+   START ROUND
 ===================================================== */
 
-function initializeLevel1() {
+function startRound() {
 
-    enableSecurity();
+    const teamName =
+        document
+            .getElementById("teamName")
+            .value
+            .trim();
 
-    loadQuestion();
 
-    startTimer("level1");
+    const teamId =
+        document
+            .getElementById("teamId")
+            .value
+            .trim();
+
+
+    if (
+        teamName === "" ||
+        teamId === ""
+    ) {
+
+        document
+            .getElementById("error")
+            .innerText =
+                "Please enter Team Name and Team ID.";
+
+        return;
+    }
+
+
+    localStorage.clear();
+
+
+    localStorage.setItem(
+        "teamName",
+        teamName
+    );
+
+
+    localStorage.setItem(
+        "teamId",
+        teamId
+    );
+
+
+    localStorage.setItem(
+        "disqualified",
+        "false"
+    );
+
+
+    localStorage.setItem(
+        "level1Answers",
+        JSON.stringify([])
+    );
+
+
+    localStorage.setItem(
+        "level1Score",
+        "0"
+    );
+
+
+    localStorage.setItem(
+        "level2Score",
+        "0"
+    );
+
+
+    localStorage.setItem(
+        "puzzleAnswer",
+        ""
+    );
+
+
+    requestFullscreen();
+
+
+    window.location.href =
+        "level1.html";
+}
+
+
+/* =====================================================
+   CHECK TEAM
+===================================================== */
+
+function checkTeam() {
+
+    const teamName =
+        localStorage.getItem("teamName");
+
+
+    const teamId =
+        localStorage.getItem("teamId");
+
+
+    if (
+        !teamName ||
+        !teamId
+    ) {
+
+        window.location.href =
+            "index.html";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =====================================================
+   LEVEL 1 LOAD
+===================================================== */
+
+function loadLevel1() {
+
+    if (!checkTeam()) {
+        return;
+    }
+
+
+    document
+        .getElementById("teamNameDisplay")
+        .innerText =
+            localStorage.getItem("teamName");
+
+
+    document
+        .getElementById("teamIdDisplay")
+        .innerText =
+            localStorage.getItem("teamId");
 
 }
 
 
-function loadQuestion() {
+/* =====================================================
+   START LEVEL 1
+===================================================== */
 
-    if (currentQuestion >= questions.length) {
+function startLevel1() {
 
-        finishLevel1();
+    document
+        .getElementById(
+            "level1Instructions"
+        )
+        .classList.add("hidden");
 
-        return;
-    }
+
+    document
+        .getElementById(
+            "level1Questions"
+        )
+        .classList.remove("hidden");
+
+
+    currentQuestion = 0;
+
+    selectedAnswer = null;
+
+
+    showQuestion();
+
+
+    /*
+       5 MINUTES
+    */
+
+    startTimer();
+
+
+    requestFullscreen();
+
+}
+
+
+/* =====================================================
+   SHOW QUESTION
+===================================================== */
+
+function showQuestion() {
+
+    selectedAnswer = null;
+
+
+    document
+        .getElementById(
+            "questionNumber"
+        )
+        .innerText =
+            currentQuestion + 1;
 
 
     const question =
         questions[currentQuestion];
 
 
-    document.getElementById("question")
-        .innerText = question.q;
+    let html = `
+
+        <div class="question-box">
+
+            <h3>
+                ${question.question}
+            </h3>
+
+    `;
 
 
-    document.getElementById("questionNo")
-        .innerText = currentQuestion + 1;
+    question.options.forEach(
+        function(option) {
+
+            const safeOption =
+                option.replace(
+                    /'/g,
+                    "\\'"
+                );
 
 
-    document.getElementById("number")
-        .innerText = currentQuestion + 1;
+            html += `
+
+                <div
+                    class="option"
+                    onclick="selectOption(
+                        this,
+                        '${safeOption}'
+                    )"
+                >
+
+                    ${option}
+
+                </div>
+
+            `;
+
+        }
+    );
 
 
-    document.getElementById("progressBar")
-        .style.width =
-        ((currentQuestion + 1) / 5 * 100) + "%";
+    html += `
+
+        </div>
+
+    `;
 
 
-    const options =
-        document.getElementById("options");
-
-
-    options.innerHTML = "";
-
-
-    question.options.forEach(function(option) {
-
-        const button =
-            document.createElement("div");
-
-
-        button.className = "option";
-
-        button.innerText = option;
-
-
-        button.onclick = function() {
-
-            checkAnswer(
-                option,
-                button
-            );
-
-        };
-
-
-        options.appendChild(button);
-
-    });
-
+    document
+        .getElementById(
+            "questionContainer"
+        )
+        .innerHTML =
+            html;
 }
 
 
 /* =====================================================
-   CHECK ANSWER
+   SELECT ANSWER
 ===================================================== */
 
-function checkAnswer(
-    selected,
-    button
+function selectOption(
+    element,
+    answer
 ) {
 
-    const correct =
-        questions[currentQuestion].answer;
+    document
+        .querySelectorAll(".option")
+        .forEach(
+            function(option) {
 
+                option.classList.remove(
+                    "selected"
+                );
 
-    if (selected === correct) {
-
-        button.style.background =
-            "#075c25";
-
-        button.style.borderColor =
-            "#00ff66";
-
-
-        document.getElementById(
-            "answerMessage"
-        ).innerText =
-            "🩸 CORRECT!";
-
-
-        let score =
-            Number(
-                sessionStorage.getItem("score")
-            ) || 0;
-
-
-        score += 10;
-
-
-        sessionStorage.setItem(
-            "score",
-            score
+            }
         );
 
+
+    element.classList.add(
+        "selected"
+    );
+
+
+    selectedAnswer =
+        answer;
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion() {
+
+    if (
+        selectedAnswer === null
+    ) {
 
         document
-            .querySelectorAll(".option")
-            .forEach(function(element) {
+            .getElementById(
+                "questionError"
+            )
+            .innerText =
+                "Please select an answer.";
 
-                element.style.pointerEvents =
-                    "none";
-
-            });
-
-
-        currentQuestion++;
+        return;
+    }
 
 
-        setTimeout(
-            loadQuestion,
-            700
+    document
+        .getElementById(
+            "questionError"
+        )
+        .innerText = "";
+
+
+    let answers =
+        JSON.parse(
+            localStorage.getItem(
+                "level1Answers"
+            ) || "[]"
         );
 
 
-    } else {
+    answers[currentQuestion] =
+        selectedAnswer;
 
-        document.getElementById(
-            "answerMessage"
-        ).innerText =
-            "❌ WRONG! Try again.";
+
+    localStorage.setItem(
+        "level1Answers",
+        JSON.stringify(answers)
+    );
+
+
+    currentQuestion++;
+
+
+    if (
+        currentQuestion <
+        questions.length
+    ) {
+
+        showQuestion();
 
     }
 
+    else {
+
+        finishLevel1();
+
+    }
 }
 
 
@@ -245,121 +473,241 @@ function checkAnswer(
 
 function finishLevel1() {
 
-    clearInterval(timerInterval);
+    clearInterval(
+        timerInterval
+    );
 
 
-    const score =
-        Number(
-            sessionStorage.getItem("score")
-        ) || 0;
+    calculateLevel1Score();
 
 
-    sessionStorage.setItem(
+    /*
+       Correct answers are NOT shown.
+
+       Go to Level 2 instructions.
+    */
+
+    window.location.href =
+        "level2.html";
+}
+
+
+/* =====================================================
+   LEVEL 1 SCORE
+===================================================== */
+
+function calculateLevel1Score() {
+
+    const answers =
+        JSON.parse(
+            localStorage.getItem(
+                "level1Answers"
+            ) || "[]"
+        );
+
+
+    level1Score = 0;
+
+
+    answers.forEach(
+        function(answer, index) {
+
+            if (
+                answer ===
+                questions[index].answer
+            ) {
+
+                level1Score += 10;
+
+            }
+
+        }
+    );
+
+
+    localStorage.setItem(
         "level1Score",
+        level1Score
+    );
+}
+
+
+/* =====================================================
+   LEVEL 2 LOAD
+===================================================== */
+
+function loadLevel2() {
+
+    if (!checkTeam()) {
+        return;
+    }
+
+
+    document
+        .getElementById(
+            "teamNameDisplay"
+        )
+        .innerText =
+            localStorage.getItem(
+                "teamName"
+            );
+
+
+    document
+        .getElementById(
+            "teamIdDisplay"
+        )
+        .innerText =
+            localStorage.getItem(
+                "teamId"
+            );
+
+}
+
+
+/* =====================================================
+   START LEVEL 2
+===================================================== */
+
+function startLevel2() {
+
+    /*
+       Hide instructions.
+    */
+
+    document
+        .getElementById(
+            "level2Instructions"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    /*
+       Show popup.
+    */
+
+    document
+        .getElementById(
+            "level2Popup"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
+
+/* =====================================================
+   CLOSE LEVEL 2 POPUP
+===================================================== */
+
+function closeLevel2Popup() {
+
+    /*
+       Close popup.
+    */
+
+    document
+        .getElementById(
+            "level2Popup"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    /*
+       Show puzzle.
+    */
+
+    document
+        .getElementById(
+            "level2Puzzle"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+
+    /*
+       Start 5-minute timer.
+    */
+
+    startTimer();
+
+
+    requestFullscreen();
+
+}
+
+
+/* =====================================================
+   SUBMIT PUZZLE
+===================================================== */
+
+function submitPuzzle() {
+
+    const answer =
+        document
+            .getElementById(
+                "puzzleAnswer"
+            )
+            .value
+            .trim();
+
+
+    if (
+        answer === ""
+    ) {
+
+        document
+            .getElementById(
+                "puzzleError"
+            )
+            .innerText =
+                "Please enter your answer.";
+
+        return;
+    }
+
+
+    clearInterval(
+        timerInterval
+    );
+
+
+    localStorage.setItem(
+        "puzzleAnswer",
+        answer
+    );
+
+
+    let score = 0;
+
+
+    /*
+       5 + 6 = 5 × 11 = 55
+    */
+
+    if (
+        answer === "55"
+    ) {
+
+        score = 40;
+
+    }
+
+
+    localStorage.setItem(
+        "level2Score",
         score
     );
 
 
     window.location.href =
-        "level2.html";
-
-}
-
-
-/* =====================================================
-   LEVEL 2
-===================================================== */
-
-function initializeLevel2() {
-
-    enableSecurity();
-
-    time = 300;
-
-    startTimer("level2");
-
-}
-
-
-function checkPuzzle() {
-
-    const answer =
-        document
-            .getElementById("puzzleAnswer")
-            .value
-            .trim()
-            .toLowerCase();
-
-
-    const message =
-        document.getElementById(
-            "puzzleMessage"
-        );
-
-
-    if (
-        answer === "60" ||
-        answer === "sixty"
-    ) {
-
-        message.innerText =
-            "🩸 CORRECT!";
-
-
-        let score =
-            Number(
-                sessionStorage.getItem("score")
-            ) || 0;
-
-
-        score += 50;
-
-
-        sessionStorage.setItem(
-            "score",
-            score
-        );
-
-
-        sessionStorage.setItem(
-            "level2Score",
-            "50"
-        );
-
-
-        document.getElementById(
-            "puzzleAnswer"
-        ).disabled = true;
-
-
-        clearInterval(timerInterval);
-
-
-        setTimeout(
-            finishGame,
-            1000
-        );
-
-
-    } else {
-
-        message.innerText =
-            "❌ Incorrect. Try again.";
-
-    }
-
-}
-
-
-/* =====================================================
-   FINISH GAME
-===================================================== */
-
-function finishGame() {
-
-    window.location.href =
         "result.html";
-
 }
 
 
@@ -367,255 +715,448 @@ function finishGame() {
    TIMER
 ===================================================== */
 
-function startTimer(level) {
+function startTimer() {
 
-    clearInterval(timerInterval);
-
-
-    const timer =
-        document.getElementById("timer");
+    clearInterval(
+        timerInterval
+    );
 
 
-    updateTimer(timer);
+    /*
+       5 MINUTES = 300 SECONDS
+    */
+
+    timeLeft = 300;
+
+
+    updateTimer();
 
 
     timerInterval =
-        setInterval(function() {
+        setInterval(
+            function() {
 
-            time--;
-
-            updateTimer(timer);
-
-
-            if (time <= 0) {
-
-                clearInterval(
-                    timerInterval
-                );
+                timeLeft--;
 
 
-                if (level === "level1") {
-
-                    finishLevel1();
-
-                } else {
-
-                    const level1 =
-                        Number(
-                            sessionStorage.getItem(
-                                "level1Score"
-                            )
-                        ) || 0;
+                updateTimer();
 
 
-                    const total =
-                        Number(
-                            sessionStorage.getItem(
-                                "score"
-                            )
-                        ) || 0;
+                if (
+                    timeLeft <= 0
+                ) {
 
-
-                    sessionStorage.setItem(
-                        "level2Score",
-                        Math.max(
-                            total - level1,
-                            0
-                        )
+                    clearInterval(
+                        timerInterval
                     );
 
 
-                    window.location.href =
-                        "result.html";
+                    timeExpired();
 
                 }
 
-            }
-
-        }, 1000);
-
+            },
+            1000
+        );
 }
 
 
 /* =====================================================
-   TIMER DISPLAY
+   UPDATE TIMER
 ===================================================== */
 
-function updateTimer(timer) {
+function updateTimer() {
 
-    if (!timer) return;
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    if (!timer) {
+        return;
+    }
 
 
     const minutes =
-        Math.floor(time / 60);
+        Math.floor(
+            timeLeft / 60
+        );
 
 
     const seconds =
-        time % 60;
+        timeLeft % 60;
 
 
     timer.innerText =
-        String(minutes).padStart(2, "0")
+
+        String(minutes)
+            .padStart(2, "0")
+
         + ":" +
-        String(seconds).padStart(2, "0");
 
-
-    if (time <= 30) {
-
-        timer.style.color =
-            "red";
-
-    }
-
+        String(seconds)
+            .padStart(2, "0");
 }
 
 
 /* =====================================================
-   SECURITY
+   TIME EXPIRED
 ===================================================== */
 
-function enableSecurity() {
+function timeExpired() {
+
+    /*
+       LEVEL 1
+    */
+
+    if (
+        currentPage ===
+        "level1.html"
+    ) {
+
+        calculateLevel1Score();
 
 
-    /* RIGHT CLICK */
+        alert(
+            "⏰ Level 1 time is over!\n\n" +
+            "Your current score has been saved."
+        );
 
-    document.addEventListener(
-        "contextmenu",
-        function(event) {
 
-            event.preventDefault();
+        window.location.href =
+            "level2.html";
 
-            showPopup(
-                "⚠️ ACTION BLOCKED",
-                "Right-click is not available during this challenge."
+
+        return;
+    }
+
+
+    /*
+       LEVEL 2
+    */
+
+    if (
+        currentPage ===
+        "level2.html"
+    ) {
+
+        localStorage.setItem(
+            "puzzleAnswer",
+            "Not Answered"
+        );
+
+
+        localStorage.setItem(
+            "level2Score",
+            "0"
+        );
+
+
+        alert(
+            "⏰ Level 2 time is over!"
+        );
+
+
+        window.location.href =
+            "result.html";
+    }
+}
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+function requestFullscreen() {
+
+    if (
+        !document.fullscreenElement &&
+        document.documentElement.requestFullscreen
+    ) {
+
+        document.documentElement
+            .requestFullscreen()
+            .catch(
+                function() {
+
+                    console.log(
+                        "Fullscreen permission denied."
+                    );
+
+                }
+            );
+
+    }
+}
+
+
+/* =====================================================
+   DETECT TAB SWITCHING
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    function() {
+
+        if (
+            document.hidden &&
+            isExamPage() &&
+            !violationTriggered
+        ) {
+
+            triggerViolation(
+                "Tab switching or minimizing is not allowed."
             );
 
         }
-    );
+
+    }
+);
 
 
-    /* COPY */
+/* =====================================================
+   DETECT FULLSCREEN EXIT
+===================================================== */
 
-    document.addEventListener(
-        "copy",
-        function(event) {
+document.addEventListener(
+    "fullscreenchange",
+    function() {
 
-            event.preventDefault();
+        if (
+            !document.fullscreenElement &&
+            isExamPage() &&
+            !violationTriggered
+        ) {
 
-            showPopup(
-                "🩸 COPY-PASTE NOT AVAILABLE",
-                "Copying text is disabled during the challenge."
+            triggerViolation(
+                "Fullscreen mode was exited."
             );
 
         }
-    );
+
+    }
+);
 
 
-    /* CUT */
+/* =====================================================
+   ESC DETECTION
+===================================================== */
 
-    document.addEventListener(
-        "cut",
-        function(event) {
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Escape" &&
+            isExamPage() &&
+            !violationTriggered
+        ) {
 
             event.preventDefault();
 
-            showPopup(
-                "🩸 COPY-PASTE NOT AVAILABLE",
-                "Cutting text is disabled during the challenge."
+
+            triggerViolation(
+                "ESC key is not allowed."
             );
 
         }
-    );
+
+    }
+);
 
 
-    /* KEYBOARD SHORTCUTS */
+/* =====================================================
+   COPY BLOCK
+===================================================== */
 
-    document.addEventListener(
-        "keydown",
-        function(event) {
+document.addEventListener(
+    "copy",
+    function(event) {
 
-            const key =
-                event.key.toLowerCase();
+        if (isExamPage()) {
 
-
-            if (
-                event.ctrlKey &&
-                [
-                    "c",
-                    "v",
-                    "x",
-                    "u",
-                    "s",
-                    "p"
-                ].includes(key)
-            ) {
-
-                event.preventDefault();
-
-                showPopup(
-                    "🩸 ACTION BLOCKED",
-                    "This keyboard shortcut is not available."
-                );
-
-            }
+            event.preventDefault();
 
 
-            /* F12 */
-
-            if (event.key === "F12") {
-
-                event.preventDefault();
-
-                showPopup(
-                    "⚠️ ACTION BLOCKED",
-                    "Developer tools are disabled."
-                );
-
-            }
+            alert(
+                "⚠️ Copying is not allowed."
+            );
 
         }
-    );
+
+    }
+);
 
 
-    /* FULLSCREEN EXIT */
+/* =====================================================
+   CUT BLOCK
+===================================================== */
 
-    document.addEventListener(
-        "fullscreenchange",
-        function() {
+document.addEventListener(
+    "cut",
+    function(event) {
 
-            if (!document.fullscreenElement) {
+        if (isExamPage()) {
 
-                registerViolation();
-
-                showPopup(
-                    "⚠️ EXIT BLOCKED",
-                    "You must remain in fullscreen mode."
-                );
-
-            }
+            event.preventDefault();
 
         }
-    );
+
+    }
+);
 
 
-    /* TAB SWITCH */
+/* =====================================================
+   PASTE BLOCK
+===================================================== */
 
-    document.addEventListener(
-        "visibilitychange",
-        function() {
+document.addEventListener(
+    "paste",
+    function(event) {
 
-            if (document.hidden) {
+        if (isExamPage()) {
 
-                registerViolation();
+            event.preventDefault();
 
-                showPopup(
-                    "🩸 CHALLENGE LEFT",
-                    "Leaving the challenge screen is not allowed."
-                );
 
-            }
+            alert(
+                "⚠️ Pasting is not allowed."
+            );
 
         }
+
+    }
+);
+
+
+/* =====================================================
+   RIGHT CLICK BLOCK
+===================================================== */
+
+document.addEventListener(
+    "contextmenu",
+    function(event) {
+
+        if (isExamPage()) {
+
+            event.preventDefault();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   DEVTOOLS SHORTCUTS
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (!isExamPage()) {
+            return;
+        }
+
+
+        /*
+           F12
+        */
+
+        if (
+            event.key === "F12"
+        ) {
+
+            event.preventDefault();
+
+
+            triggerViolation(
+                "Developer tools are not allowed."
+            );
+
+        }
+
+
+        /*
+           CTRL + SHIFT + I
+        */
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "i"
+        ) {
+
+            event.preventDefault();
+
+
+            triggerViolation(
+                "Developer tools are not allowed."
+            );
+
+        }
+
+
+        /*
+           CTRL + SHIFT + J
+        */
+
+        if (
+            event.ctrlKey &&
+            event.shiftKey &&
+            event.key.toLowerCase() === "j"
+        ) {
+
+            event.preventDefault();
+
+
+            triggerViolation(
+                "Developer tools are not allowed."
+            );
+
+        }
+
+
+        /*
+           CTRL + U
+        */
+
+        if (
+            event.ctrlKey &&
+            event.key.toLowerCase() === "u"
+        ) {
+
+            event.preventDefault();
+
+
+            triggerViolation(
+                "Viewing page source is not allowed."
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   EXAM PAGE CHECK
+===================================================== */
+
+function isExamPage() {
+
+    return (
+
+        currentPage ===
+        "level1.html"
+
+        ||
+
+        currentPage ===
+        "level2.html"
+
     );
 
 }
@@ -625,112 +1166,149 @@ function enableSecurity() {
    VIOLATION
 ===================================================== */
 
-function registerViolation() {
-
-    let violations =
-        Number(
-            sessionStorage.getItem(
-                "violations"
-            )
-        ) || 0;
-
-
-    violations++;
-
-
-    sessionStorage.setItem(
-        "violations",
-        violations
-    );
-
-}
-
-
-/* =====================================================
-   POPUP
-===================================================== */
-
-function showPopup(
-    title,
-    message
+function triggerViolation(
+    reason
 ) {
 
-    const popup =
-        document.getElementById(
-            "securityPopup"
-        );
+    if (
+        violationTriggered
+    ) {
+
+        return;
+    }
 
 
-    if (!popup) return;
+    violationTriggered =
+        true;
 
 
-    document.getElementById(
-        "popupTitle"
-    ).innerText = title;
-
-
-    document.getElementById(
-        "popupMessage"
-    ).innerText = message;
-
-
-    popup.classList.remove(
-        "hidden"
+    clearInterval(
+        timerInterval
     );
 
+
+    localStorage.setItem(
+        "disqualified",
+        "true"
+    );
+
+
+    localStorage.setItem(
+        "disqualificationReason",
+        reason
+    );
+
+
+    if (
+        currentPage ===
+        "level1.html"
+    ) {
+
+        calculateLevel1Score();
+
+    }
+
+
+    if (
+        currentPage ===
+        "level2.html"
+    ) {
+
+        localStorage.setItem(
+            "level2Score",
+            "0"
+        );
+
+    }
+
+
+    alert(
+        "⚠️ VIOLATION DETECTED\n\n" +
+        reason +
+        "\n\n" +
+        "The team has been disqualified."
+    );
+
+
+    window.location.href =
+        "result.html";
 }
 
 
 /* =====================================================
-   CLOSE POPUP
+   RESULT PAGE
 ===================================================== */
 
-function closePopup() {
+function loadResult() {
 
-    const popup =
-        document.getElementById(
-            "securityPopup"
+    const teamName =
+        localStorage.getItem(
+            "teamName"
         );
 
 
-    popup.classList.add(
-        "hidden"
-    );
+    const teamId =
+        localStorage.getItem(
+            "teamId"
+        );
+
+
+    if (
+        !teamName ||
+        !teamId
+    ) {
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    const disqualified =
+        localStorage.getItem(
+            "disqualified"
+        );
 
 
     /*
-       Try to return to fullscreen.
+       DISQUALIFIED
     */
 
-    if (!document.fullscreenElement) {
+    if (
+        disqualified ===
+        "true"
+    ) {
 
-        document.documentElement
-            .requestFullscreen()
-            .catch(function() {});
-
-    }
-
-}
-
-
-/* =====================================================
-   HINT POPUP
-===================================================== */
-
-function closeHint() {
-
-    const popup =
-        document.getElementById(
-            "hintPopup"
-        );
+        document
+            .getElementById(
+                "normalResult"
+            )
+            .classList.add(
+                "hidden"
+            );
 
 
-    if (popup) {
+        document
+            .getElementById(
+                "disqualifiedResult"
+            )
+            .classList.remove(
+                "hidden"
+            );
 
-        popup.classList.add(
-            "hidden"
-        );
 
-    }
+        document
+            .getElementById(
+                "disqualifiedTeam"
+            )
+            .innerText =
+                teamName;
 
-}
+
+        document
+            .getElementById(
+                "disqualifiedId"
+            )
+            .innerText =
+                teamId;
