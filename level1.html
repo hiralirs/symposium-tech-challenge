@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Level 1 - Vampire Logic</title>
+    <title>Level 1 - Vampire's Logic</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -16,81 +17,60 @@
 
 <body>
 
-<div class="exam">
+<div class="container">
 
-    <header>
+    <div class="top-bar">
 
-        <div>
+        <span>
+            Team:
+            <b id="teamNameDisplay"></b>
+        </span>
 
-            <span>🩸 LEVEL 1</span>
+        <span>
+            ID:
+            <b id="teamIdDisplay"></b>
+        </span>
 
-            <h1>VAMPIRE'S LOGIC</h1>
-
-        </div>
-
-        <div class="timer">
-            ⏳ <span id="timer">05:00</span>
-        </div>
-
-    </header>
+    </div>
 
 
-    <div class="progress-info">
+    <h1>🩸 LEVEL 1</h1>
+
+    <h2>Vampire's Logic</h2>
+
+
+    <div class="timer">
+
+        ⏱ Time Left:
+        <span id="timer">06:00</span>
+
+    </div>
+
+
+    <div class="progress">
 
         Question
-        <span id="questionNo">1</span>
-        / 5
-
-        <div class="progress">
-            <div id="progressBar"></div>
-        </div>
+        <span id="questionNumber">1</span>
+        of 5
 
     </div>
 
 
-    <div class="question-card">
-
-        <div class="question-title">
-            🦇 QUESTION <span id="number">1</span>
-        </div>
-
-        <h2 id="question">
-            Loading...
-        </h2>
-
-        <div id="options"></div>
-
-        <div id="answerMessage"></div>
-
-    </div>
-
-    <p class="warning">
-        ⚠️ Stay on the challenge screen.
-    </p>
-
-</div>
+    <div id="questionContainer"></div>
 
 
-<!-- SECURITY POPUP -->
+    <button
+        id="nextButton"
+        onclick="nextQuestion()"
+    >
+        NEXT
+    </button>
 
-<div id="securityPopup"
-     class="popup hidden">
 
-    <div class="popup-box">
-
-        <div class="popup-icon">🧛</div>
-
-        <h2 id="popupTitle">
-            WARNING
-        </h2>
-
-        <p id="popupMessage"></p>
-
-        <button onclick="closePopup()">
-            RETURN TO CHALLENGE
-        </button>
-
-    </div>
+    <p
+        id="questionError"
+        class="error"
+    ></p>
 
 </div>
 
@@ -98,7 +78,7 @@
 <script src="script.js"></script>
 
 <script>
-initializeLevel1();
+    loadLevel1();
 </script>
 
 </body>
