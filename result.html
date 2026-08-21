@@ -1,1 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Vampire Result</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="result">
+
+    <div class="result-card">
+
+        <div class="vampire">
+            🦇
+        </div>
+
+        <div class="badge">
+            CHALLENGE COMPLETE
+        </div>
+
+        <h1>
+            🩸 QUALIFIED!
+        </h1>
+
+        <h2>
+            You have been Qualified
+            for the Next Round
+        </h2>
+
+
+        <div class="total-score">
+
+            <p>TOTAL SCORE</p>
+
+            <strong id="finalScore">0</strong>
+
+            <span>/100</span>
+
+        </div>
+
+
+        <div class="score-row">
+            <span>🩸 Level 1</span>
+            <b id="level1Score">0 / 50</b>
+        </div>
+
+
+        <div class="score-row">
+            <span>🔮 Level 2</span>
+            <b id="level2Score">0 / 50</b>
+        </div>
+
+
+        <div class="score-row">
+            <span>⚠️ Violations</span>
+            <b id="violations">0</b>
+        </div>
+
+
+        <p class="final-message">
+            🔥 The Vampire Council has accepted your challenge!
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const total =
+    Number(sessionStorage.getItem("score")) || 0;
+
+const level1 =
+    Number(sessionStorage.getItem("level1Score")) || 0;
+
+const level2 =
+    Number(sessionStorage.getItem("level2Score")) || 0;
+
+const violations =
+    Number(sessionStorage.getItem("violations")) || 0;
+
+
+document.getElementById("finalScore")
+    .innerText = total;
+
+document.getElementById("level1Score")
+    .innerText = level1 + " / 50";
+
+document.getElementById("level2Score")
+    .innerText = level2 + " / 50";
+
+document.getElementById("violations")
+    .innerText = violations;
+
+</script>
+
+</body>
+</html>

@@ -1,1 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Level 1 - Vampire Logic</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="exam">
+
+    <header>
+
+        <div>
+
+            <span>🩸 LEVEL 1</span>
+
+            <h1>VAMPIRE'S LOGIC</h1>
+
+        </div>
+
+        <div class="timer">
+            ⏳ <span id="timer">05:00</span>
+        </div>
+
+    </header>
+
+
+    <div class="progress-info">
+
+        Question
+        <span id="questionNo">1</span>
+        / 5
+
+        <div class="progress">
+            <div id="progressBar"></div>
+        </div>
+
+    </div>
+
+
+    <div class="question-card">
+
+        <div class="question-title">
+            🦇 QUESTION <span id="number">1</span>
+        </div>
+
+        <h2 id="question">
+            Loading...
+        </h2>
+
+        <div id="options"></div>
+
+        <div id="answerMessage"></div>
+
+    </div>
+
+    <p class="warning">
+        ⚠️ Stay on the challenge screen.
+    </p>
+
+</div>
+
+
+<!-- SECURITY POPUP -->
+
+<div id="securityPopup"
+     class="popup hidden">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">🧛</div>
+
+        <h2 id="popupTitle">
+            WARNING
+        </h2>
+
+        <p id="popupMessage"></p>
+
+        <button onclick="closePopup()">
+            RETURN TO CHALLENGE
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+initializeLevel1();
+</script>
+
+</body>
+</html>
