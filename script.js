@@ -1,183 +1,736 @@
-// --- QUESTIONS & CONFIG ---
-const QUESTIONS = [
+/* =====================================================
+   VAMPIRE CODE HUNT
+===================================================== */
+
+
+const questions = [
+
     {
-        question: "What is the output of: print(type(1 / 1)) in Python 3?",
-        options: ["<class 'int'>", "<class 'float'>", "<class 'double'>", "<class 'number'>"],
-        correct: 1
+        q: "What is the output of print(2 ** 3)?",
+
+        options: [
+            "5",
+            "6",
+            "8",
+            "9"
+        ],
+
+        answer: "8"
     },
+
+
     {
-        question: "Which of the following data structures is immutable in Python?",
-        options: ["List", "Dictionary", "Tuple", "Set"],
-        correct: 2
+        q: "What is the output of print(len('Vampire'))?",
+
+        options: [
+            "6",
+            "7",
+            "8",
+            "9"
+        ],
+
+        answer: "7"
     },
+
+
     {
-        question: "What keyword is used to create an anonymous function in Python?",
-        options: ["def", "function", "lambda", "anon"],
-        correct: 2
+        q: "What does 10 // 3 produce?",
+
+        options: [
+            "3",
+            "3.33",
+            "1",
+            "0"
+        ],
+
+        answer: "3"
     },
+
+
     {
-        question: "How do you start writing a block comment spanning multiple lines in Python?",
-        options: ["//", "/*", "''' (Triple quotes)", "<!--"],
-        correct: 2
+        q: "What is the output of print(5 > 3 and 2 < 1)?",
+
+        options: [
+            "True",
+            "False",
+            "5",
+            "Error"
+        ],
+
+        answer: "False"
     },
+
+
     {
-        question: "Which library is foundational for handling data frames in Python Data Science?",
-        options: ["Matplotlib", "Pandas", "Math", "Urllib"],
-        correct: 1
+        q: "Which data type is used for [1, 2, 3]?",
+
+        options: [
+            "Tuple",
+            "Set",
+            "List",
+            "Dictionary"
+        ],
+
+        answer: "List"
     }
+
 ];
 
-let currentQuestionIndex = 0;
-let l1Score = 0;
-let l2Score = 0;
-let teamName = "";
-let teamId = "";
-let l1Timer, l2Timer;
-let timeLeft = 300; // 5 minutes per level
 
-// --- DOM ELEMENTS ---
-const welcomeScreen = document.getElementById("welcome-screen");
-const level1Screen = document.getElementById("level1-screen");
-const level2Screen = document.getElementById("level2-screen");
-const qualifiedScreen = document.getElementById("qualified-screen");
+let currentQuestion = 0;
 
-document.getElementById("start-btn").addEventListener("click", () => {
-    teamName = document.getElementById("team-name").value.trim();
-    teamId = document.getElementById("team-id").value.trim();
+let time = 300;
 
-    if (!teamName || !teamId) {
-        alert("Enter Team Name and Team ID to enter the crypt!");
-        return;
-    }
+let timerInterval;
 
-    // Trigger Fullscreen Lockdown
-    document.documentElement.requestFullscreen().catch(err => {
-        console.log("Fullscreen request denied:", err);
-    });
 
-    switchScreen(level1Screen);
-    startLevel1Timer();
+/* =====================================================
+   LEVEL 1
+===================================================== */
+
+function initializeLevel1() {
+
+    enableSecurity();
+
     loadQuestion();
-});
 
-function switchScreen(screen) {
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    screen.classList.add("active");
+    startTimer("level1");
+
 }
 
-// --- LEVEL 1 LOGIC ---
-function startLevel1Timer() {
-    timeLeft = 300;
-    l1Timer = setInterval(() => {
-        timeLeft--;
-        let min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-        let sec = String(timeLeft % 60).padStart(2, '0');
-        document.getElementById("l1-timer").innerText = `Timer: ${min}:${sec}`;
-
-        if (timeLeft <= 0) {
-            clearInterval(l1Timer);
-            startLevel2();
-        }
-    }, 1000);
-}
 
 function loadQuestion() {
-    if (currentQuestionIndex >= QUESTIONS.length) {
-        clearInterval(l1Timer);
-        startLevel2();
+
+    if (currentQuestion >= questions.length) {
+
+        finishLevel1();
+
         return;
     }
 
-    let q = QUESTIONS[currentQuestionIndex];
-    document.getElementById("question-text").innerText = `Q${currentQuestionIndex + 1}: ${q.question}`;
-    
-    let optContainer = document.getElementById("options-container");
-    optContainer.innerHTML = "";
 
-    q.options.forEach((opt, idx) => {
-        let btn = document.createElement("button");
-        btn.className = "option-btn";
-        btn.innerText = opt;
-        btn.addEventListener("click", () => checkAnswer(idx, btn));
-        optContainer.appendChild(btn);
+    const question =
+        questions[currentQuestion];
+
+
+    document.getElementById("question")
+        .innerText = question.q;
+
+
+    document.getElementById("questionNo")
+        .innerText = currentQuestion + 1;
+
+
+    document.getElementById("number")
+        .innerText = currentQuestion + 1;
+
+
+    document.getElementById("progressBar")
+        .style.width =
+        ((currentQuestion + 1) / 5 * 100) + "%";
+
+
+    const options =
+        document.getElementById("options");
+
+
+    options.innerHTML = "";
+
+
+    question.options.forEach(function(option) {
+
+        const button =
+            document.createElement("div");
+
+
+        button.className = "option";
+
+        button.innerText = option;
+
+
+        button.onclick = function() {
+
+            checkAnswer(
+                option,
+                button
+            );
+
+        };
+
+
+        options.appendChild(button);
+
     });
+
 }
 
-function checkAnswer(selectedIdx, btnElement) {
-    let q = QUESTIONS[currentQuestionIndex];
-    if (selectedIdx === q.correct) {
-        l1Score += 3; // 5 questions * 3 marks = 15 total max for Level 1
-        currentQuestionIndex++;
-        loadQuestion();
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer(
+    selected,
+    button
+) {
+
+    const correct =
+        questions[currentQuestion].answer;
+
+
+    if (selected === correct) {
+
+        button.style.background =
+            "#075c25";
+
+        button.style.borderColor =
+            "#00ff66";
+
+
+        document.getElementById(
+            "answerMessage"
+        ).innerText =
+            "🩸 CORRECT!";
+
+
+        let score =
+            Number(
+                sessionStorage.getItem("score")
+            ) || 0;
+
+
+        score += 10;
+
+
+        sessionStorage.setItem(
+            "score",
+            score
+        );
+
+
+        document
+            .querySelectorAll(".option")
+            .forEach(function(element) {
+
+                element.style.pointerEvents =
+                    "none";
+
+            });
+
+
+        currentQuestion++;
+
+
+        setTimeout(
+            loadQuestion,
+            700
+        );
+
+
     } else {
-        // Shake effect on wrong answer
-        btnElement.classList.add("shake");
-        setTimeout(() => btnElement.classList.remove("shake"), 400);
+
+        document.getElementById(
+            "answerMessage"
+        ).innerText =
+            "❌ WRONG! Try again.";
+
     }
+
 }
 
-// --- LEVEL 2 LOGIC ---
-function startLevel2() {
-    switchScreen(level2Screen);
-    timeLeft = 300;
-    
-    // Popup prompt behavior as specified
-    setTimeout(() => {
-        alert("The hint of the puzzle will appear below the crypt seal...");
-    }, 500);
 
-    l2Timer = setInterval(() => {
-        timeLeft--;
-        let min = String(Math.floor(timeLeft / 60)).padStart(2, '0');
-        let sec = String(timeLeft % 60).padStart(2, '0');
-        document.getElementById("l2-timer").innerText = `Timer: ${min}:${sec}`;
+/* =====================================================
+   FINISH LEVEL 1
+===================================================== */
 
-        if (timeLeft <= 0) {
-            clearInterval(l2Timer);
-            showResults();
+function finishLevel1() {
+
+    clearInterval(timerInterval);
+
+
+    const score =
+        Number(
+            sessionStorage.getItem("score")
+        ) || 0;
+
+
+    sessionStorage.setItem(
+        "level1Score",
+        score
+    );
+
+
+    window.location.href =
+        "level2.html";
+
+}
+
+
+/* =====================================================
+   LEVEL 2
+===================================================== */
+
+function initializeLevel2() {
+
+    enableSecurity();
+
+    time = 300;
+
+    startTimer("level2");
+
+}
+
+
+function checkPuzzle() {
+
+    const answer =
+        document
+            .getElementById("puzzleAnswer")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const message =
+        document.getElementById(
+            "puzzleMessage"
+        );
+
+
+    if (
+        answer === "60" ||
+        answer === "sixty"
+    ) {
+
+        message.innerText =
+            "🩸 CORRECT!";
+
+
+        let score =
+            Number(
+                sessionStorage.getItem("score")
+            ) || 0;
+
+
+        score += 50;
+
+
+        sessionStorage.setItem(
+            "score",
+            score
+        );
+
+
+        sessionStorage.setItem(
+            "level2Score",
+            "50"
+        );
+
+
+        document.getElementById(
+            "puzzleAnswer"
+        ).disabled = true;
+
+
+        clearInterval(timerInterval);
+
+
+        setTimeout(
+            finishGame,
+            1000
+        );
+
+
+    } else {
+
+        message.innerText =
+            "❌ Incorrect. Try again.";
+
+    }
+
+}
+
+
+/* =====================================================
+   FINISH GAME
+===================================================== */
+
+function finishGame() {
+
+    window.location.href =
+        "result.html";
+
+}
+
+
+/* =====================================================
+   TIMER
+===================================================== */
+
+function startTimer(level) {
+
+    clearInterval(timerInterval);
+
+
+    const timer =
+        document.getElementById("timer");
+
+
+    updateTimer(timer);
+
+
+    timerInterval =
+        setInterval(function() {
+
+            time--;
+
+            updateTimer(timer);
+
+
+            if (time <= 0) {
+
+                clearInterval(
+                    timerInterval
+                );
+
+
+                if (level === "level1") {
+
+                    finishLevel1();
+
+                } else {
+
+                    const level1 =
+                        Number(
+                            sessionStorage.getItem(
+                                "level1Score"
+                            )
+                        ) || 0;
+
+
+                    const total =
+                        Number(
+                            sessionStorage.getItem(
+                                "score"
+                            )
+                        ) || 0;
+
+
+                    sessionStorage.setItem(
+                        "level2Score",
+                        Math.max(
+                            total - level1,
+                            0
+                        )
+                    );
+
+
+                    window.location.href =
+                        "result.html";
+
+                }
+
+            }
+
+        }, 1000);
+
+}
+
+
+/* =====================================================
+   TIMER DISPLAY
+===================================================== */
+
+function updateTimer(timer) {
+
+    if (!timer) return;
+
+
+    const minutes =
+        Math.floor(time / 60);
+
+
+    const seconds =
+        time % 60;
+
+
+    timer.innerText =
+        String(minutes).padStart(2, "0")
+        + ":" +
+        String(seconds).padStart(2, "0");
+
+
+    if (time <= 30) {
+
+        timer.style.color =
+            "red";
+
+    }
+
+}
+
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+function enableSecurity() {
+
+
+    /* RIGHT CLICK */
+
+    document.addEventListener(
+        "contextmenu",
+        function(event) {
+
+            event.preventDefault();
+
+            showPopup(
+                "⚠️ ACTION BLOCKED",
+                "Right-click is not available during this challenge."
+            );
+
         }
-    }, 1000);
+    );
 
-    document.getElementById("submit-puzzle").addEventListener("click", () => {
-        let userAns = document.getElementById("puzzle-answer").value.trim().toUpperCase();
-        // FPSSH QSSR shifted back by 3 becomes BLOOD MOON
-        if (userAns === "BLOOD MOON") {
-            l2Score = 5; // Level 2 puzzle is worth 5 marks
-            clearInterval(l2Timer);
-            showResults();
-        } else {
-            let box = document.getElementById("puzzle-answer");
-            box.classList.add("shake");
-            setTimeout(() => box.classList.remove("shake"), 400);
+
+    /* COPY */
+
+    document.addEventListener(
+        "copy",
+        function(event) {
+
+            event.preventDefault();
+
+            showPopup(
+                "🩸 COPY-PASTE NOT AVAILABLE",
+                "Copying text is disabled during the challenge."
+            );
+
         }
-    });
+    );
+
+
+    /* CUT */
+
+    document.addEventListener(
+        "cut",
+        function(event) {
+
+            event.preventDefault();
+
+            showPopup(
+                "🩸 COPY-PASTE NOT AVAILABLE",
+                "Cutting text is disabled during the challenge."
+            );
+
+        }
+    );
+
+
+    /* KEYBOARD SHORTCUTS */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            const key =
+                event.key.toLowerCase();
+
+
+            if (
+                event.ctrlKey &&
+                [
+                    "c",
+                    "v",
+                    "x",
+                    "u",
+                    "s",
+                    "p"
+                ].includes(key)
+            ) {
+
+                event.preventDefault();
+
+                showPopup(
+                    "🩸 ACTION BLOCKED",
+                    "This keyboard shortcut is not available."
+                );
+
+            }
+
+
+            /* F12 */
+
+            if (event.key === "F12") {
+
+                event.preventDefault();
+
+                showPopup(
+                    "⚠️ ACTION BLOCKED",
+                    "Developer tools are disabled."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* FULLSCREEN EXIT */
+
+    document.addEventListener(
+        "fullscreenchange",
+        function() {
+
+            if (!document.fullscreenElement) {
+
+                registerViolation();
+
+                showPopup(
+                    "⚠️ EXIT BLOCKED",
+                    "You must remain in fullscreen mode."
+                );
+
+            }
+
+        }
+    );
+
+
+    /* TAB SWITCH */
+
+    document.addEventListener(
+        "visibilitychange",
+        function() {
+
+            if (document.hidden) {
+
+                registerViolation();
+
+                showPopup(
+                    "🩸 CHALLENGE LEFT",
+                    "Leaving the challenge screen is not allowed."
+                );
+
+            }
+
+        }
+    );
+
 }
 
-// --- QUALIFIED PAGE & SCORING ---
-function showResults() {
-    switchScreen(qualifiedScreen);
-    
-    // Exit fullscreen safely on finish
-    if (document.fullscreenElement) {
-        document.exitFullscreen().catch(err => console.log(err));
-    }
 
-    document.getElementById("res-team").innerText = teamName;
-    document.getElementById("res-id").innerText = teamId;
-    document.getElementById("res-l1").innerText = l1Score;
-    document.getElementById("res-l2").innerText = l2Score;
-    document.getElementById("res-total").innerText = l1Score + l2Score; // Total out of 20
+/* =====================================================
+   VIOLATION
+===================================================== */
+
+function registerViolation() {
+
+    let violations =
+        Number(
+            sessionStorage.getItem(
+                "violations"
+            )
+        ) || 0;
+
+
+    violations++;
+
+
+    sessionStorage.setItem(
+        "violations",
+        violations
+    );
+
 }
 
-// --- ANTI-CHEATING TAB SWITCH / MINIMIZE DETECTION ---
-document.addEventListener("visibilitychange", () => {
-    if (document.hidden && welcomeScreen.classList.contains("active") === false && qualifiedScreen.classList.contains("active") === false) {
-        document.getElementById("warning-modal").classList.remove("hidden");
-        setTimeout(() => {
-            document.getElementById("warning-modal").classList.add("hidden");
-        }, 3000);
-    }
-});
 
-// Disable Right-Click context menus to deter cheating
-document.addEventListener("contextmenu", event => event.preventDefault());
+/* =====================================================
+   POPUP
+===================================================== */
+
+function showPopup(
+    title,
+    message
+) {
+
+    const popup =
+        document.getElementById(
+            "securityPopup"
+        );
+
+
+    if (!popup) return;
+
+
+    document.getElementById(
+        "popupTitle"
+    ).innerText = title;
+
+
+    document.getElementById(
+        "popupMessage"
+    ).innerText = message;
+
+
+    popup.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+/* =====================================================
+   CLOSE POPUP
+===================================================== */
+
+function closePopup() {
+
+    const popup =
+        document.getElementById(
+            "securityPopup"
+        );
+
+
+    popup.classList.add(
+        "hidden"
+    );
+
+
+    /*
+       Try to return to fullscreen.
+    */
+
+    if (!document.fullscreenElement) {
+
+        document.documentElement
+            .requestFullscreen()
+            .catch(function() {});
+
+    }
+
+}
+
+
+/* =====================================================
+   HINT POPUP
+===================================================== */
+
+function closeHint() {
+
+    const popup =
+        document.getElementById(
+            "hintPopup"
+        );
+
+
+    if (popup) {
+
+        popup.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
