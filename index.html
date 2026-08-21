@@ -1,81 +1,78 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Vampire Challenge</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vampire Tech Challenge</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container welcome">
+<div class="page">
 
-    <div class="vampire">
-        🧛
-    </div>
+    <div class="container">
 
-    <h1>
-        VAMPIRE CHALLENGE
-    </h1>
+        <h1 class="blood-title">🧛 VAMPIRE TECH CHALLENGE</h1>
 
-    <p class="subtitle">
-        Welcome to the Tech Vampire Round
-    </p>
+        <p class="subtitle">
+            Enter the castle. Solve the challenge. Survive the night.
+        </p>
 
+        <div class="card">
 
-    <div class="form-box">
+            <h2>📜 INSTRUCTIONS</h2>
 
-        <label>
-            Team Name
-        </label>
+            <div class="instructions">
 
-        <input
-            type="text"
-            id="teamName"
-            placeholder="Enter Team Name"
-            autocomplete="off"
-        >
+                <p>🖥️ Use only the computer provided by the organizers.</p>
 
+                <p>⏱️ Each level has a strict <b>5-minute time limit.</b></p>
 
-        <label>
-            Team ID
-        </label>
+                <p>🧠 Level 1 contains <b>5 Python logical MCQs.</b></p>
 
-        <input
-            type="text"
-            id="teamId"
-            placeholder="Enter Team ID"
-            autocomplete="off"
-        >
+                <p>🧩 Level 2 contains <b>2 logical puzzles.</b></p>
 
+                <p>💡 Hints will be provided for the Level 2 puzzles.</p>
 
-        <button onclick="startRound()">
-            ENTER
-        </button>
+                <p>🤫 Correct and wrong answers will not be displayed during the level.</p>
 
+                <p>📊 The score will be displayed only after completing each level.</p>
 
-        <p
-            id="error"
-            class="error"
-        ></p>
+                <p>🚫 Copy, cut, paste and right-click are disabled.</p>
+
+                <p>🔒 Stay on the challenge screen and remain in fullscreen.</p>
+
+                <p>⚠️ Leaving fullscreen or switching tabs may trigger a warning.</p>
+
+                <p>🚫 Do not modify the website files.</p>
+
+                <p>👑 Organizer's decision will be final.</p>
+
+            </div>
+
+            <h3>👥 ENTER TEAM NAME</h3>
+
+            <input
+                type="text"
+                id="teamName"
+                placeholder="Enter Team Name"
+                autocomplete="off"
+            >
+
+            <br>
+
+            <button id="startBtn">
+                🩸 START CHALLENGE
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
-
 <script src="script.js"></script>
 
 </body>
-
 </html>
