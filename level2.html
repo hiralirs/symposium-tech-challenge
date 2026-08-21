@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Level 2 - Vampire Puzzle</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="exam">
+
+    <header>
+
+        <div>
+
+            <span>🔮 LEVEL 2</span>
+
+            <h1>VAMPIRE'S PUZZLE</h1>
+
+        </div>
+
+        <div class="timer">
+            ⏳ <span id="timer">05:00</span>
+        </div>
+
+    </header>
+
+
+    <div class="puzzle">
+
+        <div class="vampire">
+            🩸
+        </div>
+
+        <div class="badge">
+            BLOOD MOON PUZZLE
+        </div>
+
+        <h2>
+            The Vampire's Secret
+        </h2>
+
+        <p>
+            Find the output of this Python program.
+        </p>
+
+
+        <div class="code">
+
+<pre>
+x = [10, 20, 30, 40, 50]
+
+print(x[1] + x[3])
+</pre>
+
+        </div>
+
+
+        <h3>
+            🔮 What will the program print?
+        </h3>
+
+
+        <input
+            id="puzzleAnswer"
+            type="text"
+            placeholder="Enter answer"
+            autocomplete="off"
+        >
+
+
+        <button onclick="checkPuzzle()">
+            SOLVE PUZZLE 🩸
+        </button>
+
+
+        <div id="puzzleMessage"></div>
+
+
+        <div class="hint">
+
+            <b>💡 HINT</b>
+
+            <p>
+                Python indexing starts from 0.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- HINT POPUP -->
+
+<div id="hintPopup"
+     class="popup">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">🧛</div>
+
+        <h2>
+            THE VAMPIRE SPEAKS...
+        </h2>
+
+        <p>
+            The hint of the puzzle will appear below the puzzle.
+        </p>
+
+        <button onclick="closeHint()">
+            ENTER THE PUZZLE
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- SECURITY POPUP -->
+
+<div id="securityPopup"
+     class="popup hidden">
+
+    <div class="popup-box">
+
+        <div class="popup-icon">⚠️</div>
+
+        <h2 id="popupTitle">
+            WARNING
+        </h2>
+
+        <p id="popupMessage"></p>
+
+        <button onclick="closePopup()">
+            RETURN TO CHALLENGE
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+initializeLevel2();
+</script>
+
+</body>
+</html>
