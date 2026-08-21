@@ -5,10 +5,12 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Vampire Result</title>
+    <title>Final Result</title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -16,94 +18,246 @@
 
 <body>
 
-<div class="result">
+<div class="container">
 
-    <div class="result-card">
+
+    <!-- ================================
+         DISQUALIFIED RESULT
+    ================================= -->
+
+    <div
+        id="disqualifiedResult"
+        class="hidden"
+    >
 
         <div class="vampire">
-            🦇
+            🚫
         </div>
 
-        <div class="badge">
-            CHALLENGE COMPLETE
-        </div>
 
         <h1>
-            🩸 QUALIFIED!
+            TEAM DISQUALIFIED
         </h1>
 
+
+        <div class="answer-box">
+
+            <p>
+
+                <b>
+                    Team Name:
+                </b>
+
+                <span id="disqualifiedTeam"></span>
+
+            </p>
+
+
+            <p>
+
+                <b>
+                    Team ID:
+                </b>
+
+                <span id="disqualifiedId"></span>
+
+            </p>
+
+
+            <p>
+
+                <b>
+                    Reason:
+                </b>
+
+                <span
+                    id="disqualificationReason"
+                    class="wrong"
+                ></span>
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================
+         NORMAL RESULT
+    ================================= -->
+
+    <div id="normalResult">
+
+        <div class="vampire">
+            🏆
+        </div>
+
+
+        <h1>
+            FINAL RESULT
+        </h1>
+
+
+        <div class="team-result">
+
+            <p>
+
+                <b>
+                    Team Name:
+                </b>
+
+                <span id="finalTeamName"></span>
+
+            </p>
+
+
+            <p>
+
+                <b>
+                    Team ID:
+                </b>
+
+                <span id="finalTeamId"></span>
+
+            </p>
+
+        </div>
+
+
+
+        <!-- LEVEL 1 RESULT -->
+
         <h2>
-            You have been Qualified
-            for the Next Round
+            🩸 Level 1 - Vampire's Logic
         </h2>
 
 
-        <div class="total-score">
+        <div id="level1Results"></div>
 
-            <p>TOTAL SCORE</p>
 
-            <strong id="finalScore">0</strong>
+        <div class="score-box">
 
-            <span>/100</span>
+            Level 1 Score:
+
+            <span id="level1Score">
+                0
+            </span>
+
+            / 50
 
         </div>
 
 
-        <div class="score-row">
-            <span>🩸 Level 1</span>
-            <b id="level1Score">0 / 50</b>
+
+        <!-- LEVEL 2 RESULT -->
+
+        <h2>
+            🧩 Level 2 - Vampire's Puzzle
+        </h2>
+
+
+        <div class="answer-box">
+
+            <p>
+
+                <b>
+                    Your Answer:
+                </b>
+
+                <span id="puzzleUserAnswer"></span>
+
+            </p>
+
+
+            <p>
+
+                <b>
+                    Correct Answer:
+                </b>
+
+                <span class="correct">
+                    55
+                </span>
+
+            </p>
+
         </div>
 
 
-        <div class="score-row">
-            <span>🔮 Level 2</span>
-            <b id="level2Score">0 / 50</b>
+        <div class="score-box">
+
+            Level 2 Score:
+
+            <span id="level2Score">
+                0
+            </span>
+
+            / 40
+
         </div>
 
 
-        <div class="score-row">
-            <span>⚠️ Violations</span>
-            <b id="violations">0</b>
+
+        <!-- FINAL SCORE -->
+
+        <div class="final-score">
+
+            <h2>
+                🎯 FINAL SCORE
+            </h2>
+
+
+            <p>
+
+                Total:
+
+                <b>
+
+                    <span id="totalScore">
+                        0
+                    </span>
+
+                    / 90
+
+                </b>
+
+            </p>
+
+
+            <p>
+
+                Converted Score:
+
+                <b>
+
+                    <span id="convertedScore">
+                        0
+                    </span>
+
+                    / 20
+
+                </b>
+
+            </p>
+
         </div>
 
 
-        <p class="final-message">
-            🔥 The Vampire Council has accepted your challenge!
-        </p>
+        <div id="qualification"></div>
 
     </div>
 
 </div>
 
 
+<script src="script.js"></script>
+
+
 <script>
-
-const total =
-    Number(sessionStorage.getItem("score")) || 0;
-
-const level1 =
-    Number(sessionStorage.getItem("level1Score")) || 0;
-
-const level2 =
-    Number(sessionStorage.getItem("level2Score")) || 0;
-
-const violations =
-    Number(sessionStorage.getItem("violations")) || 0;
-
-
-document.getElementById("finalScore")
-    .innerText = total;
-
-document.getElementById("level1Score")
-    .innerText = level1 + " / 50";
-
-document.getElementById("level2Score")
-    .innerText = level2 + " / 50";
-
-document.getElementById("violations")
-    .innerText = violations;
-
+    loadResult();
 </script>
 
 </body>
+
 </html>
