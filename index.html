@@ -3,83 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vampire's Crypt - Tech Symposium Challenge</title>
+    <title>Vampire Code Hunt</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- CONTAINER -->
-    <div id="game-container">
+<div class="welcome">
 
-        <!-- WELCOME PAGE -->
-        <div id="welcome-screen" class="screen active">
-            <h1 class="gothic-title">🧛 VAMPIRE'S CRYPT 🩸</h1>
-            <p class="subtitle">Enter if you dare. Your coding journey dictates your survival.</p>
-            
-            <div class="form-group">
-                <label for="team-name">Team Name:</label>
-                <input type="text" id="team-name" placeholder="Enter Team Name" required>
+    <div class="vampire">🧛</div>
+
+    <h1>VAMPIRE'S<br>CODE HUNT</h1>
+
+    <p>Enter the castle. Solve the challenge. Survive the night.</p>
+
+    <div class="card">
+
+        <h2>🩸 Welcome, Coder</h2>
+
+        <p>
+            Complete both levels before the time runs out.
+        </p>
+
+        <div class="levels">
+
+            <div class="level">
+                <h3>🩸 LEVEL 1</h3>
+                <p>Python Logic</p>
+                <b>5 Minutes</b>
             </div>
-            <div class="form-group">
-                <label for="team-id">Team ID:</label>
-                <input type="text" id="team-id" placeholder="Enter Team ID" required>
+
+            <div class="level">
+                <h3>🔮 LEVEL 2</h3>
+                <p>Vampire Puzzle</p>
+                <b>5 Minutes</b>
             </div>
-            
-            <button id="start-btn" class="vampire-btn">Enter the Crypt (Fullscreen)</button>
+
         </div>
 
-        <!-- LEVEL 1: PYTHON MCQS -->
-        <div id="level1-screen" class="screen">
-            <div class="hud">
-                <span>Chamber I: Vampire's Logic (10 Marks)</span>
-                <span id="l1-timer">Timer: 05:00</span>
-            </div>
-            <div id="question-container">
-                <h3 id="question-text">Loading question...</h3>
-                <div id="options-container"></div>
-            </div>
+        <div class="rules">
+
+            <h3>⚔️ Rules</h3>
+
+            <p>🚫 Copy and paste are disabled.</p>
+            <p>🚫 Right-click is disabled.</p>
+            <p>⚠️ Leaving the challenge screen is recorded.</p>
+            <p>⏱️ Each level has 5 minutes.</p>
+
         </div>
 
-        <!-- LEVEL 2: PUZZLE -->
-        <div id="level2-screen" class="screen">
-            <div class="hud">
-                <span>Chamber II: Vampire's Puzzle (10 Marks)</span>
-                <span id="l2-timer">Timer: 05:00</span>
-            </div>
-            <div id="puzzle-container">
-                <h3>The Final Seal</h3>
-                <p>Decrypt the ancient cryptographic text to break the curse:</p>
-                <div id="puzzle-box" class="cipher-text">FPSSH QSSR</div>
-                
-                <p id="hint-text" class="hidden-hint"><em>Hint: Shift backwards by 3 in the alphabet (Caesar Cipher -3)</em></p>
-                
-                <input type="text" id="puzzle-answer" placeholder="Enter decrypted text...">
-                <button id="submit-puzzle" class="vampire-btn">Break the Seal</button>
-            </div>
-        </div>
-
-        <!-- QUALIFIED PAGE -->
-        <div id="qualified-screen" class="screen">
-            <h1 class="gothic-title">🩸 THE CRYPT CONQUERED 🩸</h1>
-            <p>You have escaped the shadows successfully.</p>
-            <div id="score-card">
-                <p><strong>Team:</strong> <span id="res-team"></span> (<span id="res-id"></span>)</p>
-                <p><strong>MCQ Score (Level 1):</strong> <span id="res-l1"></span> / 10</p>
-                <p><strong>Puzzle Score (Level 2):</strong> <span id="res-l2"></span> / 10</p>
-                <h2 class="total-score">Total Score: <span id="res-total"></span> / 20</h2>
-            </div>
-        </div>
+        <button onclick="startGame()">
+            ENTER THE CASTLE 🩸
+        </button>
 
     </div>
 
-    <!-- WARNING MODAL FOR CHEATING -->
-    <div id="warning-modal" class="modal hidden">
-        <div class="modal-content">
-            <h2>⚠️ BLOOD OATH BROKEN!</h2>
-            <p>Tab switching or exiting full-screen mode is forbidden in the crypt! Return immediately.</p>
-        </div>
-    </div>
+</div>
 
-    <script src="script.js"></script>
+<script>
+
+function startGame() {
+
+    sessionStorage.clear();
+
+    sessionStorage.setItem("score", "0");
+    sessionStorage.setItem("level1Score", "0");
+    sessionStorage.setItem("level2Score", "0");
+    sessionStorage.setItem("violations", "0");
+
+    if (document.documentElement.requestFullscreen) {
+
+        document.documentElement.requestFullscreen()
+        .then(() => {
+            location.href = "level1.html";
+        })
+        .catch(() => {
+            location.href = "level1.html";
+        });
+
+    } else {
+
+        location.href = "level1.html";
+
+    }
+
+}
+
+</script>
+
 </body>
 </html>
