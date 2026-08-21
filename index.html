@@ -1,95 +1,59 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vampire Code Hunt</title>
+
+    <title>Vampire Challenge</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="welcome">
+<div class="container welcome">
 
     <div class="vampire">🧛</div>
 
-    <h1>VAMPIRE'S<br>CODE HUNT</h1>
+    <h1>VAMPIRE CHALLENGE</h1>
 
-    <p>Enter the castle. Solve the challenge. Survive the night.</p>
+    <p class="subtitle">
+        Welcome to the Tech Vampire Round
+    </p>
 
-    <div class="card">
+    <div class="form-box">
 
-        <h2>🩸 Welcome, Coder</h2>
+        <label>Team Name</label>
 
-        <p>
-            Complete both levels before the time runs out.
-        </p>
+        <input
+            type="text"
+            id="teamName"
+            placeholder="Enter Team Name"
+            autocomplete="off"
+        >
 
-        <div class="levels">
+        <label>Team ID</label>
 
-            <div class="level">
-                <h3>🩸 LEVEL 1</h3>
-                <p>Python Logic</p>
-                <b>5 Minutes</b>
-            </div>
+        <input
+            type="text"
+            id="teamId"
+            placeholder="Enter Team ID"
+            autocomplete="off"
+        >
 
-            <div class="level">
-                <h3>🔮 LEVEL 2</h3>
-                <p>Vampire Puzzle</p>
-                <b>5 Minutes</b>
-            </div>
-
-        </div>
-
-        <div class="rules">
-
-            <h3>⚔️ Rules</h3>
-
-            <p>🚫 Copy and paste are disabled.</p>
-            <p>🚫 Right-click is disabled.</p>
-            <p>⚠️ Leaving the challenge screen is recorded.</p>
-            <p>⏱️ Each level has 5 minutes.</p>
-
-        </div>
-
-        <button onclick="startGame()">
-            ENTER THE CASTLE 🩸
+        <button onclick="startRound()">
+            ENTER
         </button>
+
+        <p id="error" class="error"></p>
 
     </div>
 
 </div>
 
-<script>
-
-function startGame() {
-
-    sessionStorage.clear();
-
-    sessionStorage.setItem("score", "0");
-    sessionStorage.setItem("level1Score", "0");
-    sessionStorage.setItem("level2Score", "0");
-    sessionStorage.setItem("violations", "0");
-
-    if (document.documentElement.requestFullscreen) {
-
-        document.documentElement.requestFullscreen()
-        .then(() => {
-            location.href = "level1.html";
-        })
-        .catch(() => {
-            location.href = "level1.html";
-        });
-
-    } else {
-
-        location.href = "level1.html";
-
-    }
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
