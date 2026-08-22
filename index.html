@@ -1,111 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Vampire Tech Challenge</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vampire's Realm - Registration</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
-
 <body>
 
-    <main class="page">
+  <div id="secModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>⚠️ Security Alert</h3>
+      <p id="secModalMsg">Security Warning</p>
+      <button class="btn" onclick="closeSecModal()">I Understand</button>
+    </div>
+  </div>
 
-        <div class="container">
-
-            <h1 class="blood-title">
-                🧛 VAMPIRE TECH CHALLENGE
-            </h1>
-
-            <p class="subtitle">
-                Enter the castle. Solve the challenge. Survive the night.
-            </p>
-
-            <section class="card">
-
-                <h2>📜 CHALLENGE INSTRUCTIONS</h2>
-
-                <div class="instructions">
-
-                    <p>🖥️ Use only the computer provided by the organizers.</p>
-
-                    <p>⏱️ Each level has a strict <b>5-minute time limit.</b></p>
-
-                    <p>🧠 Level 1 contains <b>5 Python logical MCQs.</b></p>
-
-                    <p>🧩 Level 2 contains <b>2 logical puzzles.</b></p>
-
-                    <p>💡 Hints will be provided for Level 2.</p>
-
-                    <p>🤫 Correct or wrong answers will <b>not</b> be displayed.</p>
-
-                    <p>📊 Score will be displayed only after completing each level.</p>
-
-                    <p>🚫 Copy, cut, paste and right-click are disabled.</p>
-
-                    <p>🔒 Stay on the challenge screen.</p>
-
-                    <p>⚠️ Switching tabs or leaving fullscreen may trigger a warning.</p>
-
-                    <p>🚫 Do not modify the challenge files.</p>
-
-                    <p>👑 Organizer's decision will be final.</p>
-
-                </div>
-
-                <h3 class="team-title">
-                    👥 ENTER TEAM NAME
-                </h3>
-
-                <input
-                    type="text"
-                    id="teamName"
-                    placeholder="Enter Team Name"
-                    maxlength="30"
-                    autocomplete="off"
-                >
-
-                <br>
-
-                <button id="startBtn">
-                    🩸 START CHALLENGE
-                </button>
-
-                <p class="enter-text">
-                    Press <b>ENTER</b> to start
-                </p>
-
-            </section>
-
-        </div>
-
-    </main>
-
-
-    <!-- Warning Popup -->
-
-    <div id="warningPopup" class="popup">
-
-        <div class="popup-box">
-
-            <h2>⚠️ TEAM NAME REQUIRED</h2>
-
-            <p>
-                Please enter your team name before starting the challenge.
-            </p>
-
-            <button id="closePopup">
-                OK
-            </button>
-
-        </div>
-
+  <div class="container">
+    <div class="header">
+      <div class="title">Vampire's Realm</div>
     </div>
 
-
-    <script src="script.js"></script>
+    <div>
+      <h2 style="font-family:'Cinzel', serif; margin-bottom: 10px;">Enter the Realm</h2>
+      <p style="color: var(--text-sub); margin-bottom: 20px; font-size: 0.9rem;">Provide your team details to begin the evaluation.</p>
+      <input type="text" id="teamNameInput" placeholder="Team Name" autocomplete="off">
+      <button class="btn" onclick="startQuiz()">Enter Fullscreen & Start Stage 1</button>
+    </div>
+  </div>
 
 </body>
 </html>
