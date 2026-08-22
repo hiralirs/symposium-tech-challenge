@@ -2,29 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stage 3 - Final Result</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Final Results</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body onload="initResults()">
-
-  <div class="container" style="text-align: center;">
-    <div class="header">
-      <div class="title" style="width:100%; text-align:center;">Stage 3 – Final Result</div>
-    </div>
-
-    <div>
-      <p style="color: var(--text-sub); margin-bottom: 10px;">Team: <span id="finalTeamName" style="color: #fff; font-weight: bold;"></span></p>
-      <!-- Point 22 & 23: Total Calculation & Final Score Page -->
-      <div style="font-size: 2.8rem; font-weight: bold; margin-bottom: 15px; color: #38ef7d;" id="finalTotalScore">0 / 7</div>
-      <!-- Point 24: Vampire Result Message -->
-      <p id="vampireTitle" style="font-family: 'Cinzel', serif; font-size: 1.2rem; color: var(--crimson-glow); margin-bottom: 25px;"></p>
-      <!-- Point 25: Restart Option -->
-      <button class="btn" onclick="restartApp()">Restart for Another Team</button>
-    </div>
+  <div class="container">
+    <h2 style="color: #ccc;">Team:</h2>
+    <h1 class="gothic-text" id="finalTeamName">Team Name</h1>
+    
+    <h2>Final Score: <span id="finalTotalScore" class="highlight">0 / 10</span></h2>
+    <h3 id="violationCountDisplay" style="margin-top: 10px; font-size: 1.2rem;">Security Violations: 0</h3>
+    
+    <h3 id="vampireTitle" style="margin-top: 20px; font-style: italic;">Title</h3>
+    
+    <br><br>
+    <button class="btn" onclick="restartApp()" style="background: #222;">Return to Start</button>
   </div>
-
+  <script src="script.js"></script>
 </body>
 </html>
