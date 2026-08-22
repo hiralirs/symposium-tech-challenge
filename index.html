@@ -2,17 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Vampire Escape Room</title>
+  <title>The Vampire's Crypt - Entrance</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
+  <div class="glass-panel" id="startScreen">
     <h1 class="gothic-text">The Vampire's Crypt</h1>
-    <p>Survive the code. Solve the puzzles. Do not cheat, or face disqualification.</p>
-    <input type="text" id="teamNameInput" class="input-box" placeholder="Enter Team Name...">
-    <br>
+    
+    <div class="instructions-box" style="text-align: left; padding: 20px; border: 1px solid var(--blood-red); background: rgba(0,0,0,0.7); margin-bottom: 25px; border-radius: 8px; line-height: 1.6;">
+      <h3 class="gothic-text" style="color: var(--blood-red); margin-top: 0; text-align: center; font-size: 1.5rem;">📜 Rules of the Crypt</h3>
+      <ul style="padding-left: 20px; color: #e0e0e0; font-size: 0.95rem;">
+        <li style="margin-bottom: 10px;"><b>Format:</b> The game has 2 stages (Stage 1: Python, Stage 2: Logic Puzzles).</li>
+        <li style="margin-bottom: 10px;"><b>Strict Timings:</b> You have exactly <b>5 minutes per stage</b>. If the timer hits zero, you will be forced to the next screen automatically.</li>
+        <li style="margin-bottom: 10px;"><b>One Attempt Only:</b> There are no retries, no second chances, and no page refreshes allowed.</li>
+        <li style="margin-bottom: 10px;"><b>No Going Back:</b> The next question only opens once you answer the current one. Once you select or submit an answer, it is permanently locked. You cannot go back.</li>
+        <li><b>Anti-Cheat System:</b> Do not exit full screen, switch tabs, or copy-paste. You will get exactly 3 warnings. On the 4th warning, you will be instantly disqualified with a score of zero.</li>
+      </ul>
+    </div>
+    
+    <input type="text" id="teamName" placeholder="Enter Team Name..." class="input-gothic">
     <button class="btn" onclick="startQuiz()">Enter the Crypt</button>
+    <p id="startError" style="color: var(--blood-red); display: none; margin-top: 10px; font-weight: bold;">You must enter a name to proceed.</p>
   </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
