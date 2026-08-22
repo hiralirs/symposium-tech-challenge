@@ -2,22 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Final Results</title>
+  <title>The Verdict</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body onload="initResults()">
-  <div class="container">
-    <h2 style="color: #ccc;">Team:</h2>
-    <h1 class="gothic-text" id="finalTeamName">Team Name</h1>
+<body>
+  <div class="glass-panel" style="text-align: center; max-width: 600px;">
+    <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 10px;">The Verdict</h1>
+    <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 20px;"></h2>
     
-    <h2>Final Score: <span id="finalTotalScore" class="highlight">0 / 10</span></h2>
-    <h3 id="violationCountDisplay" style="margin-top: 10px; font-size: 1.2rem;">Security Violations: 0</h3>
-    
-    <h3 id="vampireTitle" style="margin-top: 20px; font-style: italic;">Title</h3>
-    
-    <br><br>
-    <button class="btn" onclick="restartApp()" style="background: #222;">Return to Start</button>
+    <div style="margin: 30px auto; padding: 30px 20px; max-width: 400px; border: 1px solid #333; background: rgba(0,0,0,0.5); border-radius: 10px;">
+      <h2 style="font-size: 2.2rem; margin: 0;">Final Score: <span id="finalScoreDisplay" style="color: var(--blood-red);"></span> / 10</h2>
+      
+      <div style="margin-top: 25px;">
+        <!-- UPDATED: Changed to gothic-text font and added a subtle glow -->
+        <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.4rem; margin: 0; text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);"></h3>
+      </div>
+    </div>
+
+    <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">Your results have been sealed in the crypt. You may close this tab.</p>
   </div>
+
   <script src="script.js"></script>
+  <script>
+    window.onload = loadResult;
+  </script>
 </body>
 </html>
