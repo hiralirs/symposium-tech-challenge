@@ -1,332 +1,199 @@
+:root {
+  --bg-dark: #070709;
+  --card-bg: rgba(18, 16, 22, 0.88);
+  --crimson-glow: #e63946;
+  --blood-red: #8b0000;
+  --text-main: #f1f1f1;
+  --text-sub: #a0a0ab;
+  --border-red: rgba(230, 57, 70, 0.35);
+}
+
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none; /* Point 26: Disables text selection */
+  -webkit-user-select: none;
 }
 
 body {
-    min-height: 100vh;
-
-    font-family: Arial, Helvetica, sans-serif;
-
-    color: white;
-
-    background:
-        radial-gradient(
-            circle at top,
-            #650000,
-            #260000 40%,
-            #080000 80%,
-            #000000
-        );
-
-    overflow-x: hidden;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 50% 10%, rgba(139, 0, 0, 0.18) 0%, transparent 60%),
+    radial-gradient(circle at 80% 80%, rgba(230, 57, 70, 0.08) 0%, transparent 50%);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-
-/* Main page */
-
-.page {
-    min-height: 100vh;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 25px;
-}
-
-
+/* Point 32: Responsive Container */
 .container {
-    width: 100%;
-
-    max-width: 900px;
-
-    text-align: center;
+  width: 100%;
+  max-width: 750px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-red);
+  border-radius: 16px;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(139, 0, 0, 0.25);
+  padding: 32px;
+  position: relative;
 }
 
-
-/* Title */
-
-.blood-title {
-    font-size: clamp(32px, 7vw, 60px);
-
-    color: #ff1a1a;
-
-    text-shadow:
-        0 0 10px #ff0000,
-        0 0 25px #ff0000,
-        0 0 45px #990000;
-
-    margin-bottom: 10px;
-
-    letter-spacing: 2px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-red);
+  padding-bottom: 16px;
+  margin-bottom: 24px;
 }
 
-
-.subtitle {
-    color: #ffb3b3;
-
-    font-size: 18px;
-
-    margin-bottom: 25px;
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  color: var(--crimson-glow);
+  text-shadow: 0 0 8px rgba(230, 57, 70, 0.4);
 }
 
-
-/* Card */
-
-.card {
-    background:
-        linear-gradient(
-            145deg,
-            rgba(75, 0, 0, 0.96),
-            rgba(10, 0, 0, 0.98)
-        );
-
-    border: 2px solid #a00000;
-
-    border-radius: 20px;
-
-    padding: 30px;
-
-    box-shadow:
-        0 0 25px rgba(255, 0, 0, 0.35);
+.timer-badge {
+  font-family: 'Fira Code', monospace;
+  background: rgba(139, 0, 0, 0.35);
+  border: 1px solid var(--crimson-glow);
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: #fff;
+  font-weight: 600;
 }
 
+.hidden { display: none !important; }
 
-.card h2 {
-    color: #ff3333;
-
-    margin-bottom: 20px;
-
-    text-shadow:
-        0 0 10px #ff0000;
+/* Form Controls */
+input[type="text"] {
+  width: 100%;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-red);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 20px;
+}
+input[type="text"]:focus {
+  border-color: var(--crimson-glow);
+  box-shadow: 0 0 8px rgba(230, 57, 70, 0.4);
 }
 
-
-/* Instructions */
-
-.instructions {
-    text-align: left;
-
-    margin-bottom: 25px;
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--blood-red), var(--crimson-glow));
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
 }
 
-
-.instructions p {
-    padding: 11px 14px;
-
-    margin: 8px 0;
-
-    background:
-        rgba(100, 0, 0, 0.35);
-
-    border-left:
-        4px solid #ff0000;
-
-    border-radius: 7px;
-
-    line-height: 1.5;
-
-    color: #ffe5e5;
+/* MCQ Options */
+.code-block {
+  background: rgba(0, 0, 0, 0.6);
+  padding: 16px;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  color: #38ef7d;
+  margin-bottom: 20px;
+  border-left: 3px solid var(--crimson-glow);
+  white-space: pre-wrap;
 }
 
-
-.instructions b {
-    color: #ff5555;
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-
-/* Team */
-
-.team-title {
-    color: #ff6666;
-
-    margin-bottom: 10px;
+.option-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 14px 18px;
+  border-radius: 8px;
+  color: var(--text-main);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+.option-btn:hover {
+  border-color: var(--crimson-glow);
+  background: rgba(230, 57, 70, 0.1);
 }
 
-
-#teamName {
-    width: 90%;
-
-    max-width: 500px;
-
-    padding: 15px;
-
-    border-radius: 10px;
-
-    border:
-        2px solid #800000;
-
-    background: #120000;
-
-    color: white;
-
-    font-size: 17px;
-
-    outline: none;
-
-    text-align: center;
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 20px;
 }
 
-
-#teamName::placeholder {
-    color: #bb7777;
+/* Point 15: Centered Hint Box / Popup styling */
+.modal-box {
+  background: #121016;
+  border: 1px solid var(--crimson-glow);
+  padding: 28px;
+  border-radius: 12px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(230, 57, 70, 0.35);
+}
+.modal-box h3 {
+  font-family: 'Cinzel', serif;
+  color: var(--crimson-glow);
+  margin-bottom: 12px;
+}
+.modal-box p {
+  color: var(--text-sub);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
 }
 
-
-#teamName:focus {
-    border-color: #ff0000;
-
-    box-shadow:
-        0 0 15px rgba(255, 0, 0, 0.6);
+/* Point 17: Hints Below Questions */
+.hint-container {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--border-red);
 }
-
-
-/* Button */
-
-button {
-    padding:
-        14px 30px;
-
-    margin-top: 18px;
-
-    border: none;
-
-    border-radius: 10px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #720000,
-            #ff0000
-        );
-
-    color: white;
-
-    font-size: 17px;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 0 15px rgba(255, 0, 0, 0.5);
-
-    transition: 0.2s;
+.hint-toggle {
+  background: none;
+  border: none;
+  color: var(--crimson-glow);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: underline;
 }
-
-
-button:hover {
-    transform: scale(1.05);
-
-    box-shadow:
-        0 0 25px #ff0000;
-}
-
-
-.enter-text {
-    margin-top: 18px;
-
-    color: #ff9999;
-
-    font-size: 14px;
-}
-
-
-/* Popup */
-
-.popup {
-    position: fixed;
-
-    inset: 0;
-
-    display: none;
-
-    justify-content: center;
-
-    align-items: center;
-
-    padding: 20px;
-
-    background:
-        rgba(0, 0, 0, 0.9);
-
-    z-index: 1000;
-}
-
-
-.popup-box {
-    width: 95%;
-
-    max-width: 500px;
-
-    padding: 30px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            145deg,
-            #500000,
-            #100000
-        );
-
-    border:
-        2px solid #ff0000;
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 0 35px #ff0000;
-}
-
-
-.popup-box h2 {
-    color: #ff3333;
-
-    margin-bottom: 15px;
-}
-
-
-.popup-box p {
-    color: #ffe5e5;
-
-    line-height: 1.6;
-}
-
-
-/* Mobile */
-
-@media (max-width: 600px) {
-
-    .page {
-        padding: 15px;
-    }
-
-    .card {
-        padding: 20px;
-    }
-
-    .blood-title {
-        font-size: 34px;
-    }
-
-    .subtitle {
-        font-size: 15px;
-    }
-
-    .instructions p {
-        font-size: 14px;
-    }
-
-    #teamName {
-        width: 100%;
-    }
-
-    button {
-        width: 100%;
-    }
+.hint-text {
+  margin-top: 10px;
+  padding: 12px;
+  background: rgba(139, 0, 0, 0.2);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #ffcccc;
 }
