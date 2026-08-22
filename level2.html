@@ -2,59 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Level 2: The Vampire's Puzzle</title>
+  <title>Stage 2 - Logic</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body onload="initLevel2()">
-  <div class="container">
-    <div id="timerDisplay" class="hidden"></div>
+<body>
 
-    <!-- Active Puzzle Area -->
-    <div id="s2ActiveArea" class="hidden">
-      <h3 id="s2Progress" class="gothic-text">Puzzle 1 of 5</h3>
-      <p id="s2QuestionText"></p>
-      <input type="text" id="s2AnswerInput" class="input-box" placeholder="Your answer...">
-      <br>
-      <button class="btn" onclick="submitStage2Answer()">Submit Answer</button>
-      <br><br>
-      <button class="btn" onclick="toggleHint()" style="background: #333; font-size: 0.9rem;">Reveal Hint</button>
-      <p id="hintBox" class="hidden"></p>
-    </div>
-
-    <!-- End of Level Area -->
-    <div id="s2ScoreArea" class="hidden">
-      <h2 class="gothic-text">You Survived the Crypt!</h2>
-      <p>Stage 2 Score: <span id="s2ScoreVal" class="highlight"></span> / 5</p>
-      <button class="btn" onclick="goToResults()">View Final Results</button>
+  <div id="stage2InstModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 500px;">
+      <h3 class="gothic-text" style="color: var(--blood-red); font-size: 2rem; margin-bottom: 15px;">🦇 Stage 2: Logic Puzzles</h3>
+      <p style="text-align: left; font-size: 0.95rem; line-height: 1.6; color: #ccc;">
+        <b>Instructions:</b> You have 5 minutes to solve 5 puzzles. Type your answer in the box and click submit to open the next question. Capital letters do not matter (typing "door b" or "Door B" both work).
+        <br><br>
+        <b>Hints:</b> If you are stuck, click the "Reveal Hint" button. Using a hint is completely free and will NOT lower your score!
+      </p>
+      <button class="btn" style="margin-top: 20px;" onclick="startLevel2Actual()">Start Stage 2</button>
     </div>
   </div>
 
-  <!-- Intros/Modals -->
-  <div id="stage2InstModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <h3 class="gothic-text">📜 Level 2 Instructions</h3>
-      <p>Welcome to Level 2: Vampire's Logic! You have 5 minutes to solve 5 logical puzzles.</p>
-      <button class="btn" onclick="showHintNoticeModal()">Next</button>
+  <div class="glass-panel hidden" id="level2MainUI">
+    <div class="header-bar">
+      <span id="teamDisplayS2" style="font-weight: bold; color: var(--blood-red);"></span>
+      <span id="timerS2" class="timer">05:00</span>
     </div>
+
+    <h3 id="s2Progress" class="gothic-text" style="font-size: 1.8rem;">Puzzle 1 of 5</h3>
+    <div id="s2PuzzleText" style="text-align: left; margin: 20px 0; font-size: 1.1rem; line-height: 1.5; color: #eee;"></div>
+    
+    <div id="hintArea" style="margin-bottom: 20px;">
+      <button class="btn" style="padding: 5px 15px; font-size: 0.8rem; background: #333;" onclick="showHint()">Reveal Hint</button>
+      <p id="hintText" class="hidden" style="color: #aaa; font-style: italic; margin-top: 10px; font-size: 0.9rem;"></p>
+    </div>
+
+    <input type="text" id="s2Answer" class="input-gothic" placeholder="Type your answer here...">
+    <button class="btn" style="width: 100%; margin-top: 10px;" onclick="submitS2Answer()">Submit Answer</button>
   </div>
 
-  <div id="stage2HintModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <h3 class="gothic-text">💡 A Word on Hints</h3>
-      <p>Hints are available for every puzzle to guide you in the dark. Use them wisely!</p>
-      <button class="btn" onclick="startLevel2Actual()">Start Level 2</button>
-    </div>
-  </div>
-
-  <!-- Security Modal -->
   <div id="secModal" class="modal-overlay hidden">
-    <div class="modal-box" style="border: 2px solid #ff4d4d;">
-      <h3 style="color: #ff4d4d;">🛑 SECURITY ALERT</h3>
-      <p id="secModalMsg" style="white-space: pre-wrap;"></p>
-      <button class="btn" onclick="closeSecModal()" style="background: #ff4d4d;">Acknowledge & Return</button>
+    <div class="modal-box" style="border: 2px solid #ff3333;">
+      <h2 style="color: #ff3333; font-size: 2rem; margin-bottom: 10px;">⚠️ SECURITY WARNING ⚠️</h2>
+      <p id="secMsg" style="font-size: 1.2rem; margin-bottom: 20px; white-space: pre-wrap;"></p>
+      <button class="btn" onclick="closeSecModal()">I Understand</button>
     </div>
   </div>
 
   <script src="script.js"></script>
+  <script>
+    window.onload = () => {
+      initSecurity();
+      document.getElementById('teamDisplayS2').innerText = localStorage.getItem('teamName') || 'Unknown Soul';
+    };
+  </script>
 </body>
 </html>
