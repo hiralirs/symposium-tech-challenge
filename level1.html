@@ -1,59 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Level 1 - Vampire's Logic</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 1 - Vampire's Logic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
+<body onload="initLevel1()">
 
-<body>
+  <div id="secModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>⚠️ Security Alert</h3>
+      <p id="secModalMsg">Security warning</p>
+      <button class="btn" onclick="closeSecModal()">I Understand</button>
+    </div>
+  </div>
 
-<div class="timer-box">
-    ⏱️ <span id="timer">05:00</span>
-</div>
-
-<div class="page">
-
-    <div class="container">
-
-        <h1 class="blood-title">
-            🧠 LEVEL 1
-        </h1>
-
-        <h2 class="red-heading">
-            VAMPIRE'S LOGIC
-        </h2>
-
-        <div class="card">
-
-            <div class="question-number">
-                Question <span id="questionNumber">1</span> / 5
-            </div>
-
-            <div class="progress-container">
-                <div id="progressBar"></div>
-            </div>
-
-            <div id="questionBox" class="question-box">
-                Question
-            </div>
-
-            <div id="optionsBox"></div>
-
-            <p class="enter-info">
-                Select an answer or press <b>ENTER</b> to continue.
-            </p>
-
-        </div>
-
+  <div class="container">
+    <!-- Points 6: 5-Minute Timer Display -->
+    <div class="header">
+      <div class="title">Stage 1 – Vampire's Logic</div>
+      <div id="timerDisplay" class="timer-badge">⏱ 05:00</div>
     </div>
 
-</div>
+    <!-- Active Question View -->
+    <div id="s1ActiveArea">
+      <p style="color: var(--text-sub); margin-bottom: 8px; font-size: 0.85rem;" id="s1Progress">Question 1 of 5</p>
+      <div id="s1CodeBlock" class="code-block"></div>
+      <p style="margin-bottom: 16px; font-weight: 600;">What is the output of this Python code?</p>
+      <div id="s1Options" class="options-grid"></div>
+    </div>
 
-<script src="script.js"></script>
+    <!-- Point 11 & 12: Stage 1 Score & Continue Option -->
+    <div id="s1ScoreArea" class="hidden" style="text-align: center;">
+      <h2 style="font-family:'Cinzel', serif; color: var(--crimson-glow); margin-bottom: 12px;">Stage 1 Complete</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 20px;">Level 1 Score: <span id="s1ScoreVal" style="color:#38ef7d; font-weight:bold;">0</span> / 5</p>
+      <button class="btn" onclick="goToLevel2()">Continue to Level 2</button>
+    </div>
+  </div>
 
 </body>
 </html>
