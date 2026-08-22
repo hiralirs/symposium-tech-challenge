@@ -2,34 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vampire's Realm - Registration</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Vampire Escape Room</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body>
-
-  <div id="secModal" class="modal-overlay hidden">
-    <div class="modal-box">
-      <h3>⚠️ Security Alert</h3>
-      <p id="secModalMsg">Security Warning</p>
-      <button class="btn" onclick="closeSecModal()">I Understand</button>
-    </div>
-  </div>
-
   <div class="container">
-    <div class="header">
-      <div class="title">Vampire's Realm</div>
-    </div>
-
-    <div>
-      <h2 style="font-family:'Cinzel', serif; margin-bottom: 10px;">Enter the Realm</h2>
-      <p style="color: var(--text-sub); margin-bottom: 20px; font-size: 0.9rem;">Provide your team details to begin the evaluation.</p>
-      <input type="text" id="teamNameInput" placeholder="Team Name" autocomplete="off">
-      <button class="btn" onclick="startQuiz()">Enter Fullscreen & Start Stage 1</button>
-    </div>
+    <h1 class="gothic-text">The Vampire's Crypt</h1>
+    <p>Survive the code. Solve the puzzles. Do not cheat, or face disqualification.</p>
+    <input type="text" id="teamNameInput" class="input-box" placeholder="Enter Team Name...">
+    <br>
+    <button class="btn" onclick="startQuiz()">Enter the Crypt</button>
   </div>
-
+  <script src="script.js"></script>
 </body>
 </html>
