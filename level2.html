@@ -1,97 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Level 2 - Vampire's Puzzle</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stage 2 - Vampire's Puzzle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
+<body onload="initLevel2()">
 
-<body>
+  <div id="secModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>⚠️ Security Alert</h3>
+      <p id="secModalMsg">Security warning</p>
+      <button class="btn" onclick="closeSecModal()">I Understand</button>
+    </div>
+  </div>
 
-<div class="timer-box">
-    ⏱️ <span id="timer">05:00</span>
-</div>
+  <!-- Point 14: Level 2 Instructions Popup -->
+  <div id="stage2InstModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>📜 Level 2 Instructions</h3>
+      <p>Welcome to Level 2: Vampire's Puzzle! You have 5 minutes to solve 2 logical puzzles.</p>
+      <button class="btn" onclick="showHintNoticeModal()">Next</button>
+    </div>
+  </div>
 
-<div class="page">
+  <!-- Point 15: Centered Hint Popup -->
+  <div id="stage2HintModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <h3>💡 Centered Hint Notice</h3>
+      <p>Hints are available directly below each question if you get stuck during this stage.</p>
+      <button class="btn" onclick="startLevel2Actual()">Begin Level 2</button>
+    </div>
+  </div>
 
-    <div class="container">
-
-        <h1 class="blood-title">
-            🩸 LEVEL 2
-        </h1>
-
-        <h2 class="red-heading">
-            VAMPIRE'S PUZZLE
-        </h2>
-
-        <div class="card">
-
-            <div id="puzzleArea"></div>
-
-        </div>
-
+  <div class="container">
+    <!-- Point 13: 5-Minute Timer -->
+    <div class="header">
+      <div class="title">Stage 2 – Vampire's Puzzle</div>
+      <div id="timerDisplay" class="timer-badge hidden">⏱ 05:00</div>
     </div>
 
-</div>
+    <!-- Active Question View -->
+    <div id="s2ActiveArea" class="hidden">
+      <p style="color: var(--text-sub); margin-bottom: 8px; font-size: 0.85rem;" id="s2Progress">Puzzle 1 of 2</p>
+      <p id="s2QuestionText" style="margin-bottom: 16px; font-weight: 600; line-height: 1.5;"></p>
+      <input type="text" id="s2AnswerInput" placeholder="Enter your answer..." autocomplete="off">
+      <button class="btn" onclick="submitStage2Answer()">Submit Answer</button>
 
-
-<!-- LEVEL 2 INSTRUCTIONS -->
-
-<div id="instructionsPopup" class="popup show">
-
-    <div class="popup-box">
-
-        <h2>📜 LEVEL 2 INSTRUCTIONS</h2>
-
-        <p>⏱️ You have <b>5 minutes</b> to complete Level 2.</p>
-
-        <p>🧩 There are <b>2 logical puzzles.</b></p>
-
-        <p>💡 Each puzzle contains a hint.</p>
-
-        <p>🤫 Correct and wrong answers will not be displayed.</p>
-
-        <p>📊 Your score will be displayed after completing Level 2.</p>
-
-        <button id="instructionsContinue">
-            CONTINUE
-        </button>
-
+      <!-- Point 17: Hints Below Questions -->
+      <div class="hint-container">
+        <button class="hint-toggle" onclick="toggleHint()">💡 Need a hint?</button>
+        <div id="hintBox" class="hint-text hidden"></div>
+      </div>
     </div>
 
-</div>
-
-
-<!-- HINT POPUP -->
-
-<div id="hintPopup" class="popup">
-
-    <div class="popup-box">
-
-        <h2>💡 PUZZLE HINT</h2>
-
-        <p>
-            The hint for the puzzle will appear
-            <b>below the question.</b>
-        </p>
-
-        <p>
-            Read the puzzle carefully and use the hint if needed.
-        </p>
-
-        <button id="hintContinue">
-            GOT IT
-        </button>
-
+    <!-- Point 21: Level 2 Score View -->
+    <div id="s2ScoreArea" class="hidden" style="text-align: center;">
+      <h2 style="font-family:'Cinzel', serif; color: var(--crimson-glow); margin-bottom: 12px;">Stage 2 Complete</h2>
+      <p style="font-size: 1.2rem; margin-bottom: 20px;">Level 2 Score: <span id="s2ScoreVal" style="color:#38ef7d; font-weight:bold;">0</span> / 2</p>
+      <button class="btn" onclick="goToResults()">Proceed to Final Results</button>
     </div>
-
-</div>
-
-
-<script src="script.js"></script>
+  </div>
 
 </body>
 </html>
