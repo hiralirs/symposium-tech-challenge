@@ -1,4 +1,4 @@
-// --- STAGE 1 & STAGE 2 QUESTION DATA ---
+// --- DATA ---
 const stage1Questions = [
   {
     code: "def func(a, b=[]):\n    b.append(a)\n    return b\n\nprint(func(1))\nprint(func(2))",
@@ -55,11 +55,10 @@ const stage2Puzzles = [
   }
 ];
 
-// --- GLOBAL SECURITY & CONTROLS ---
+// --- SECURITY PROTOCOLS ---
 let isWarningOpen = false;
 
 function initSecurity() {
-  // Prevent Right Click, Copy, Cut, Paste
   ['contextmenu', 'copy', 'cut', 'paste'].forEach(evt =>
     document.addEventListener(evt, e => {
       e.preventDefault();
@@ -67,7 +66,6 @@ function initSecurity() {
     })
   );
 
-  // Prevent Keyboard Shortcuts
   document.addEventListener('keydown', e => {
     if (e.key === 'F12' || (e.ctrlKey && ['u', 'U', 'c', 'C', 'v', 'V'].includes(e.key))) {
       e.preventDefault();
@@ -75,25 +73,16 @@ function initSecurity() {
     }
   });
 
-  // Prevent Tab Switching
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && !isSafePage()) {
-      recordViolation("Tab Switching Detected");
-    }
+    if (document.hidden && !isSafePage()) recordViolation("Tab Switching Detected");
   });
 
-  // Prevent leaving window focus
   window.addEventListener('blur', () => {
-    if (!isSafePage() && !isWarningOpen && !document.hidden) {
-      recordViolation("Leaving quiz window focus");
-    }
+    if (!isSafePage() && !isWarningOpen && !document.hidden) recordViolation("Leaving quiz window focus");
   });
 
-  // Enforce Fullscreen
   document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement && !isSafePage() && !isWarningOpen) {
-      recordViolation("Exiting Fullscreen");
-    }
+    if (!document.fullscreenElement && !isSafePage() && !isWarningOpen) recordViolation("Exiting Fullscreen");
   });
 
   window.addEventListener('beforeunload', (e) => {
@@ -115,19 +104,11 @@ function recordViolation(reason) {
   attempts++;
   localStorage.setItem('vampire_violations', attempts.toString());
   
-  if (attempts === 1) {
-    showSecModal(`⚠️ WARNING 1/3: ${reason} is strictly prohibited!\n\nReturn to the quiz immediately.`);
-  } 
-  else if (attempts === 2) {
-    showSecModal(`⚠️ WARNING 2/3: ${reason} is strictly prohibited!\n\nReturn to the quiz immediately.`);
-  } 
-  else if (attempts === 3) {
-    showSecModal(`🛑 FINAL WARNING 3/3: ${reason} is strictly prohibited!\n\nOne more violation will result in immediate disqualification.`);
-  } 
-  else if (attempts > 3) {
-    // 4th Offense = Disqualified
-    alert("🚨 DISQUALIFIED: You have been disqualified as you are not honest.");
-    if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+  if (attempts < 4) {
+    showSecModal(`⚠️ WARNING ${attempts}/3: ${reason} is strictly prohibited!\n\nReturn to the quiz immediately.`);
+  } else {
+    localStorage.setItem('disqualified', 'true');
+    alert("🚨 DISQUALIFIED: You have been disqualified for rule violations.");
     window.location.href = 'result.html';
   }
 }
@@ -136,7 +117,7 @@ function showSecModal(msg) {
   isWarningOpen = true;
   let modal = document.getElementById('secModal');
   if (modal) {
-    document.getElementById('secModalMsg').innerText = msg;
+    document.getElementById('secMsg').innerText = msg;
     modal.classList.remove('hidden');
   } else {
     alert(msg);
@@ -148,26 +129,53 @@ function closeSecModal() {
   let modal = document.getElementById('secModal');
   if (modal) modal.classList.add('hidden');
   
-  // Force re-entry into fullscreen
   if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen().catch(() => {});
   }
 }
 
-// --- TIMER LOGIC ---
-let timerInterval = null;
-let timeRemaining = 300; 
+// --- INDEX LOGIC ---
+function startQuiz() {
+  const teamInput = document.getElementById('teamName').value.trim();
+  if (!teamInput) {
+    document.getElementById('startError').style.display = 'block';
+    return;
+  }
+  
+  localStorage.setItem('teamName', teamInput);
+  localStorage.setItem('s1Score', '0');
+  localStorage.setItem('s2Score', '0');
+  localStorage.setItem('vampire_violations', '0');
+  localStorage.setItem('disqualified', 'false');
 
-function startTimer(onTimeout) {
+  // FORCE FULLSCREEN ON CLICK
+  let elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen().catch(err => {
+      console.log("Error attempting to enable fullscreen:", err.message);
+    });
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+
+  // Move to Level 1
+  window.location.href = 'level1.html';
+}
+
+// --- TIMER LOGIC ---
+let timerInterval;
+let timeRemaining = 300;
+
+function startTimer(displayElementId, onTimeout) {
   clearInterval(timerInterval);
-  timeRemaining = 300;
-  updateTimerBadge();
-  const badge = document.getElementById('timerDisplay');
-  if (badge) badge.classList.remove('hidden');
+  timeRemaining = 300; 
+  updateTimerDisplay(displayElementId);
 
   timerInterval = setInterval(() => {
     timeRemaining--;
-    updateTimerBadge();
+    updateTimerDisplay(displayElementId);
     if (timeRemaining <= 0) {
       clearInterval(timerInterval);
       onTimeout();
@@ -175,44 +183,27 @@ function startTimer(onTimeout) {
   }, 1000);
 }
 
-function updateTimerBadge() {
-  const badge = document.getElementById('timerDisplay');
+function updateTimerDisplay(displayElementId) {
+  const badge = document.getElementById(displayElementId);
   if (!badge) return;
   const mins = String(Math.floor(timeRemaining / 60)).padStart(2, '0');
   const secs = String(timeRemaining % 60).padStart(2, '0');
-  badge.innerText = `⏱ ${mins}:${secs}`;
-}
-
-// --- INDEX PAGE LOGIC ---
-function startQuiz() {
-  const teamInput = document.getElementById('teamNameInput').value.trim();
-  if (!teamInput) {
-    alert("Please enter a valid team name.");
-    return;
-  }
-  localStorage.setItem('vampire_team', teamInput);
-  localStorage.setItem('vampire_s1_score', '0');
-  localStorage.setItem('vampire_s2_score', '0');
-  localStorage.setItem('vampire_violations', '0');
-
-  if (document.documentElement.requestFullscreen) {
-    document.documentElement.requestFullscreen().catch(() => {});
-  }
-  window.location.href = 'level1.html';
+  badge.innerText = `${mins}:${secs}`;
 }
 
 // --- LEVEL 1 LOGIC ---
 let s1Index = 0;
 let s1Score = 0;
 
-function initLevel1() {
-  startTimer(finishLevel1);
-  renderStage1Question();
+function startLevel1() {
+  document.getElementById('teamDisplayS1').innerText = localStorage.getItem('teamName') || 'Unknown Soul';
+  startTimer('timerS1', endLevel1);
+  renderS1Question();
 }
 
-function renderStage1Question() {
+function renderS1Question() {
   if (s1Index >= stage1Questions.length) {
-    finishLevel1();
+    endLevel1();
     return;
   }
   const q = stage1Questions[s1Index];
@@ -225,28 +216,22 @@ function renderStage1Question() {
     const btn = document.createElement('button');
     btn.className = 'option-btn';
     btn.innerText = opt;
-    btn.onclick = () => selectStage1Option(idx);
+    btn.onclick = () => submitS1Answer(idx);
     optDiv.appendChild(btn);
   });
 }
 
-function selectStage1Option(idx) {
+function submitS1Answer(idx) {
   if (idx === stage1Questions[s1Index].correct) {
     s1Score++;
   }
   s1Index++;
-  renderStage1Question();
+  renderS1Question(); // Immediately moves to next question, no going back
 }
 
-function finishLevel1() {
+function endLevel1() {
   clearInterval(timerInterval);
-  localStorage.setItem('vampire_s1_score', s1Score);
-  document.getElementById('s1ActiveArea').classList.add('hidden');
-  document.getElementById('s1ScoreVal').innerText = s1Score;
-  document.getElementById('s1ScoreArea').classList.remove('hidden');
-}
-
-function goToLevel2() {
+  localStorage.setItem('s1Score', s1Score);
   window.location.href = 'level2.html';
 }
 
@@ -254,100 +239,67 @@ function goToLevel2() {
 let s2Index = 0;
 let s2Score = 0;
 
-function initLevel2() {
-  document.getElementById('stage2InstModal').classList.remove('hidden');
-}
-
-function showHintNoticeModal() {
-  document.getElementById('stage2InstModal').classList.add('hidden');
-  document.getElementById('stage2HintModal').classList.remove('hidden');
-}
-
 function startLevel2Actual() {
-  document.getElementById('stage2HintModal').classList.add('hidden');
-  document.getElementById('s2ActiveArea').classList.remove('hidden');
-  startTimer(finishLevel2);
-  renderStage2Puzzle();
+  document.getElementById('stage2InstModal').classList.add('hidden');
+  document.getElementById('level2MainUI').classList.remove('hidden');
+  startTimer('timerS2', endLevel2);
+  renderS2Question();
 }
 
-function renderStage2Puzzle() {
+function renderS2Question() {
   if (s2Index >= stage2Puzzles.length) {
-    finishLevel2();
+    endLevel2();
     return;
   }
   const p = stage2Puzzles[s2Index];
   document.getElementById('s2Progress').innerText = `Puzzle ${s2Index + 1} of 5`;
-  document.getElementById('s2QuestionText').innerText = p.text;
-  document.getElementById('s2AnswerInput').value = "";
-  document.getElementById('hintBox').innerText = p.hint;
-  document.getElementById('hintBox').classList.add('hidden');
+  document.getElementById('s2PuzzleText').innerText = p.text;
+  document.getElementById('s2Answer').value = "";
+  document.getElementById('hintText').innerText = p.hint;
+  document.getElementById('hintText').classList.add('hidden');
 }
 
-function toggleHint() {
-  document.getElementById('hintBox').classList.toggle('hidden');
+function showHint() {
+  document.getElementById('hintText').classList.remove('hidden');
 }
 
-function submitStage2Answer() {
-  const userAns = document.getElementById('s2AnswerInput').value.trim().toLowerCase();
-  const validAnswers = stage2Puzzles[s2Index].answers;
+function submitS2Answer() {
+  const userAns = document.getElementById('s2Answer').value.trim().toLowerCase();
+  if (userAns === "") return; // Prevent empty accidental submits
   
+  const validAnswers = stage2Puzzles[s2Index].answers;
   if (validAnswers.some(ans => userAns === ans || userAns.includes(ans))) {
     s2Score++;
   }
   s2Index++;
-  renderStage2Puzzle();
+  renderS2Question();
 }
 
-function finishLevel2() {
+function endLevel2() {
   clearInterval(timerInterval);
-  localStorage.setItem('vampire_s2_score', s2Score);
-  document.getElementById('s2ActiveArea').classList.add('hidden');
-  document.getElementById('s2ScoreVal').innerText = s2Score;
-  document.getElementById('s2ScoreArea').classList.remove('hidden');
-}
-
-function goToResults() {
+  localStorage.setItem('s2Score', s2Score);
   window.location.href = 'result.html';
 }
 
-// --- RESULT PAGE LOGIC ---
-function initResults() {
-  const team = localStorage.getItem('vampire_team') || "Unknown Team";
-  const score1 = parseInt(localStorage.getItem('vampire_s1_score') || 0);
-  const score2 = parseInt(localStorage.getItem('vampire_s2_score') || 0);
-  const violations = parseInt(localStorage.getItem('vampire_violations') || 0);
-  const total = score1 + score2;
+// --- RESULT LOGIC ---
+function loadResult() {
+  const team = localStorage.getItem('teamName') || 'Unknown Soul';
+  const s1 = parseInt(localStorage.getItem('s1Score')) || 0;
+  const s2 = parseInt(localStorage.getItem('s2Score')) || 0;
+  const dq = localStorage.getItem('disqualified') === 'true';
+  
+  let total = s1 + s2;
+  if (dq) total = 0;
 
-  document.getElementById('finalTeamName').innerText = team;
-  document.getElementById('finalTotalScore').innerText = `${total} / 10`;
+  document.getElementById('teamResultName').innerText = team;
+  document.getElementById('finalScoreDisplay').innerText = total;
 
-  const violationEl = document.getElementById('violationCountDisplay');
-  if (violationEl) {
-    violationEl.innerText = `Security Violations: ${violations}`;
-    violationEl.style.color = violations > 0 ? "#ff4d4d" : "#00ff00"; 
-  }
+  let rank = "";
+  if (dq) rank = "☠️ Banished & Disqualified (Cheating)";
+  else if (total === 10) rank = "👑 Vampire Lord";
+  else if (total >= 7) rank = "🦇 Creature of the Night";
+  else if (total >= 4) rank = "🐺 Thrall";
+  else rank = "💀 Fledgling Initiate";
 
-  let title = "";
-  if (violations > 3) {
-    title = "🚫 Disqualified: You have been disqualified as you are not honest.";
-    document.getElementById('finalTotalScore').innerText = "0 / 10 (Nullified)";
-  } else {
-    if (total === 10) title = "🦇 Sovereign Vampire Lord (Perfect Score)";
-    else if (total >= 7) title = "🩸 Nightstalker Code Master";
-    else if (total >= 4) title = "🕯️ Shadow Crypt Keeper";
-    else title = "💀 Fledgling Initiate";
-  }
-  document.getElementById('vampireTitle').innerText = title;
+  document.getElementById('rankDisplay').innerText = rank;
 }
-
-function restartApp() {
-  localStorage.clear();
-  if (document.exitFullscreen) {
-    document.exitFullscreen().catch(() => {});
-  }
-  window.location.href = 'index.html';
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  initSecurity();
-});
