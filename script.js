@@ -1,64 +1,162 @@
-// --- DATA ---
+// --- STAGE 1 & STAGE 2 QUESTION DATA ---
 const stage1Questions = [
-  { code: "x = [1, 2, 3]\ny = x\ny.append(4)\nprint(len(x))", options: ["3", "4", "Error", "None"], correct: 1 },
-  { code: "print(bool('False'))", options: ["False", "True", "Error", "None"], correct: 1 },
-  { code: "a = (1, 2, 3)\na[0] = 4", options: ["(4, 2, 3)", "TypeError", "SyntaxError", "None"], correct: 1 },
-  { code: "print(2 ** 3 ** 2)", options: ["64", "512", "81", "256"], correct: 1 },
-  { code: "print(type(1/2))", options: ["<class 'int'>", "<class 'float'>", "<class 'double'>", "<class 'number'>"], correct: 1 }
+  {
+    code: "def func(a, b=[]):\n    b.append(a)\n    return b\n\nprint(func(1))\nprint(func(2))",
+    options: ["[1]\n[2]", "[1]\n[1, 2]", "[1, 2]\n[1, 2]", "TypeError"],
+    correct: 1
+  },
+  {
+    code: "a = [1, 2, 3]\nb = a[:]\nprint(a is b, a == b)",
+    options: ["True True", "False True", "True False", "False False"],
+    correct: 1
+  },
+  {
+    code: "x = [10, 20, 30]\nprint(x[1:5])",
+    options: ["[20, 30]", "IndexError", "[20, 30, None, None]", "[10, 20, 30]"],
+    correct: 0
+  },
+  {
+    code: "print(True or False and False)",
+    options: ["False", "True", "SyntaxError", "None"],
+    correct: 1
+  },
+  {
+    code: "data = [1, 2, 3]\nres = [x * 2 for x in data if x % 2 == 0]\nprint(res)",
+    options: ["[2, 4, 6]", "[4]", "[2]", "[1, 4, 3]"],
+    correct: 1
+  }
 ];
 
 const stage2Puzzles = [
-  { text: "I speak without a mouth and hear without ears. I have no body, but I come alive with wind. What am I?", answer: "echo", hint: "Think of sound bouncing off cavern walls." },
-  { text: "A vampire leaves his tomb at 12:00 AM, walks 3 miles south, 3 miles west, shoots a bat, and walks 3 miles north back to his exact tomb. What color was the bat?", answer: "white", hint: "The tomb location makes this place very cold and unique." }
+  {
+    text: "A vampire hunter stands before two doors (Door A & Door B) guarded by two gargoyles. One gargoyle always tells the truth; the other always lies. One door leads to freedom, the other to the vampire's lair. The hunter asks: 'Which door would the OTHER gargoyle say leads to freedom?' The gargoyle points to Door A. Which door leads to freedom?",
+    answers: ["door b", "b"],
+    hint: "Both gargoyles will direct you toward the WRONG door when asked about the other. Choose the opposite!"
+  },
+  {
+    text: "Count Dracula lines up 4 victims facing a wall (Person 4 sees 3, 2, 1; Person 3 sees 2, 1; Person 2 sees 1; Person 1 sees the wall). They wear capes from a pool of 2 Black and 2 Red capes. Nobody can talk, except to state their own cape color. If Person 4 remains silent, who can deduce their cape color first?",
+    answers: ["person 3", "3", "p3"],
+    hint: "Silence from Person 4 means Person 2 and Person 1 have DIFFERENT cape colors!"
+  },
+  {
+    text: "A vampire enters a pitch-black crypt carrying a match, a candle, a lantern, and a fireplace. He can only light one thing first. What must he light first?",
+    answers: ["match", "the match", "a match"],
+    hint: "Before you can ignite any lantern or fireplace, you need the initial flame."
+  },
+  {
+    text: "A vampire locked his sanctuary with a 3-digit code. The sum of the digits is 15. The second digit is 4 times the first digit. The third digit is the first digit plus 3. What is the code?",
+    answers: ["285"],
+    hint: "Set up the equation: X + 4X + (X + 3) = 15."
+  },
+  {
+    text: "A vampire claims: 'Two days ago, I was 100 years old. Next year, I will turn 103.' On what month and day was the vampire turned?",
+    answers: ["december 31", "dec 31", "december 31st", "31 december", "31st december"],
+    hint: "Think about the very last day of the year and a statement made on January 1st."
+  }
 ];
 
 // --- GLOBAL SECURITY & CONTROLS ---
+let isWarningOpen = false;
+
 function initSecurity() {
-  // Point 27: Right-click blocking
-  document.addEventListener('contextmenu', e => e.preventDefault());
-  // Point 26: Copy/Cut/Paste blocking
-  document.addEventListener('copy', e => e.preventDefault());
-  document.addEventListener('cut', e => e.preventDefault());
-  document.addEventListener('paste', e => e.preventDefault());
-
-  // Point 31: Keyboard Protection
-  document.addEventListener('keydown', e => {
-    if (e.key === 'F12' || (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C' || e.key === 'v' || e.key === 'V' || e.shiftKey))) {
+  // Prevent Right Click, Copy, Cut, Paste
+  ['contextmenu', 'copy', 'cut', 'paste'].forEach(evt =>
+    document.addEventListener(evt, e => {
       e.preventDefault();
+      recordViolation("Copy/Paste or Right-Click");
+    })
+  );
+
+  // Prevent Keyboard Shortcuts
+  document.addEventListener('keydown', e => {
+    if (e.key === 'F12' || (e.ctrlKey && ['u', 'U', 'c', 'C', 'v', 'V'].includes(e.key))) {
+      e.preventDefault();
+      recordViolation("Prohibited Keyboard Shortcut");
     }
   });
 
-  // Point 28: Tab-switch warning
+  // Prevent Tab Switching
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden && !location.pathname.includes('result.html') && !location.pathname.includes('index.html')) {
-      showSecModal("Tab switching detected! Answers must be submitted without leaving the frame.");
+    if (document.hidden && !isSafePage()) {
+      recordViolation("Tab Switching Detected");
     }
   });
 
-  // Point 29: Fullscreen-exit warning
+  // Prevent leaving window focus
+  window.addEventListener('blur', () => {
+    if (!isSafePage() && !isWarningOpen && !document.hidden) {
+      recordViolation("Leaving quiz window focus");
+    }
+  });
+
+  // Enforce Fullscreen
   document.addEventListener('fullscreenchange', () => {
-    if (!document.fullscreenElement && !location.pathname.includes('result.html') && !location.pathname.includes('index.html')) {
-      showSecModal("Exiting fullscreen mode is flagged. Please keep the window expanded.");
+    if (!document.fullscreenElement && !isSafePage() && !isWarningOpen) {
+      recordViolation("Exiting Fullscreen");
+    }
+  });
+
+  window.addEventListener('beforeunload', (e) => {
+    if (!isSafePage()) {
+      e.preventDefault();
+      e.returnValue = '';
     }
   });
 }
 
+function isSafePage() {
+  return location.pathname.includes('result.html') || location.pathname.includes('index.html');
+}
+
+function recordViolation(reason) {
+  if (isSafePage()) return;
+  
+  let attempts = parseInt(localStorage.getItem('vampire_violations') || '0');
+  attempts++;
+  localStorage.setItem('vampire_violations', attempts.toString());
+  
+  if (attempts === 1) {
+    showSecModal(`⚠️ WARNING 1/3: ${reason} is strictly prohibited!\n\nReturn to the quiz immediately.`);
+  } 
+  else if (attempts === 2) {
+    showSecModal(`⚠️ WARNING 2/3: ${reason} is strictly prohibited!\n\nReturn to the quiz immediately.`);
+  } 
+  else if (attempts === 3) {
+    showSecModal(`🛑 FINAL WARNING 3/3: ${reason} is strictly prohibited!\n\nOne more violation will result in immediate disqualification.`);
+  } 
+  else if (attempts > 3) {
+    // 4th Offense = Disqualified
+    alert("🚨 DISQUALIFIED: You have been disqualified as you are not honest.");
+    if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+    window.location.href = 'result.html';
+  }
+}
+
 function showSecModal(msg) {
+  isWarningOpen = true;
   let modal = document.getElementById('secModal');
   if (modal) {
     document.getElementById('secModalMsg').innerText = msg;
     modal.classList.remove('hidden');
+  } else {
+    alert(msg);
   }
 }
 
 function closeSecModal() {
+  isWarningOpen = false;
   let modal = document.getElementById('secModal');
   if (modal) modal.classList.add('hidden');
+  
+  // Force re-entry into fullscreen
+  if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
 }
 
 // --- TIMER LOGIC ---
 let timerInterval = null;
-let timeRemaining = 300; // Points 6 & 13: 5 minutes per level
+let timeRemaining = 300; 
 
 function startTimer(onTimeout) {
   clearInterval(timerInterval);
@@ -70,7 +168,7 @@ function startTimer(onTimeout) {
   timerInterval = setInterval(() => {
     timeRemaining--;
     updateTimerBadge();
-    if (timeRemaining <= 0) { // Point 30: Automatic Timeout
+    if (timeRemaining <= 0) {
       clearInterval(timerInterval);
       onTimeout();
     }
@@ -93,8 +191,9 @@ function startQuiz() {
     return;
   }
   localStorage.setItem('vampire_team', teamInput);
-  localStorage.setItem('vampire_s1_score', 0);
-  localStorage.setItem('vampire_s2_score', 0);
+  localStorage.setItem('vampire_s1_score', '0');
+  localStorage.setItem('vampire_s2_score', '0');
+  localStorage.setItem('vampire_violations', '0');
 
   if (document.documentElement.requestFullscreen) {
     document.documentElement.requestFullscreen().catch(() => {});
@@ -117,7 +216,7 @@ function renderStage1Question() {
     return;
   }
   const q = stage1Questions[s1Index];
-  document.getElementById('s1Progress').innerText = `Question ${s1Index + 1} of 5`; // Point 7: 5 MCQs
+  document.getElementById('s1Progress').innerText = `Question ${s1Index + 1} of 5`;
   document.getElementById('s1CodeBlock').innerText = q.code;
   
   const optDiv = document.getElementById('s1Options');
@@ -136,8 +235,6 @@ function selectStage1Option(idx) {
     s1Score++;
   }
   s1Index++;
-  // Point 8: Automatic Navigation
-  // Points 9 & 10: No feedback / answers hidden
   renderStage1Question();
 }
 
@@ -145,11 +242,11 @@ function finishLevel1() {
   clearInterval(timerInterval);
   localStorage.setItem('vampire_s1_score', s1Score);
   document.getElementById('s1ActiveArea').classList.add('hidden');
-  document.getElementById('s1ScoreVal').innerText = s1Score; // Point 11: Score After Level
+  document.getElementById('s1ScoreVal').innerText = s1Score;
   document.getElementById('s1ScoreArea').classList.remove('hidden');
 }
 
-function goToLevel2() { // Point 12: Continue to Level 2
+function goToLevel2() {
   window.location.href = 'level2.html';
 }
 
@@ -158,13 +255,11 @@ let s2Index = 0;
 let s2Score = 0;
 
 function initLevel2() {
-  // Point 14: Level 2 Instructions Popup appears initially
   document.getElementById('stage2InstModal').classList.remove('hidden');
 }
 
 function showHintNoticeModal() {
   document.getElementById('stage2InstModal').classList.add('hidden');
-  // Point 15: Centered Hint Popup
   document.getElementById('stage2HintModal').classList.remove('hidden');
 }
 
@@ -181,10 +276,10 @@ function renderStage2Puzzle() {
     return;
   }
   const p = stage2Puzzles[s2Index];
-  document.getElementById('s2Progress').innerText = `Puzzle ${s2Index + 1} of 2`; // Point 16: 2 Logical Puzzles
+  document.getElementById('s2Progress').innerText = `Puzzle ${s2Index + 1} of 5`;
   document.getElementById('s2QuestionText').innerText = p.text;
   document.getElementById('s2AnswerInput').value = "";
-  document.getElementById('hintBox').innerText = p.hint; // Point 17: Hints Below
+  document.getElementById('hintBox').innerText = p.hint;
   document.getElementById('hintBox').classList.add('hidden');
 }
 
@@ -194,12 +289,12 @@ function toggleHint() {
 
 function submitStage2Answer() {
   const userAns = document.getElementById('s2AnswerInput').value.trim().toLowerCase();
-  if (userAns === stage2Puzzles[s2Index].answer.toLowerCase()) {
+  const validAnswers = stage2Puzzles[s2Index].answers;
+  
+  if (validAnswers.some(ans => userAns === ans || userAns.includes(ans))) {
     s2Score++;
   }
   s2Index++;
-  // Point 18: Automatic Navigation
-  // Points 19 & 20: No feedback / hidden answers
   renderStage2Puzzle();
 }
 
@@ -207,7 +302,7 @@ function finishLevel2() {
   clearInterval(timerInterval);
   localStorage.setItem('vampire_s2_score', s2Score);
   document.getElementById('s2ActiveArea').classList.add('hidden');
-  document.getElementById('s2ScoreVal').innerText = s2Score; // Point 21: Score After Level
+  document.getElementById('s2ScoreVal').innerText = s2Score;
   document.getElementById('s2ScoreArea').classList.remove('hidden');
 }
 
@@ -220,20 +315,32 @@ function initResults() {
   const team = localStorage.getItem('vampire_team') || "Unknown Team";
   const score1 = parseInt(localStorage.getItem('vampire_s1_score') || 0);
   const score2 = parseInt(localStorage.getItem('vampire_s2_score') || 0);
-  const total = score1 + score2; // Point 22: Total Score Calculation
+  const violations = parseInt(localStorage.getItem('vampire_violations') || 0);
+  const total = score1 + score2;
 
   document.getElementById('finalTeamName').innerText = team;
-  document.getElementById('finalTotalScore').innerText = `${total} / 7`; // Point 23: Final Score Page
+  document.getElementById('finalTotalScore').innerText = `${total} / 10`;
+
+  const violationEl = document.getElementById('violationCountDisplay');
+  if (violationEl) {
+    violationEl.innerText = `Security Violations: ${violations}`;
+    violationEl.style.color = violations > 0 ? "#ff4d4d" : "#00ff00"; 
+  }
 
   let title = "";
-  if (total === 7) title = "🦇 Sovereign Vampire Lord (Perfect Score)";
-  else if (total >= 4) title = "🩸 Nightstalker Code Master";
-  else title = "🕯️ Fledgling Initiate";
-
-  document.getElementById('vampireTitle').innerText = title; // Point 24: Vampire Result Message
+  if (violations > 3) {
+    title = "🚫 Disqualified: You have been disqualified as you are not honest.";
+    document.getElementById('finalTotalScore').innerText = "0 / 10 (Nullified)";
+  } else {
+    if (total === 10) title = "🦇 Sovereign Vampire Lord (Perfect Score)";
+    else if (total >= 7) title = "🩸 Nightstalker Code Master";
+    else if (total >= 4) title = "🕯️ Shadow Crypt Keeper";
+    else title = "💀 Fledgling Initiate";
+  }
+  document.getElementById('vampireTitle').innerText = title;
 }
 
-function restartApp() { // Point 25: Restart Option
+function restartApp() {
   localStorage.clear();
   if (document.exitFullscreen) {
     document.exitFullscreen().catch(() => {});
@@ -241,7 +348,6 @@ function restartApp() { // Point 25: Restart Option
   window.location.href = 'index.html';
 }
 
-// Global initialization call
 document.addEventListener('DOMContentLoaded', () => {
   initSecurity();
 });
