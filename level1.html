@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Stage 1 - Python</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Level 1 - Python Programming</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="glass-panel">
+
+  <!-- Level 1 Main Content Area -->
+  <div class="glass-panel" id="level1MainUI">
     <div class="header-bar">
       <span id="teamDisplayS1" style="font-weight: bold; color: var(--blood-red);"></span>
       <span id="timerS1" class="timer">05:00</span>
     </div>
 
+    <!-- Active Question Area -->
     <div id="s1ActiveArea">
       <h3 id="s1Progress" class="gothic-text" style="font-size: 1.8rem; margin-bottom: 5px;">Question 1 of 5</h3>
-      
+
       <p style="color: #bbb; font-size: 0.9rem; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 20px; text-align: left;">
         <b>Instructions:</b> Read the Python code and click the correct output. The moment you click an option, you will instantly move to the next question. You cannot go back.
       </p>
@@ -22,8 +26,23 @@
       <pre id="s1CodeBlock" class="code-block"></pre>
       <div id="s1Options" class="options-grid"></div>
     </div>
+
+    <!-- Stage 1 Completion Screen -->
+    <div id="s1CompleteArea" class="hidden" style="text-align: center; padding: 20px 0;">
+      <h2 class="gothic-text" style="font-size: 2.2rem; color: var(--blood-red, #ff3333); margin-bottom: 15px;">
+        🩸 LEVEL 1 CLEARED
+      </h2>
+      <p style="font-size: 1.3rem; color: #ccc; margin-bottom: 25px;">
+        You scored <strong id="s1ScoreDisplay" style="color: #ff3333; font-size: 1.8rem;">0</strong> / 5 in Python Programming.
+      </p>
+      <!-- Updated link to level2.html -->
+      <button class="btn" style="width: 100%; max-width: 300px; padding: 15px;" onclick="window.location.href='level2.html'">
+        PROCEED TO LEVEL 2 ➜
+      </button>
+    </div>
   </div>
 
+  <!-- Security Warning Modal -->
   <div id="secModal" class="modal-overlay hidden">
     <div class="modal-box" style="border: 2px solid #ff3333;">
       <h2 style="color: #ff3333; font-size: 2rem; margin-bottom: 10px;">⚠️ SECURITY WARNING ⚠️</h2>
@@ -32,12 +51,11 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="game.js"></script>
   <script>
-    window.onload = () => {
-      initSecurity();
+    document.addEventListener("DOMContentLoaded", () => {
       startLevel1();
-    };
+    });
   </script>
 </body>
 </html>

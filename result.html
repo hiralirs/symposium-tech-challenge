@@ -1,30 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>The Verdict</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>The Verdict</title>
+    <link rel="stylesheet" href="game.css">
+    <style>
+        /* Forcefully hides any button or restart element on the verdict page */
+        .glass-panel button, 
+        .glass-panel .btn, 
+        #restart-btn, 
+        [onclick*="restart"], 
+        [onclick*="playAgain"] {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
-  <div class="glass-panel" style="text-align: center; max-width: 600px;">
-    <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 10px;">The Verdict</h1>
-    <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 20px;"></h2>
-    
-    <div style="margin: 30px auto; padding: 30px 20px; max-width: 400px; border: 1px solid #333; background: rgba(0,0,0,0.5); border-radius: 10px;">
-      <h2 style="font-size: 2.2rem; margin: 0;">Final Score: <span id="finalScoreDisplay" style="color: var(--blood-red);"></span> / 10</h2>
-      
-      <div style="margin-top: 25px;">
-        <!-- UPDATED: Changed to gothic-text font and added a subtle glow -->
-        <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.4rem; margin: 0; text-shadow: 0 0 8px rgba(255, 51, 51, 0.4);"></h3>
-      </div>
+    <div class="glass-panel" style="text-align: center; max-width: 600px;">
+        <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 10px;">The Verdict</h1>
+        <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 20px;"></h2>
+
+        <div style="margin: 30px auto; padding: 30px 20px; max-width: 400px; border: 1px solid rgba(255, 0, 0, 0.3); background: rgba(0, 0, 0, 0.5); border-radius: 8px;">
+            <h2 style="font-size: 2.2rem; margin: 0;">Final Score: <span id="finalScoreDisplay" style="color: var(--blood-red);">0</span> / 10</h2>
+
+            <div style="margin-top: 25px;">
+                <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.4rem; margin: 0; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);"></h3>
+            </div>
+        </div>
+
+        <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">Your results have been sealed in the crypt archives.</p>
     </div>
 
-    <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">Your results have been sealed in the crypt. You may close this tab.</p>
-  </div>
-
-  <script src="script.js"></script>
-  <script>
-    window.onload = loadResult;
-  </script>
+    <script src="game.js"></script>
+    <script>
+        window.onload = function() {
+            loadResult();
+            
+            // Extra JavaScript safety check: Finds any button on the page and deletes it permanently
+            const buttons = document.querySelectorAll('button, .btn');
+            buttons.forEach(btn => btn.remove());
+        };
+    </script>
 </body>
 </html>

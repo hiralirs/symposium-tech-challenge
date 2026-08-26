@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stage 2 - Logic</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -25,18 +26,31 @@
       <span id="timerS2" class="timer">05:00</span>
     </div>
 
-    <h3 id="s2Progress" class="gothic-text" style="font-size: 1.8rem;">Puzzle 1 of 5</h3>
-    <div id="s2PuzzleText" style="text-align: left; margin: 20px 0; font-size: 1.1rem; line-height: 1.5; color: #eee;"></div>
-    
-    <div id="hintArea" style="margin-bottom: 20px;">
-      <button class="btn" style="padding: 5px 15px; font-size: 0.8rem; background: #333;" onclick="showHint()">Reveal Hint</button>
-      <p id="hintText" class="hidden" style="color: #aaa; font-style: italic; margin-top: 10px; font-size: 0.9rem;"></p>
+    <!-- Active Puzzle Area -->
+    <div id="s2ActiveArea">
+      <h3 id="s2Progress" class="gothic-text" style="font-size: 1.8rem;">Puzzle 1 of 5</h3>
+      <div id="s2PuzzleText" style="text-align: left; margin: 20px 0; font-size: 1.1rem; line-height: 1.5; color: #eee;"></div>
+
+      <div id="hintArea" style="margin-bottom: 20px;">
+        <button class="btn" style="padding: 5px 15px; font-size: 0.8rem; background: #333;" onclick="showHint()">Reveal Hint</button>
+        <p id="hintText" class="hidden" style="color: #aaa; font-style: italic; margin-top: 10px; font-size: 0.9rem;"></p>
+      </div>
+
+      <input type="text" id="s2Answer" class="input-gothic" placeholder="Type your answer here..." style="width: 100%; height: 50px; padding: 0 15px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,20,30,0.6); color: white; font-size: 1.1rem; border-radius: 4px; outline: none; margin-bottom: 10px;">
+      <button class="btn" style="width: 100%; margin-top: 10px;" onclick="submitS2Answer()">Submit Answer</button>
     </div>
 
-    <input type="text" id="s2Answer" class="input-gothic" placeholder="Type your answer here...">
-    <button class="btn" style="width: 100%; margin-top: 10px;" onclick="submitS2Answer()">Submit Answer</button>
+    <!-- Final Score Display (Combined Stage 1 & 2) -->
+    <div id="s2CompleteArea" class="hidden" style="text-align: center; padding: 20px 0;">
+      <h1 class="gothic-text" id="teamResultName" style="font-size: 2.2rem; margin-bottom: 15px;">Team: </h1>
+      <h2 style="font-size: 1.8rem; margin-bottom: 20px;">
+        Final Score: <span id="finalScoreDisplay" style="color: var(--blood-red, #ff3333); font-weight: bold;">0</span> / 10
+      </h2>
+      <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.5rem; margin-bottom: 30px;"></h3>
+    </div>
   </div>
 
+  <!-- Security Warning Modal -->
   <div id="secModal" class="modal-overlay hidden">
     <div class="modal-box" style="border: 2px solid #ff3333;">
       <h2 style="color: #ff3333; font-size: 2rem; margin-bottom: 10px;">⚠️ SECURITY WARNING ⚠️</h2>
@@ -45,11 +59,11 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="game.js"></script>
   <script>
     window.onload = () => {
       initSecurity();
-      document.getElementById('teamDisplayS2').innerText = localStorage.getItem('teamName') || 'Unknown Soul';
+      document.getElementById('teamDisplayS2').innerText = 'TEAM: ' + (localStorage.getItem('teamName') || 'UNKNOWN SOUL').toUpperCase();
     };
   </script>
 </body>

@@ -1,30 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>The Vampire's Crypt - Entrance</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crimson Hack - Vampire Kingdom</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="glass-panel" id="startScreen">
-    <h1 class="gothic-text">The Vampire's Crypt</h1>
-    
-    <div class="instructions-box" style="text-align: left; padding: 20px; border: 1px solid var(--blood-red); background: rgba(0,0,0,0.7); margin-bottom: 25px; border-radius: 8px; line-height: 1.6;">
-      <h3 class="gothic-text" style="color: var(--blood-red); margin-top: 0; text-align: center; font-size: 1.5rem;">📜 Rules of the Crypt</h3>
-      <ul style="padding-left: 20px; color: #e0e0e0; font-size: 0.95rem;">
-        <li style="margin-bottom: 10px;"><b>Format:</b> The game has 2 stages (Stage 1: Python, Stage 2: Logic Puzzles).</li>
-        <li style="margin-bottom: 10px;"><b>Strict Timings:</b> You have exactly <b>5 minutes per stage</b>. If the timer hits zero, you will be forced to the next screen automatically.</li>
-        <li style="margin-bottom: 10px;"><b>One Attempt Only:</b> There are no retries, no second chances, and no page refreshes allowed.</li>
-        <li style="margin-bottom: 10px;"><b>No Going Back:</b> The next question only opens once you answer the current one. Once you select or submit an answer, it is permanently locked. You cannot go back.</li>
-        <li><b>Anti-Cheat System:</b> Do not exit full screen, switch tabs, or copy-paste. You will get exactly 3 warnings. On the 4th warning, you will be instantly disqualified with a score of zero.</li>
-      </ul>
+    <div class="page" id="page">
+        <!-- Background -->
+        <div class="background"></div>
+        <div class="dark-overlay"></div>
+        <div class="particles"></div>
+
+        <!-- TOP HEADER -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-symbol">🦇</span>
+                <span>CRIMSON HACK</span>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="hero">
+            <div class="hero-content">
+                <div class="small-title">
+                    WELCOME TO THE VAMPIRE KINGDOM
+                </div>
+
+                <h1>
+                    <span class="crimson">VAMPIRE'S</span>
+                    <span class="hack">CRYPT</span>
+                </h1>
+
+                <div class="divider">
+                    <span></span>
+                    ENTER IF YOU DARE
+                    <span></span>
+                </div>
+
+                <p class="description">
+                    A battle of brains, logic and power.<br>
+                    Only the sharpest minds will survive the night.
+                </p>
+
+                <!-- TEAM NAME -->
+                <div class="team-box">
+                    <label for="teamName">
+                        ENTER YOUR TEAM NAME
+                    </label>
+
+                    <input
+                        type="text"
+                        id="teamName"
+                        placeholder="Enter Team Name..."
+                        maxlength="40"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        class="enter-button"
+                        id="enterButton"
+                        type="button"
+                    >
+                        ENTER THE BLOODLINE
+                        <span>➜</span>
+                    </button>
+
+                    <p id="errorMessage">
+                        You must enter a team name.
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- CENTERED RULES PANEL -->
+        <aside
+            class="rules-panel"
+            id="rulesPanel"
+        >
+            <div class="rules-header">
+                <div class="blood-line"></div>
+                <p>THE CRYPT HAS AWAKENED</p>
+                <h2>
+                    RULES OF THE
+                    <span>VAMPIRE KINGDOM</span>
+                </h2>
+            </div>
+
+            <!-- TEAM NAME -->
+            <div class="team-display">
+                <span>TEAM</span>
+                <strong id="teamDisplay">
+                    —
+                </strong>
+            </div>
+
+            <!-- RULES -->
+            <div class="rules">
+                <div class="rule">
+                    <div class="number">
+                        01
+                    </div>
+                    <div>
+                        <h3>
+                            TWO STAGES
+                        </h3>
+                        <p>
+                            Stage 1: Python Programming.<br>
+                            Stage 2: Logic Puzzles.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="number">
+                        02
+                    </div>
+                    <div>
+                        <h3>
+                            STRICT TIMING
+                        </h3>
+                        <p>
+                            You have exactly 5 minutes for each stage.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="number">
+                        03
+                    </div>
+                    <div>
+                        <h3>
+                            ONE ATTEMPT ONLY
+                        </h3>
+                        <p>
+                            No retries, no second chances, and no page refreshes.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="number">
+                        04
+                    </div>
+                    <div>
+                        <h3>
+                            NO GOING BACK
+                        </h3>
+                        <p>
+                            Questions unlock one at a time. Submitted answers are permanently locked.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="rule">
+                    <div class="number">
+                        05
+                    </div>
+                    <div>
+                        <h3>
+                            ANTI-CHEAT SYSTEM
+                        </h3>
+                        <p>
+                            You will receive 3 warnings. The 4th warning results in immediate disqualification.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTINUE BUTTON -->
+            <button
+                class="continue-button"
+                id="continueButton"
+                type="button"
+            >
+                CONTINUE TO ROUND 1
+                <span>➜</span>
+            </button>
+        </aside>
+
+        <!-- VAMPIRE MOUTH CLOSING TRANSITION -->
+        <div
+            class="mouth-transition"
+            id="mouthTransition"
+        >
+            <div class="mouth-top"></div>
+            <div class="mouth-bottom"></div>
+            <div class="blood-flash"></div>
+            <div class="transition-message">
+                THE CRYPT AWAKENS...
+            </div>
+        </div>
+
+        <!-- AUDIO -->
+        <audio
+            id="vampireAudio"
+            preload="auto"
+        >
+            <source
+                src="assets/vm.mpeg"
+                type="audio/mpeg"
+            >
+        </audio>
     </div>
-    
-    <input type="text" id="teamName" placeholder="Enter Team Name..." class="input-gothic">
-    <button class="btn" onclick="startQuiz()">Enter the Crypt</button>
-    <p id="startError" style="color: var(--blood-red); display: none; margin-top: 10px; font-weight: bold;">You must enter a name to proceed.</p>
-  </div>
-  
-  <script src="script.js"></script>
+
+    <script src="script.js"></script>
 </body>
 </html>

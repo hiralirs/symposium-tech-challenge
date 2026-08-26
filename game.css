@@ -535,7 +535,7 @@ body {
 }
 
 /* =========================================
-   MODALS & RULES PANEL (FIXED)
+   MODALS & RULES PANEL
 ========================================= */
 
 .modal-overlay {
@@ -546,9 +546,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: rgba(0,0,0,.85);
+    background: rgba(0,0,0,.8);
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 }
 
 .modal-box {
@@ -562,28 +561,28 @@ body {
     box-shadow: 0 0 60px rgba(255,0,0,.15);
 }
 
-/* Rules Panel Modal Container */
 .rules-panel {
     position: fixed;
-    z-index: 300;
+    z-index: 100;
     left: 50%;
     top: 50%;
     width: min(470px, 92vw);
     max-height: 85vh;
-    height: max-content;
-    padding: 35px 30px 40px;
-    display: flex;
-    flex-direction: column;
+    padding: 50px 40px 30px;
     overflow-y: auto;
-    overflow-x: hidden;
     border-radius: 12px;
-    border: 1px solid rgba(255, 60, 0, 0.4);
-    background: #0a0101;
-    transform: translate(-50%, -50%) scale(0.95);
+    background: linear-gradient(135deg, rgba(5,5,5,.98), rgba(35,0,3,.98));
+    border: 1px solid rgba(255,0,15,.65);
+    box-shadow:
+        0 0 60px rgba(0,0,0,.9),
+        0 0 30px rgba(255,0,0,.2);
+    transform: translate(-50%, -45%) scale(0.95);
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all .6s cubic-bezier(.2,.8,.2,1);
+    scrollbar-width: thin;
+    scrollbar-color: #e10b14 rgba(10, 0, 0, 0.8);
 }
 
 .rules-panel.active {
@@ -591,10 +590,6 @@ body {
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
-    box-shadow: 
-        0 0 0 100vmax rgba(5, 0, 0, 0.95), 
-        0 0 60px rgba(255, 0, 0, 0.25),   
-        inset 0 0 20px rgba(255, 0, 0, 0.05);
 }
 
 .close-button {
@@ -620,13 +615,16 @@ body {
 .rules-panel::-webkit-scrollbar {
     width: 6px;
 }
+
 .rules-panel::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 10px 0;
-}
-.rules-panel::-webkit-scrollbar-thumb {
-    background: #ff3c00;
+    background: rgba(10, 0, 0, 0.8);
     border-radius: 4px;
+}
+
+.rules-panel::-webkit-scrollbar-thumb {
+    background: #e10b14;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(225, 11, 20, 0.6);
 }
 
 .blood-line {
@@ -657,8 +655,8 @@ body {
 }
 
 .team-display {
-    margin-top: 20px;
-    padding: 14px 18px;
+    margin-top: 25px;
+    padding: 15px 18px;
     border-left: 3px solid #e20c15;
     background: rgba(255,255,255,.04);
 }
@@ -682,14 +680,12 @@ body {
 
 .rules {
     margin-top: 15px;
-    padding-bottom: 5px;
 }
 
 .rule {
     display: flex;
-    align-items: flex-start;
     gap: 18px;
-    padding: 16px 0;
+    padding: 17px 0;
     border-bottom: 1px solid rgba(255,255,255,.1);
 }
 
@@ -724,10 +720,8 @@ body {
 
 .continue-button {
     width: 100%;
-    min-height: 54px;
+    height: 58px;
     margin-top: 25px;
-    margin-bottom: 10px;
-    flex-shrink: 0;
     border: 1px solid #ff2028;
     border-radius: 6px;
     background: linear-gradient(180deg, #700006, #260002);
@@ -873,7 +867,7 @@ body {
     }
 
     .rules-panel {
-        padding: 35px 20px 30px;
+        padding: 45px 24px 25px;
     }
     .rules-header h2 { font-size: 25px; }
 }
