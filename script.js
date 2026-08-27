@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const rulesPanel = document.getElementById("rulesPanel");
     const teamDisplay = document.getElementById("teamDisplay");
     const continueButton = document.getElementById("continueButton");
-    const mouthTransition = document.getElementById("mouthTransition");
     const vampireAudio = document.getElementById("vampireAudio");
 
     // Clear stale state on load
@@ -29,27 +28,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // Hide error if previously shown
             if (errorMessage) {
                 errorMessage.style.display = "none";
             }
 
-            // Save team name to localStorage
             localStorage.setItem("teamName", teamName);
 
-            // Update team display inside the rules panel
             if (teamDisplay) {
                 teamDisplay.textContent = teamName.toUpperCase();
             }
 
-            // Play the vampire audio effect right after entering the team name
             if (vampireAudio) {
                 vampireAudio.play().catch(function (error) {
                     console.log("Audio autoplay restricted by browser:", error);
                 });
             }
 
-            // Smoothly reveal the rules panel
             if (rulesPanel) {
                 rulesPanel.classList.add("active");
                 rulesPanel.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Allow pressing "Enter" key inside the input field to submit
     if (teamNameInput) {
         teamNameInput.addEventListener("keydown", function (e) {
             if (e.key === "Enter") {
@@ -66,18 +59,78 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 2. Handle "CONTINUE TO ROUND 1" click
+    // 2. Handle "CONTINUE TO ROUND 1" click (Lightning Storm Intro)
     if (continueButton) {
         continueButton.addEventListener("click", function () {
-            // Trigger the vampire mouth closing transition animation
-            if (mouthTransition) {
-                mouthTransition.classList.add("active");
+            
+            const stormOverlay = document.createElement("div");
+            stormOverlay.style.position = "fixed";
+            stormOverlay.style.inset = "0";
+            stormOverlay.style.backgroundColor = "#0a0a0a";
+            stormOverlay.style.zIndex = "99999";
+            document.body.appendChild(stormOverlay);
+
+            const canvas = document.createElement("canvas");
+            canvas.style.width = "100%";
+            canvas.style.height = "100%";
+            canvas.style.position = "absolute";
+            canvas.style.left = "0";
+            canvas.style.top = "0";
+            canvas.style.background = "#0a0a0a";
+            stormOverlay.appendChild(canvas);
+
+            let thunderAudio = document.getElementById("thunderAudio");
+            if (!thunderAudio) {
+                thunderAudio = new Audio("assets/thunder.mp4");
+                document.body.appendChild(thunderAudio);
+            }
+            thunderAudio.currentTime = 0;
+            thunderAudio.play().catch(e => console.log("Audio locked:", e));
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext("2d");
+
+            function drawSingleBolt() {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                let sx = Math.random() * canvas.width;
+                let sy = 0;
+                ctx.beginPath();
+                ctx.strokeStyle = "silver";
+                ctx.lineWidth = 3;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = "aliceblue";
+                ctx.moveTo(sx, sy);
+
+                let limit = Math.floor(canvas.height * 0.7);
+                for (let i = 0; i < limit; i += 20) {
+                    sx += (Math.random() - 0.5) * 40;
+                    sy += 20;
+                    ctx.lineTo(sx, sy);
+                }
+                ctx.stroke();
+
+                setTimeout(() => {
+                    ctx.fillStyle = "black";
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                }, 120);
             }
 
-            // Redirect to level1.html after the transition animation plays out
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            setTimeout(() => drawSingleBolt(), 400);
+            setTimeout(() => drawSingleBolt(), 1300);
+            setTimeout(() => drawSingleBolt(), 2200);
+
             setTimeout(function () {
                 window.location.href = "level1.html";
-            }, 1800); // Matches transition duration
+            }, 3200);
         });
     }
 });

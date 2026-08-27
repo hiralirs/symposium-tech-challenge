@@ -747,6 +747,7 @@ body {
 
 /* =========================================
    VAMPIRE MOUTH TRANSITION & ANIMATIONS
+   (FIXED TO 100VH TO PREVENT LEAKS)
 ========================================= */
 
 .mouth-transition {
@@ -771,7 +772,7 @@ body {
     background-image: url("assets/bg.jpeg");
     background-size: cover;
     background-position: center top;
-    transform: translateY(-105%);
+    transform: translateY(-100vh);
 }
 
 .mouth-bottom {
@@ -783,7 +784,7 @@ body {
     background-image: url("assets/bg.jpeg");
     background-size: cover;
     background-position: center bottom;
-    transform: translateY(105%);
+    transform: translateY(100vh);
 }
 
 .mouth-transition.active .mouth-top {
@@ -795,12 +796,12 @@ body {
 }
 
 @keyframes closeTop {
-    0% { transform: translateY(-105%); }
+    0% { transform: translateY(-100vh); }
     100% { transform: translateY(0); }
 }
 
 @keyframes closeBottom {
-    0% { transform: translateY(105%); }
+    0% { transform: translateY(100vh); }
     100% { transform: translateY(0); }
 }
 
@@ -839,6 +840,71 @@ body {
     0%, 40% { opacity: 0; }
     55%, 80% { opacity: 1; }
     100% { opacity: 0; }
+}
+
+/* =========================================
+   LIGHTNING STORM INTRO
+========================================= */
+
+#stormIntroScreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #0a0a0a;
+}
+#stormIntroScreen canvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #0a0a0a;
+}
+.fog {
+    width: 100%;
+    height: 80px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    backdrop-filter: blur(20px);
+}
+
+/* =========================================
+   BAT SWARM TRANSITION
+========================================= */
+
+.bat-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: #000000;
+    z-index: 99999;
+    overflow: hidden;
+    display: none;
+}
+.bat-wrapper {
+    position: absolute;
+    top: 180px;
+    left: 0;
+    display: flex;
+    animation-name: across, float;
+    animation-iteration-count: infinite, infinite;
+    animation-duration: 11s, 7s;
+    animation-play-state: running, running;
+    transform-origin: top;
+}
+@keyframes across {
+    0% { left: -200px; }
+    100% { left: 2000px; right: -50px; }
+}
+@keyframes float {
+    0% { transform: translate(0px, 0px); }
+    50% { transform: translate(0px, -80px); }
+    100% { transform: translate(0px, 0px); }
+}
+.bat-wrapper img {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
 }
 
 /* =========================================

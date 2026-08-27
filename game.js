@@ -4,6 +4,59 @@
 ========================================= */
 
 /* =========================================
+   BAT SWARM TRANSITION SYSTEM (MASSIVE SWARM)
+========================================= */
+
+// Triggers a dense, massive bat effect on a completely separate black screen
+function triggerBatSwarm(callback) {
+    const batOverlay = document.createElement("div");
+    batOverlay.className = "bat-overlay";
+    batOverlay.style.display = "block";
+    document.body.appendChild(batOverlay);
+
+    let batAudio = document.getElementById("batAudio");
+    if (!batAudio) {
+        batAudio = new Audio("assets/bat-sound.mp4");
+        batAudio.id = "batAudio";
+        document.body.appendChild(batAudio);
+    }
+    batAudio.currentTime = 0;
+    batAudio.play().catch(e => console.log("Audio locked:", e));
+
+    const totalBats = 60;
+    for (let i = 0; i < totalBats; i++) {
+        const bat = document.createElement('div');
+        bat.classList.add('bat-wrapper');
+        
+        const img = document.createElement('img');
+        img.src = "https://64.media.tumblr.com/bf3f8736efc8a5a6fed5f21d51944b4c/9e7f16c91e063c7d-ca/s400x600/854677d99a0e291e42edd01734fb35b591050257.gifv";
+        
+        const scaleFactor = Math.random() * 0.5 + 0.3;
+        img.width = Math.floor(250 * scaleFactor);
+        img.height = Math.floor(125 * scaleFactor);
+        img.alt = "bat";
+        
+        bat.appendChild(img);
+        
+        bat.style.top = (Math.random() * window.innerHeight) + 'px';
+        bat.style.left = (-300 - Math.random() * 600) + 'px';
+        
+        const durationAcross = (Math.random() * 4 + 7).toFixed(2);
+        const durationFloat = (Math.random() * 3 + 4).toFixed(2);
+        bat.style.animationDuration = `${durationAcross}s, ${durationFloat}s`;
+        bat.style.animationDelay = (Math.random() * 2) + 's';
+        
+        batOverlay.appendChild(bat);
+    }
+
+    setTimeout(() => {
+        batOverlay.remove();
+        if (callback) callback();
+    }, 5500); 
+}
+
+
+/* =========================================
    SECURITY / ANTI-CHEAT SYSTEM
 ========================================= */
 
@@ -80,36 +133,17 @@ function closeSecModal() {
     }
 }
 
+
 /* =========================================
    STAGE 1 — PYTHON MCQ
 ========================================= */
 
 const pythonQuestions = [
-    {
-        code: `x = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)`,
-        options: ["[1, 2, 3]", "[1, 2, 3, 4]", "Error", "[4, 1, 2, 3]"],
-        correct: 1
-    },
-    {
-        code: `def f(a, b=5):\n    return a + b\n\nprint(f(10))`,
-        options: ["Error", "10", "15", "5"],
-        correct: 2
-    },
-    {
-        code: `print(3 == 3.0)`,
-        options: ["True", "False", "Error", "None"],
-        correct: 0
-    },
-    {
-        code: `s = "vampire"\nprint(s[::-1])`,
-        options: ["vampire", "eripmav", "Error", "v"],
-        correct: 1
-    },
-    {
-        code: `total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)`,
-        options: ["10", "9", "6", "4"],
-        correct: 0
-    }
+    { code: `x = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)`, options: ["[1, 2, 3]", "[1, 2, 3, 4]", "Error", "[4, 1, 2, 3]"], correct: 1 },
+    { code: `def f(a, b=5):\n    return a + b\n\nprint(f(10))`, options: ["Error", "10", "15", "5"], correct: 2 },
+    { code: `print(3 == 3.0)`, options: ["True", "False", "Error", "None"], correct: 0 },
+    { code: `s = "vampire"\nprint(s[::-1])`, options: ["vampire", "eripmav", "Error", "v"], correct: 1 },
+    { code: `total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)`, options: ["10", "9", "6", "4"], correct: 0 }
 ];
 
 let s1Index = 0;
@@ -165,9 +199,7 @@ function updateS1TimerDisplay() {
 function renderS1Question() {
     const q = pythonQuestions[s1Index];
 
-    document.getElementById("s1Progress").textContent =
-        "Question " + (s1Index + 1) + " of " + pythonQuestions.length;
-
+    document.getElementById("s1Progress").textContent = "Question " + (s1Index + 1) + " of " + pythonQuestions.length;
     document.getElementById("s1CodeBlock").textContent = q.code;
 
     const optionsWrap = document.getElementById("s1Options");
@@ -212,43 +244,28 @@ function finishStage1() {
 
     if (activeArea && completeArea) {
         activeArea.classList.add("hidden");
-        completeArea.classList.remove("hidden");
-        if (scoreDisplay) scoreDisplay.textContent = s1Score;
+        
+        triggerBatSwarm(function() {
+            completeArea.classList.remove("hidden");
+            if (scoreDisplay) scoreDisplay.textContent = s1Score;
+        });
+
     } else {
         window.location.href = "level2.html";
     }
 }
+
 
 /* =========================================
    STAGE 2 — LOGIC PUZZLES
 ========================================= */
 
 const logicPuzzles = [
-    {
-        text: "Three doors: A, B, C. Behind one is treasure, behind the other two are traps. The sign on A says 'Treasure is not here.' The sign on B says 'Treasure is in C.' Only one sign is true. Which door hides the treasure?",
-        hint: "Try assuming each sign is the true one and check for contradictions.",
-        answers: ["a", "door a", "door A"]
-    },
-    {
-        text: "A vampire lord always lies. A guard always tells the truth. You meet one of them who says: 'I am the vampire lord.' Is the speaker the vampire lord or the guard?",
-        hint: "If the vampire lord said this, would it be a lie or the truth?",
-        answers: ["guard", "the guard"]
-    },
-    {
-        text: "What has keys but no locks, space but no room, and you can enter but not go inside?",
-        hint: "You are probably using one right now.",
-        answers: ["keyboard", "a keyboard"]
-    },
-    {
-        text: "I am an odd number. Take away one letter and I become even. What number am I?",
-        hint: "Think of the number spelled out in words.",
-        answers: ["seven", "7"]
-    },
-    {
-        text: "A crypt has 5 coffins in a row. The vampire sleeps in a coffin that is not at either end, and not next to the coffin with the silver cross (coffin 3). Which coffin position(s) could the vampire be sleeping in?",
-        hint: "Positions are numbered 1 to 5. Rule out the ends and the neighbors of position 3.",
-        answers: ["2 and 4", "2, 4", "4 and 2", "4, 2", "2,4", "4,2", "coffin 2 and 4"]
-    }
+    { text: "Three doors: A, B, C. Behind one is treasure, behind the other two are traps. The sign on A says 'Treasure is not here.' The sign on B says 'Treasure is in C.' Only one sign is true. Which door hides the treasure?", hint: "Try assuming each sign is the true one and check for contradictions.", answers: ["a", "door a", "door A"] },
+    { text: "A vampire lord always lies. A guard always tells the truth. You meet one of them who says: 'I am the vampire lord.' Is the speaker the vampire lord or the guard?", hint: "If the vampire lord said this, would it be a lie or the truth?", answers: ["guard", "the guard"] },
+    { text: "What has keys but no locks, space but no room, and you can enter but not go inside?", hint: "You are probably using one right now.", answers: ["keyboard", "a keyboard"] },
+    { text: "I am an odd number. Take away one letter and I become even. What number am I?", hint: "Think of the number spelled out in words.", answers: ["seven", "7"] },
+    { text: "A crypt has 5 coffins in a row. The vampire sleeps in a coffin that is not at either end, and not next to the coffin with the silver cross (coffin 3). Which coffin position(s) could the vampire be sleeping in?", hint: "Positions are numbered 1 to 5. Rule out the ends and the neighbors of position 3.", answers: ["2 and 4", "2, 4", "4 and 2", "4, 2", "2,4", "4,2", "coffin 2 and 4"] }
 ];
 
 let s2Index = 0;
@@ -303,10 +320,7 @@ function updateS2TimerDisplay() {
 
 function renderS2Puzzle() {
     const p = logicPuzzles[s2Index];
-
-    document.getElementById("s2Progress").textContent =
-        "Puzzle " + (s2Index + 1) + " of " + logicPuzzles.length;
-
+    document.getElementById("s2Progress").textContent = "Puzzle " + (s2Index + 1) + " of " + logicPuzzles.length;
     document.getElementById("s2PuzzleText").textContent = p.text;
 
     const hintText = document.getElementById("hintText");
@@ -359,8 +373,12 @@ function finishStage2() {
 
     if (activeArea && completeArea) {
         activeArea.classList.add("hidden");
-        completeArea.classList.remove("hidden");
-        loadResult();
+        
+        triggerBatSwarm(function() {
+            completeArea.classList.remove("hidden");
+            loadResult();
+        });
+
     } else {
         window.location.href = "result.html";
     }
