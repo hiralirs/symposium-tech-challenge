@@ -10,12 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const teamDisplay = document.getElementById("teamDisplay");
     const continueButton = document.getElementById("continueButton");
     const vampireAudio = document.getElementById("vampireAudio");
+    const mouthTransition = document.getElementById("mouthTransition");
 
     // Clear stale state on load
     localStorage.removeItem("disqualified");
     localStorage.removeItem("warningCount");
 
-    // 1. Handle "ENTER THE BLOODLINE" click
+    // 1. Handle "ENTER THE BLOODLINE" click with Jaw Closing Transition
     if (enterButton) {
         enterButton.addEventListener("click", function () {
             const teamName = teamNameInput.value.trim();
@@ -44,10 +45,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             }
 
-            if (rulesPanel) {
-                rulesPanel.classList.add("active");
-                rulesPanel.scrollIntoView({ behavior: "smooth" });
+            // Trigger the vampire jaw closing transition animation
+            if (mouthTransition) {
+                mouthTransition.classList.add("active");
             }
+
+            // Once the jaw animation peaks, reveal the rules panel and reset transition
+            setTimeout(function () {
+                if (rulesPanel) {
+                    rulesPanel.classList.add("active");
+                    rulesPanel.scrollIntoView({ behavior: "smooth" });
+                }
+            }, 700); // Matches halfway through the jaw snap
+
+            // Hide transition overlay after animation completes (1.35s)
+            setTimeout(function () {
+                if (mouthTransition) {
+                    mouthTransition.classList.remove("active");
+                }
+            }, 1350);
         });
     }
 
