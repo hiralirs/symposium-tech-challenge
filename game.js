@@ -64,14 +64,26 @@ function triggerBatSwarm(callback) {
 ========================================= */
 
 function initSecurity() {
-    if (localStorage.getItem("warningCount") === null) {
-        localStorage.setItem("warningCount", "0");
-    }
-
     setTimeout(function() {
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
-                registerWarning("Tab switching or window minimization detected!");
+                localStorage.setItem("disqualified", "true");
+                
+                const secModal = document.getElementById("secModal");
+                const secMsg = document.getElementById("secMsg");
+
+                if (secMsg) {
+                    secMsg.textContent = "Tab switching or window minimization detected!\n\nYou have been DISQUALIFIED.";
+                }
+                if (secModal) {
+                    secModal.classList.remove("hidden");
+                    const btn = secModal.querySelector("button");
+                    if (btn) btn.style.display = "none";
+                }
+
+                setTimeout(function() {
+                    finishStage2();
+                }, 2000);
             }
         });
     }, 1500);
