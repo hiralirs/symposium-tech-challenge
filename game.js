@@ -3,6 +3,9 @@
    (Stage 1: Python, Stage 2: Logic)
 ========================================= */
 
+// Initialize the 20-second warning audio using the correct .mpeg extension found in assets
+const warningSound = new Audio('assets/timer-warning.mpeg');
+
 /* =========================================
    BAT SWARM TRANSITION SYSTEM (MASSIVE SWARM)
 ========================================= */
@@ -180,6 +183,11 @@ function startS1Timer() {
         s1TimeLeft--;
         updateS1TimerDisplay();
 
+        // 20-second warning trigger for Level 1
+        if (s1TimeLeft === 20) {
+            warningSound.play().catch(e => console.log("Audio play failed:", e));
+        }
+
         if (s1TimeLeft <= 0) {
             clearInterval(s1TimerInterval);
             finishStage1();
@@ -301,6 +309,11 @@ function startS2Timer() {
     s2TimerInterval = setInterval(function() {
         s2TimeLeft--;
         updateS2TimerDisplay();
+
+        // 20-second warning trigger for Level 2
+        if (s2TimeLeft === 20) {
+            warningSound.play().catch(e => console.log("Audio play failed:", e));
+        }
 
         if (s2TimeLeft <= 0) {
             clearInterval(s2TimerInterval);
