@@ -105,6 +105,10 @@
                 loadResult();
             }
             
+            // Play game over audio automatically on page load
+            const gameOverAudio = new Audio('assets/game-over.mp3');
+            gameOverAudio.play().catch(e => console.log("Audio autoplay restricted by browser:", e));
+            
             // Safety check: Removes any unwanted buttons except the finish button
             const buttons = document.querySelectorAll('button:not(#finishBtn), .btn:not(#finishBtn)');
             buttons.forEach(btn => btn.remove());
