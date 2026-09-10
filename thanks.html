@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crimson Hack — Thank You</title>
+    <link rel="stylesheet" href="game.css">
+    <style>
+        body.vampire-thanks {
+            background-color: #050505;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .crypt-box {
+            position: relative;
+            background: rgba(15, 5, 5, 0.9);
+            border: 2px solid #8b0000;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.7), inset 0 0 20px rgba(139, 0, 0, 0.4);
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            z-index: 10;
+            border-radius: 8px;
+            overflow: visible; 
+        }
+
+        /* Adjusted slightly more horizontal outward so the edge of the bat wing rests precisely on the corner vertex */
+        .corner-bat {
+            position: absolute;
+            width: 280px;
+            z-index: 20;
+            pointer-events: none;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.85));
+        }
+
+        .bat-left {
+            top: -95px;
+            left: -133px;
+            transform: rotate(-22deg);
+        }
+
+        .bat-right {
+            top: -95px;
+            right: -133px;
+            transform: scaleX(-1) rotate(-22deg);
+        }
+
+        .crypt-title {
+            color: #ff1a1a;
+            font-size: 2.8rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 12px rgba(255, 0, 0, 0.9);
+        }
+
+        .crypt-subtitle {
+            color: #b3b3b3;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="vampire-thanks">
+
+    <div class="crypt-box">
+        
+        <!-- Top Left Corner Bat -->
+        <img class="corner-bat bat-left" src="https://64.media.tumblr.com/bf3f8736efc8a5a6fed5f21d51944b4c/9e7f16c91e063c7d-ca/s400x600/854677d99a0e291e42edd01734fb35b591050257.gif" alt="bat">
+
+        <!-- Top Right Corner Bat -->
+        <img class="corner-bat bat-right" src="https://64.media.tumblr.com/bf3f8736efc8a5a6fed5f21d51944b4c/9e7f16c91e063c7d-ca/s400x600/854677d99a0e291e42edd01734fb35b591050257.gif" alt="bat">
+
+        <h1 class="crypt-title">THANK YOU</h1>
+        <p class="crypt-subtitle">
+            Your soul and code have been recorded in the crypt.<br><br>
+            The Crimson Hack bloodline trial has concluded.
+        </p>
+    </div>
+
+</body>
+</html>

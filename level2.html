@@ -73,8 +73,19 @@
   <script src="game.js"></script>
   <script>
     window.onload = () => {
+      // --- DEVELOPMENT/TESTING OVERRIDE ---
+      // This wipes your 'disqualified' status every time the page loads 
+      // so the anti-cheat doesn't instantly skip the questions!
+      localStorage.removeItem("disqualified");
+      localStorage.removeItem("warningCount");
+      // ------------------------------------
+
       initSecurity();
-      document.getElementById('teamDisplayS2').innerText = 'TEAM: ' + (localStorage.getItem('teamName') || 'UNKNOWN SOUL').toUpperCase();
+      
+      const teamDisplay = document.getElementById('teamDisplayS2');
+      if (teamDisplay) {
+        teamDisplay.innerText = 'TEAM: ' + (localStorage.getItem('teamName') || 'UNKNOWN SOUL').toUpperCase();
+      }
     };
   </script>
 </body>

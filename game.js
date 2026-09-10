@@ -77,6 +77,7 @@ function initSecurity() {
                 }
                 if (secModal) {
                     secModal.classList.remove("hidden");
+                    secModal.style.display = "block";
                     const btn = secModal.querySelector("button");
                     if (btn) btn.style.display = "none";
                 }
@@ -120,6 +121,7 @@ function registerWarning(reason) {
         }
         if (secModal) {
             secModal.classList.remove("hidden");
+            secModal.style.display = "block";
             const btn = secModal.querySelector("button");
             if (btn) btn.style.display = "none";
         }
@@ -136,7 +138,10 @@ function registerWarning(reason) {
     if (secMsg) {
         secMsg.textContent = reason + "\n\nWarning " + count + " of 3.\nOne more will result in disqualification.";
     }
-    if (secModal) secModal.classList.remove("hidden");
+    if (secModal) {
+        secModal.classList.remove("hidden");
+        secModal.style.display = "block";
+    }
 }
 
 function closeSecModal() {
@@ -145,6 +150,7 @@ function closeSecModal() {
 
     if (secModal && !isDisqualified) {
         secModal.classList.add("hidden");
+        secModal.style.display = "none";
     }
 }
 
@@ -298,8 +304,25 @@ function startLevel2Actual() {
 
     const instModal = document.getElementById("stage2InstModal");
     const mainUI = document.getElementById("level2MainUI");
-    if (instModal) instModal.classList.add("hidden");
-    if (mainUI) mainUI.classList.remove("hidden");
+    const activeArea = document.getElementById("s2ActiveArea");
+    const completeArea = document.getElementById("s2CompleteArea");
+
+    if (instModal) {
+        instModal.classList.add("hidden");
+        instModal.style.display = "none";
+    }
+    if (mainUI) {
+        mainUI.classList.remove("hidden");
+        mainUI.style.display = "block";
+    }
+    if (activeArea) {
+        activeArea.classList.remove("hidden");
+        activeArea.style.display = "block";
+    }
+    if (completeArea) {
+        completeArea.classList.add("hidden");
+        completeArea.style.display = "none";
+    }
 
     if (localStorage.getItem("disqualified") === "true") {
         finishStage2();
@@ -352,6 +375,7 @@ function renderS2Puzzle() {
     if (hintText) {
         hintText.textContent = p.hint;
         hintText.classList.add("hidden");
+        hintText.style.display = "none";
     }
 
     const answerInput = document.getElementById("s2Answer");
@@ -363,7 +387,10 @@ function renderS2Puzzle() {
 
 function showHint() {
     const hintText = document.getElementById("hintText");
-    if (hintText) hintText.classList.remove("hidden");
+    if (hintText) {
+        hintText.classList.remove("hidden");
+        hintText.style.display = "block";
+    }
 }
 
 function submitS2Answer() {
@@ -398,14 +425,16 @@ function finishStage2() {
 
     if (activeArea && completeArea) {
         activeArea.classList.add("hidden");
+        activeArea.style.display = "none";
         
         triggerBatSwarm(function() {
             completeArea.classList.remove("hidden");
+            completeArea.style.display = "block";
             loadResult();
         });
 
     } else {
-        window.location.href = "result.html";
+        window.location.href = "thanks.html";
     }
 }
 
@@ -446,6 +475,13 @@ function loadResult() {
     }
 
     rankEl.textContent = rank;
+
+    // Automatically transition to thanks.html after viewing the score for 10 seconds
+    setTimeout(function() {
+        triggerBatSwarm(function() {
+            window.location.href = "thanks.html";
+        });
+    }, 10000);
 }
 
 document.addEventListener("keydown", function(e) {
