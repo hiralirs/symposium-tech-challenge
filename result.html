@@ -13,13 +13,10 @@
             -moz-user-select: none; /* Firefox */
             -ms-user-select: none; /* Older IE/Edge */
         }
-    </style>
-    <!-- ========================================== -->
 
-    <style>
-        /* Forcefully hides any button or restart element on the verdict page */
-        .glass-panel button, 
-        .glass-panel .btn, 
+        /* Forcefully hides any button or restart element on the verdict page, except our finish button */
+        .glass-panel button:not(#finishBtn), 
+        .glass-panel .btn:not(#finishBtn), 
         #restart-btn, 
         [onclick*="restart"], 
         [onclick*="playAgain"] {
@@ -40,18 +37,26 @@
             </div>
         </div>
 
+        <button id="finishBtn" class="btn continue-button" style="margin-top: 25px; width: 100%;">FINISH <span>→</span></button>
+
         <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">Your results have been sealed in the crypt archives.</p>
     </div>
 
     <script src="game.js"></script>
     <script>
-        window.onload = function() {
-            loadResult();
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof loadResult === 'function') {
+                loadResult();
+            }
             
-            // Extra JavaScript safety check: Finds any button on the page and deletes it permanently
-            const buttons = document.querySelectorAll('button, .btn');
+            // Safety check: Removes any unwanted buttons except the finish button
+            const buttons = document.querySelectorAll('button:not(#finishBtn), .btn:not(#finishBtn)');
             buttons.forEach(btn => btn.remove());
-        };
+        });
+
+        document.getElementById('finishBtn').addEventListener('click', function() {
+            window.location.href = 'thanks.html';
+        });
     </script>
 </body>
 </html>

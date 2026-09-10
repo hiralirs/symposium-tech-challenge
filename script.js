@@ -12,9 +12,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const vampireAudio = document.getElementById("vampireAudio");
     const mouthTransition = document.getElementById("mouthTransition");
 
-    // Clear stale state on load
+    // Clear stale state on load to ensure a clean new attempt
     localStorage.removeItem("disqualified");
     localStorage.removeItem("warningCount");
+    localStorage.removeItem("s1Score");
+    localStorage.removeItem("s2Score");
 
     // 1. Handle "ENTER THE BLOODLINE" click with Jaw Closing Transition
     if (enterButton) {

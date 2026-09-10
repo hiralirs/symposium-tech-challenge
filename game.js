@@ -7,16 +7,17 @@
 const warningSound = new Audio('assets/timer-warning.mpeg');
 
 /* =========================================
-   BAT SWARM TRANSITION SYSTEM (MASSIVE SWARM)
+   BAT SWARM TRANSITION SYSTEM (VIDEO + AUDIO)
 ========================================= */
 
-// Triggers a dense, massive bat effect on a completely separate black screen
+// Triggers the video transition and plays the bat-sound audio file
 function triggerBatSwarm(callback) {
     const batOverlay = document.createElement("div");
     batOverlay.className = "bat-overlay";
     batOverlay.style.display = "block";
     document.body.appendChild(batOverlay);
 
+    // Play the standalone bat-sound audio file
     let batAudio = document.getElementById("batAudio");
     if (!batAudio) {
         batAudio = new Audio("assets/bat-sound.mp4");
@@ -26,36 +27,34 @@ function triggerBatSwarm(callback) {
     batAudio.currentTime = 0;
     batAudio.play().catch(e => console.log("Audio locked:", e));
 
-    const totalBats = 60;
-    for (let i = 0; i < totalBats; i++) {
-        const bat = document.createElement('div');
-        bat.classList.add('bat-wrapper');
-        
-        const img = document.createElement('img');
-        img.src = "https://64.media.tumblr.com/bf3f8736efc8a5a6fed5f21d51944b4c/9e7f16c91e063c7d-ca/s400x600/854677d99a0e291e42edd01734fb35b591050257.gifv";
-        
-        const scaleFactor = Math.random() * 0.5 + 0.3;
-        img.width = Math.floor(250 * scaleFactor);
-        img.height = Math.floor(125 * scaleFactor);
-        img.alt = "bat";
-        
-        bat.appendChild(img);
-        
-        bat.style.top = (Math.random() * window.innerHeight) + 'px';
-        bat.style.left = (-300 - Math.random() * 600) + 'px';
-        
-        const durationAcross = (Math.random() * 4 + 7).toFixed(2);
-        const durationFloat = (Math.random() * 3 + 4).toFixed(2);
-        bat.style.animationDuration = `${durationAcross}s, ${durationFloat}s`;
-        bat.style.animationDelay = (Math.random() * 2) + 's';
-        
-        batOverlay.appendChild(bat);
-    }
+    // Create and configure the video element (muted so it pairs with bat-sound)
+    const video = document.createElement("video");
+    video.src = "assets/bat-transition.mp4";
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.style.position = "absolute";
+    video.style.inset = "0";
+    video.style.width = "100%";
+    video.style.height = "100%";
+    video.style.objectFit = "cover";
+    batOverlay.appendChild(video);
 
-    setTimeout(() => {
+    video.play().catch(e => console.log("Video play locked:", e));
+
+    // Automatically clean up and proceed when the video finishes playing
+    video.onended = function() {
         batOverlay.remove();
         if (callback) callback();
-    }, 5500); 
+    };
+
+    // Fallback safety timeout
+    setTimeout(() => {
+        if (document.body.contains(batOverlay)) {
+            batOverlay.remove();
+            if (callback) callback();
+        }
+    }, 6000); 
 }
 
 
@@ -67,24 +66,8 @@ function initSecurity() {
     setTimeout(function() {
         document.addEventListener("visibilitychange", function() {
             if (document.hidden) {
-                localStorage.setItem("disqualified", "true");
-                
-                const secModal = document.getElementById("secModal");
-                const secMsg = document.getElementById("secMsg");
-
-                if (secMsg) {
-                    secMsg.textContent = "Tab switching or window minimization detected!\n\nYou have been DISQUALIFIED.";
-                }
-                if (secModal) {
-                    secModal.classList.remove("hidden");
-                    secModal.style.display = "block";
-                    const btn = secModal.querySelector("button");
-                    if (btn) btn.style.display = "none";
-                }
-
-                setTimeout(function() {
-                    finishStage2();
-                }, 2000);
+                // Triggers warning system instead of instant disqualification
+                registerWarning("Tab switching or window minimization detected!");
             }
         });
     }, 1500);
@@ -421,21 +404,17 @@ function finishStage2() {
     localStorage.setItem("s2Score", String(s2Score));
 
     const activeArea = document.getElementById("s2ActiveArea");
-    const completeArea = document.getElementById("s2CompleteArea");
 
-    if (activeArea && completeArea) {
+    // Hide the questions
+    if (activeArea) {
         activeArea.classList.add("hidden");
         activeArea.style.display = "none";
-        
-        triggerBatSwarm(function() {
-            completeArea.classList.remove("hidden");
-            completeArea.style.display = "block";
-            loadResult();
-        });
-
-    } else {
-        window.location.href = "thanks.html";
     }
+
+    // Trigger video transition and audio, then FORCE the game to load the dedicated result.html page
+    triggerBatSwarm(function() {
+        window.location.href = "result.html";
+    });
 }
 
 function loadResult() {
@@ -475,13 +454,6 @@ function loadResult() {
     }
 
     rankEl.textContent = rank;
-
-    // Automatically transition to thanks.html after viewing the score for 10 seconds
-    setTimeout(function() {
-        triggerBatSwarm(function() {
-            window.location.href = "thanks.html";
-        });
-    }, 10000);
 }
 
 document.addEventListener("keydown", function(e) {

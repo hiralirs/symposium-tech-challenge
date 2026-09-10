@@ -25,20 +25,17 @@ html, body {
 }
 
 body {
-    background:
-        radial-gradient(circle at 50% 20%, rgba(120,0,10,.35), transparent 60%),
-        var(--deep-bg);
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)),
+        url('assets/bg2.jpeg') no-repeat center center fixed !important;
+    background-size: cover !important;
     color: #eee;
     font-family: "Cormorant Garamond", Georgia, serif;
     overflow-x: hidden;
     position: relative;
-    
-    /* === ANTI-COPY & ANTI-SELECT PROTECTION === */
-    user-select: none;
-    -webkit-user-select: none; /* Safari */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Older IE/Edge */
-    /* ========================================== */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Selection Styling */
@@ -383,7 +380,7 @@ body {
     width: 100%;
     max-width: 640px;
     margin: 60px auto 40px;
-    background: rgba(15, 5, 6, 0.75);
+    background: rgba(12, 4, 5, 0.82);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(255, 30, 40, .35);

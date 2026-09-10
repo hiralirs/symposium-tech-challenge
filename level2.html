@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stage 2 - Logic</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="game.css">
   
   <!-- === ANTI-COPY & ANTI-SELECT PROTECTION === -->
   <style>
@@ -13,6 +14,9 @@
           -webkit-user-select: none; /* Safari */
           -moz-user-select: none; /* Firefox */
           -ms-user-select: none; /* Older IE/Edge */
+      }
+      .hidden {
+          display: none !important;
       }
   </style>
   <!-- ========================================== -->
@@ -62,7 +66,7 @@
   </div>
 
   <!-- Security Warning Modal -->
-  <div id="secModal" class="modal-overlay hidden">
+  <div id="secModal" class="modal-overlay hidden" style="display: none;">
     <div class="modal-box" style="border: 2px solid #ff3333;">
       <h2 style="color: #ff3333; font-size: 2rem; margin-bottom: 10px;">⚠️ SECURITY WARNING ⚠️</h2>
       <p id="secMsg" style="font-size: 1.2rem; margin-bottom: 20px; white-space: pre-wrap;"></p>
@@ -73,13 +77,6 @@
   <script src="game.js"></script>
   <script>
     window.onload = () => {
-      // --- DEVELOPMENT/TESTING OVERRIDE ---
-      // This wipes your 'disqualified' status every time the page loads 
-      // so the anti-cheat doesn't instantly skip the questions!
-      localStorage.removeItem("disqualified");
-      localStorage.removeItem("warningCount");
-      // ------------------------------------
-
       initSecurity();
       
       const teamDisplay = document.getElementById('teamDisplayS2');
