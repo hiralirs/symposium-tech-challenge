@@ -426,10 +426,14 @@ function loadResult() {
     const total = disqualified ? 0 : s1 + s2;
 
     const nameEl = document.getElementById("teamResultName");
+    const round1El = document.querySelector("#round1Display span");
+    const round2El = document.querySelector("#round2Display span");
     const scoreEl = document.getElementById("finalScoreDisplay");
     const rankEl = document.getElementById("rankDisplay");
 
     if (nameEl) nameEl.textContent = "Team: " + teamName;
+    if (round1El) round1El.textContent = disqualified ? 0 : s1;
+    if (round2El) round2El.textContent = disqualified ? 0 : s2;
     if (scoreEl) scoreEl.textContent = total;
 
     if (!rankEl) return;
