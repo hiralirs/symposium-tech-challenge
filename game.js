@@ -436,6 +436,17 @@ function loadResult() {
     if (round2El) round2El.textContent = disqualified ? 0 : s2;
     if (scoreEl) scoreEl.textContent = total;
 
+    // --- NEW: Audio Playback Logic with Fallback ---
+    const gameOverAudio = new Audio('assets/game-over.mp3');
+    gameOverAudio.play().catch(e => {
+        console.log("Audio autoplay restricted by browser, waiting for user interaction:", e);
+        // Fallback: Play audio on first click anywhere on the page
+        document.body.addEventListener('click', function playAudioOnce() {
+            gameOverAudio.play().catch(err => console.log("Audio still restricted:", err));
+            document.body.removeEventListener('click', playAudioOnce);
+        }, { once: true });
+    });
+
     if (!rankEl) return;
 
     if (disqualified) {

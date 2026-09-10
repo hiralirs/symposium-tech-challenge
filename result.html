@@ -63,6 +63,11 @@
     </style>
 </head>
 <body>
+    <!-- Hidden HTML Audio Element for Game Over Sound (Updated to .mpeg) -->
+    <audio id="gameOverAudio" preload="auto">
+        <source src="assets/game-over.mpeg" type="audio/mpeg">
+    </audio>
+
     <div class="glass-panel" style="text-align: center; max-width: 600px;">
         <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 5px; text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);">The Verdict</h1>
         <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 25px; letter-spacing: 1px;"></h2>
@@ -105,9 +110,17 @@
                 loadResult();
             }
             
-            // Play game over audio automatically on page load
-            const gameOverAudio = new Audio('assets/game-over.mp3');
-            gameOverAudio.play().catch(e => console.log("Audio autoplay restricted by browser:", e));
+            // Play game over audio automatically with user interaction fallback
+            const audio = document.getElementById('gameOverAudio');
+            if (audio) {
+                audio.play().catch(e => {
+                    console.log("Audio autoplay restricted by browser, waiting for user click:", e);
+                    document.addEventListener('click', function playOnInteraction() {
+                        audio.play().catch(err => console.log("Audio play failed:", err));
+                        document.removeEventListener('click', playOnInteraction);
+                    }, { once: true });
+                });
+            }
             
             // Safety check: Removes any unwanted buttons except the finish button
             const buttons = document.querySelectorAll('button:not(#finishBtn), .btn:not(#finishBtn)');
