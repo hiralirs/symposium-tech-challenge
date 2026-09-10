@@ -22,26 +22,80 @@
         [onclick*="playAgain"] {
             display: none !important;
         }
+
+        /* Card enhancement styles */
+        .score-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .score-box {
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            border-radius: 6px;
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        .score-box .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+
+        .score-box .value {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--blood-red, #ff3333);
+        }
+
+        .final-score-container {
+            background: radial-gradient(circle, rgba(139, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+            padding: 15px;
+            border-top: 1px dashed rgba(255, 0, 0, 0.3);
+            border-bottom: 1px dashed rgba(255, 0, 0, 0.3);
+            margin-bottom: 25px;
+        }
     </style>
 </head>
 <body>
     <div class="glass-panel" style="text-align: center; max-width: 600px;">
-        <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 10px;">The Verdict</h1>
-        <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 20px;"></h2>
+        <h1 class="gothic-text" style="font-size: 3.5rem; margin-bottom: 5px; text-shadow: 0 0 15px rgba(255, 0, 0, 0.6);">The Verdict</h1>
+        <h2 id="teamResultName" style="color: var(--blood-red); font-size: 1.8rem; margin-bottom: 25px; letter-spacing: 1px;"></h2>
 
-        <div style="margin: 30px auto; padding: 30px 20px; max-width: 400px; border: 1px solid rgba(255, 0, 0, 0.3); background: rgba(0, 0, 0, 0.5); border-radius: 8px;">
-            <div style="font-size: 1.4rem; margin-bottom: 15px;" id="round1Display">Round 1 Score: <span style="color: var(--blood-red);">0</span></div>
-            <div style="font-size: 1.4rem; margin-bottom: 15px;" id="round2Display">Round 2 Score: <span style="color: var(--blood-red);">0</span></div>
-            <h2 style="font-size: 2.2rem; margin: 0;">Final Score: <span id="finalScoreDisplay" style="color: var(--blood-red);">0</span> / 10</h2>
+        <div style="margin: 0 auto 25px auto; padding: 30px 25px; max-width: 440px; border: 1px solid rgba(255, 0, 0, 0.4); background: rgba(10, 10, 10, 0.75); border-radius: 12px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(255, 0, 0, 0.1);">
+            
+            <!-- Round Breakdown Grid -->
+            <div class="score-grid">
+                <div class="score-box" id="round1Display">
+                    <div class="label">Round 1</div>
+                    <div class="value"><span>0</span> / 5</div>
+                </div>
+                <div class="score-box" id="round2Display">
+                    <div class="label">Round 2</div>
+                    <div class="value"><span>0</span> / 5</div>
+                </div>
+            </div>
 
-            <div style="margin-top: 25px;">
-                <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.4rem; margin: 0; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);"></h3>
+            <!-- Final Score Display -->
+            <div class="final-score-container">
+                <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 5px;">Total Score</div>
+                <h2 style="font-size: 2.8rem; margin: 0; font-weight: bold;"><span id="finalScoreDisplay" style="color: var(--blood-red); text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);">0</span> <span style="font-size: 1.8rem; color: #666;">/ 10</span></h2>
+            </div>
+
+            <!-- Rank / Status Message -->
+            <div>
+                <h3 id="rankDisplay" class="gothic-text" style="font-size: 1.3rem; margin: 0; text-shadow: 0 0 10px rgba(255, 0, 0, 0.5); line-height: 1.4;"></h3>
             </div>
         </div>
 
-        <button id="finishBtn" class="btn continue-button" style="margin-top: 25px; width: 100%;">FINISH <span>→</span></button>
+        <button id="finishBtn" class="btn continue-button" style="margin-top: 10px; width: 100%;">FINISH <span>→</span></button>
 
-        <p style="color: #666; font-size: 0.8rem; margin-top: 30px;">Your results have been sealed in the crypt archives.</p>
+        <p style="color: #666; font-size: 0.8rem; margin-top: 25px; letter-spacing: 0.5px;">Your results have been sealed in the crypt archives.</p>
     </div>
 
     <script src="game.js"></script>
