@@ -143,11 +143,31 @@ function closeSecModal() {
 ========================================= */
 
 const pythonQuestions = [
-    { code: `x = [1, 2, 3]\ny = x\ny.append(4)\nprint(x)`, options: ["[1, 2, 3]", "[1, 2, 3, 4]", "Error", "[4, 1, 2, 3]"], correct: 1 },
-    { code: `def f(a, b=5):\n    return a + b\n\nprint(f(10))`, options: ["Error", "10", "15", "5"], correct: 2 },
-    { code: `print(3 == 3.0)`, options: ["True", "False", "Error", "None"], correct: 0 },
-    { code: `s = "vampire"\nprint(s[::-1])`, options: ["vampire", "eripmav", "Error", "v"], correct: 1 },
-    { code: `total = 0\nfor i in range(1, 5):\n    total += i\nprint(total)`, options: ["10", "9", "6", "4"], correct: 0 }
+    { 
+        code: `numbers = [10, 15, 20, 25]\nfor n in numbers:\n    if n % 5 == 0:\n        if n % 2 == 0:\n            print("A")\n        else:\n            print("B")\n    else:\n        print("C")`, 
+        options: ["A, A, B, B", "A, B, A, B", "B, A, B, A", "C, C, C, C"], 
+        correct: 1 
+    },
+    { 
+        code: `dict1 = {'a': 1, 'b': 2}\ndict2 = {'b': 99, 'c': 3}\nmerged = {**dict1, **dict2}\nprint(merged['b'])`, 
+        options: ["2", "99", "3", "Error"], 
+        correct: 1 
+    },
+    { 
+        code: `result = [x for x in range(6) if x % 2 == 0]\nprint(result)`, 
+        options: ["[1, 3, 5]", "[0, 2, 4, 6]", "[0, 2, 4]", "[2, 4, 6]"], 
+        correct: 2 
+    },
+    { 
+        code: `data = {\n    "A": 10,\n    "B": 20,\n    "C": 30\n}\ndata["B"] += data["A"]\ndata["A"] = data["C"]\nprint(data)`, 
+        options: ["{'A': 10, 'B': 20, 'C': 30}", "{'A': 0, 'B': 30, 'C': 30}", "{'A': 30, 'B': 10, 'C': 30}", "{'A': -10, 'B': 40, 'C': 30}"], 
+        correct: 1 
+    },
+    { 
+        code: `try:\n    print("A")\n    1/0\nexcept ZeroDivisionError:\n    print("B")\nfinally:\n    print("C")`, 
+        options: ["A, B, C", "A, C, B", "B, C", "Error"], 
+        correct: 0 
+    }
 ];
 
 let s1Index = 0;
@@ -270,11 +290,11 @@ function finishStage1() {
 ========================================= */
 
 const logicPuzzles = [
-    { text: "Three doors: A, B, C. Behind one is treasure, behind the other two are traps. The sign on A says 'Treasure is not here.' The sign on B says 'Treasure is in C.' Only one sign is true. Which door hides the treasure?", hint: "Try assuming each sign is the true one and check for contradictions.", answers: ["a", "door a", "door A"] },
-    { text: "A vampire lord always lies. A guard always tells the truth. You meet one of them who says: 'I am the vampire lord.' Is the speaker the vampire lord or the guard?", hint: "If the vampire lord said this, would it be a lie or the truth?", answers: ["guard", "the guard"] },
-    { text: "What has keys but no locks, space but no room, and you can enter but not go inside?", hint: "You are probably using one right now.", answers: ["keyboard", "a keyboard"] },
-    { text: "I am an odd number. Take away one letter and I become even. What number am I?", hint: "Think of the number spelled out in words.", answers: ["seven", "7"] },
-    { text: "A crypt has 5 coffins in a row. The vampire sleeps in a coffin that is not at either end, and not next to the coffin with the silver cross (coffin 3). Which coffin position(s) could the vampire be sleeping in?", hint: "Positions are numbered 1 to 5. Rule out the ends and the neighbors of position 3.", answers: ["2 and 4", "2, 4", "4 and 2", "4, 2", "2,4", "4,2", "coffin 2 and 4"] }
+    { text: "A prisoner faces three doors: 17, 24, 31. One leads outside, one to a guard, one back to prison. The correct door has a number following a hidden rule based on its digits. Which door should the prisoner choose?", hint: "Look at the digits rather than the numbers as whole values.", answers: ["24", "door 24", "twenty four"] },
+    { text: "You see four cards: A | D | 4 | 7. Rule: If a card has a vowel on one side, it must have an even number on the other side. Which cards MUST you turn over to test whether the rule is true?", hint: "Look for cards that could potentially break the rule, not cards that simply support it.", answers: ["a and 7", "a, 7", "a and seven", "card a and 7"] },
+    { text: "Three vampires — Dracula, Nosferatu, and Lestat — work night shifts across Monday, Tuesday, and Wednesday. Dracula does not work on Monday. Nosferatu works on the day immediately after Dracula works. Lestat does not work on Wednesday. Who works on Tuesday?", hint: "Use elimination.", answers: ["dracula", "lord dracula"] },
+    { text: "A master vampire keeps 10 loyal bats in his tower. All but 4 escape through the window into the moonlight. How many bats are left inside?", hint: "Pay close attention to the phrasing 'all but 4'.", answers: ["4", "four"] },
+    { text: "A vampire leaves this code clue: PYTHON -> 6, JAVA -> 4, HTML -> 4, SQL -> 3, PROGRAM -> ?", hint: "Don't calculate anything complicated. Look at the word itself.", answers: ["7", "seven"] }
 ];
 
 let s2Index = 0;
@@ -437,7 +457,7 @@ function loadResult() {
     if (scoreEl) scoreEl.textContent = total;
 
     // --- NEW: Audio Playback Logic with Fallback ---
-    const gameOverAudio = new Audio('assets/game-over.mp3');
+    const gameOverAudio = new Audio('assets/game-over.mpeg');
     gameOverAudio.play().catch(e => {
         console.log("Audio autoplay restricted by browser, waiting for user interaction:", e);
         // Fallback: Play audio on first click anywhere on the page
